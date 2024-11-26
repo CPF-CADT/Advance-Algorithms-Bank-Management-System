@@ -58,25 +58,6 @@ void selectionSort(vector<Selection> &array){
       array.at(i)=minValue;
    }
 }
-//solution 1
-// template <typename Array>
-// bool isSorted(vector<Array> &array){
-//    int direction=0;
-//    int current=0;
-//    if(array.empty()) return true;
-//    for(int i=0;i<array.size()-1;i++){
-//       if(array.at(i)>array.at(i+1))
-//          current=-1;
-//       else if(array.at(i)<array.at(i+1))
-//          current=1;
-//       if(direction!=current && (direction!=0 && current!=0)) //check current is change or not
-//          return false;
-//       direction=current;
-//    }
-//    return true;
-// }
-
-//solution 2
 template <typename Array>
 bool isSorted(vector<Array> &array){
    int direction=0;

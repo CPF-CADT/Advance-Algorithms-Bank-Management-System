@@ -1,6 +1,8 @@
 //nice
 #include<iostream>
+#include"./utils/User.hpp"
 int main(){
-    std:: cout<<"hi";
+    User user;
+    user.input();
     return 0;
 }
