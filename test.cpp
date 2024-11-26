@@ -2,5 +2,6 @@
 #include<iostream>
 int main(){
     std:: cout<<"hi";
-    return 0;
+    std::cout<<"moto"
+;    return 0;
 }
