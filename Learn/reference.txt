@@ -1,0 +1,2 @@
+for file handling with c++ i learn from 
+- https://stackoverflow.com/questions/55906812/c-binary-read-write-files

@@ -12,12 +12,14 @@ private:
    string lastName;
    string address;
    int phoneNumber;
+
    long bankNumberKHR;
    long bankNumberUSD;
    double loanUSD;
    double loanKHR;
    double totalMoneyKHR;
    double totalMoneyUSD;
+
    stack<string> history; //when read move from stack to queue and finish move to stack
    // vector<string> readHistory; // need to consider mroe Linklist or array list
    string password;
@@ -47,6 +49,12 @@ public:
       //and generate the bank id for user after complete password
 
       //store data to the data base CSV or SQL (consider process)
+   }
+   long getBankNumberKHR(){
+      return bankNumberKHR;
+   }
+   long getBankNumberUSD(){
+      return bankNumberUSD;
    }
 };
 #endif
