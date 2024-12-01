@@ -1,4 +1,2 @@
-empStu.input(12,"Nak");
-    // stu.push(tempStu);
-    // tempStu = stu.getValue(0);
-    // tempStu.output();
+tempUser.input();
+    user.push(tempUser);

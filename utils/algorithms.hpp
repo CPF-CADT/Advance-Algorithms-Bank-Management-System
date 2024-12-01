@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include"arrayList.hpp"
 using namespace std;
 template <typename T>
 void printArray(T *number,int n){

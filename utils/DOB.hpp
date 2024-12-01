@@ -11,7 +11,7 @@ public:
    int day;
    int month;
    int year;
-   string nameOfMonth[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+   char nameOfMonth[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
    DOB(){
       day=0;
       month=0;
