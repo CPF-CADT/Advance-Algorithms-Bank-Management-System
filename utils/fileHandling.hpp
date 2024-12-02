@@ -31,7 +31,7 @@
 // }
 
 template <typename Object> void writeToBinary(const string& filename, ArrayList<Object> &array) {
-   ofstream file(filename, ios::app |ios::binary);
+   ofstream file(filename, ios::binary);
    if (file) {
          int length = array.getLength();
          file.write((char *)(&length), sizeof(length));
