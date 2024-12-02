@@ -30,7 +30,9 @@ int main(){
          cout<<"ATM"<<endl;
          cout<<"login "<<endl;
          break;
-
+      case 0:
+      out=false;
+      break;
       
       default:
       cout<<"Please try again"<<endl;
