@@ -36,6 +36,7 @@ int main(){
       
       default:
       cout<<"Please try again"<<endl;
+      cout<<"Can i put my ball in your jaw"<<endl;
          break;
       }
 
