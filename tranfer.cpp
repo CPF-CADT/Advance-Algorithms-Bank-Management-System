@@ -19,6 +19,7 @@ int main(){
    system(command2);
    system(command3);
    system(command4);
+   
    // for show run code below
    // system(command1);
    // readFromBinary(USER_FILE,user);
