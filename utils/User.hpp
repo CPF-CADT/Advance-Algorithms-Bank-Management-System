@@ -12,6 +12,7 @@ private:
    string lastName;
    string address;
    int phoneNumber;
+   double userId;
 
    long bankNumberKHR;
    long bankNumberUSD;
@@ -47,7 +48,6 @@ public:
       cout<<"Password   : ";cin>>password;
 
       //and generate the bank id for user after complete password
-
       //store data to the data base CSV or SQL (consider process)
    }
    long getBankNumberKHR(){
