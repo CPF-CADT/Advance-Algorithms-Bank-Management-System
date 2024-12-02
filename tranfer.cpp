@@ -2,7 +2,7 @@
 #include"utils/User.hpp"
 #include <cstdlib>
 
-#define USER_FILE "user.bin"
+#define USER_FILE "users.bin"
 int User::numberOfUser = 0;
 int main(){
    ArrayList<User> user;
