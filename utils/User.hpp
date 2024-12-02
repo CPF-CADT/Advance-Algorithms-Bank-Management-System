@@ -12,10 +12,6 @@ private:
    
    long nationalIdCard;
    DOB dob;
-   string firstName;
-   string lastName;
-   string address;
-   int phoneNumber;
    double userId;
    char firstName[45];
    char lastName[45];
