@@ -10,12 +10,10 @@ int main(){
     
     tempUser.input(USER_FILE);
     user.push(tempUser);
-    tempUser.output();
     writeToBinary(USER_FILE,user);
 
     tempUser.input(USER_FILE);
     user.push(tempUser);
-    tempUser.output();
     writeToBinary(USER_FILE,user);
 
     readFromBinary(USER_FILE,user);

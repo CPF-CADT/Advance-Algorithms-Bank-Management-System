@@ -12,7 +12,6 @@ private:
    
    long nationalIdCard;
    DOB dob;
-   double userId;
    char firstName[45];
    char lastName[45];
    char phoneNumber[12];
@@ -25,9 +24,6 @@ private:
    double loanKHR;
    double totalMoneyKHR;
    double totalMoneyUSD;
-
-   // // // stack<char> history; //when read move from stack to queue and finish move to stack
-   // // // vector<char> readHistory; // need to consider mroe Linklist or array list
    char password[16];
    int qrCodePayment; // consider move to dinamic array for many QrCode
 public:
@@ -45,7 +41,7 @@ public:
       qrCodePayment = 0;
       numberOfUser++;
    }
-   void input(const string fileName){
+   void input(const string &fileName){
       // string fname;
       cout<<"Create a User Account "<<endl;
       cout<<"User information "<<endl;
@@ -64,7 +60,7 @@ public:
    char* getPhoneNumber(){
       return phoneNumber;
    }
-   void inputPhoneNumber(const string fileName){
+   void inputPhoneNumber(const string &fileName){
       enterPhonenumber:
       cout<<"Phone Number : ";cin>>phoneNumber;
       //add validation
@@ -74,13 +70,23 @@ public:
          goto enterPhonenumber;
       }
    }
+   bool isPhoneNumberUsed(const string fileName,const char *phoneNumber){
+      //add code
+      ArrayList<User> tempUser;
+      if((numberOfUser)>0){
+         readFromBinary(fileName,tempUser);
+         for(int i=0;i<tempUser.getLength();i++){        
+            char *phone = tempUser.getValue(i).getPhoneNumber();
+            if(strcmp(phoneNumber,phone)==0) return true;
+         }
+      }
+      return false;
+   }
+
    void inputPassword(){
       char confirmPassword[16];
       enterPassword:
       cout<<"Password   : ";cin>>password;
-
-      //and generate the bank id for user after complete password
-      //store data to the data base CSV or SQL (consider process)
       cout<<"Confirm Password : ";cin>>confirmPassword;
       if(strcmp(confirmPassword,password)!=0){
          cerr<<"Confirm Password Incorrect "<<endl;
@@ -88,19 +94,7 @@ public:
          goto enterPassword;
       }
    }
-   bool isPhoneNumberUsed(const string fileName,const char *phoneNumber){
-      //add code
-      ArrayList<User> tempUser;
-      if((numberOfUser-1)>0){
-         readFromBinary(fileName,tempUser);
-         for(int i=0;i<tempUser.getLength();i++){        
-            char *phone = tempUser.getValue(i).getPhoneNumber();
-            cout<<phone<<endl;
-            if(strcmp(phoneNumber,phone)==0) return true;
-         }
-      }
-      return false;
-   }
+
    void output(){
       cout<<firstName<<" "<<phoneNumber<<endl;
       // cout<<phoneNumber<<" ";
