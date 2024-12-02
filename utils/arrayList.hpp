@@ -24,20 +24,20 @@ public:
          throw runtime_error("Index out of bound");
       }
    }
-   // void push(Object value){
-   //    data[length] = value;
-   //    length+=1;
-   // }
-   void push(Object value) {
-      Object* newData = new Object[length + 1]; 
-      for (int i = 0; i < length; i++) {
-         newData[i] = data[i]; 
-      }
-      newData[length] = value; 
-      delete[] data;           
-      data = newData;          
-      length += 1;             
+   void push(Object value){
+      data[length] = value;
+      length+=1;
    }
+   // void push(Object value) {
+   //    Object* newData = new Object[length + 1]; 
+   //    for (int i = 0; i < length; i++) {
+   //       newData[i] = data[i]; 
+   //    }
+   //    newData[length] = value; 
+   //    delete[] data;           
+   //    data = newData;          
+   //    length += 1;             
+   // }
    
    int getLength(){
       return length;
@@ -49,8 +49,11 @@ public:
    Object *pointerOfAtray(){
       return this->data;
    }
-   void setSize(int length){
-      this->length=length;
+   void setSize(int newLength) {
+      Object* newData = new Object[newLength];
+      delete[] data;
+      data = newData;
+      length = newLength;
    }
    void insertAt(int index,Object value){
       validateIndex(index);

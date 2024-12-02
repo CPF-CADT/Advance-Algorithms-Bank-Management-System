@@ -1,7 +1,6 @@
 #ifndef CRUDE_BINARY
 #define CRUDE_BINARY
 #include <fstream>
-#include "../utils/User.hpp"
 #include"../utils/arrayList.hpp"
 #include "../utils/LinkList.hpp"
 #include <cassert>
@@ -44,15 +43,17 @@ template <typename Object> void writeToBinary(const string& filename, ArrayList<
 }
 
 template <typename Object> void readFromBinary(const string& filename, ArrayList<Object> &array) {
-   fstream file(filename, ios::in | ios::out | ios::binary);
+   ifstream file(filename, std::ios::in | std::ios::binary);
    if (file) {
       int length;
       file.read((char *)(&length), sizeof(length));
       array.setSize(length);
       file.read((char *)(array.pointerOfAtray()), sizeof(Object) * length); 
       file.close();
-   } else {
-      throw runtime_error("Cannot Read file");
+   } 
+   else {
+      cerr<<"Cannot Read file"<<endl;
    }
 }
+
 #endif
