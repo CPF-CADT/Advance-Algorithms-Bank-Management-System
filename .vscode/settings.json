@@ -60,6 +60,7 @@
     "string": "cpp",
     "ostream": "cpp",
     "xutility": "cpp",
+<<<<<<< HEAD
     "array": "cpp",
     "atomic": "cpp",
     "*.tcc": "cpp",
@@ -101,3 +102,16 @@
     "typeinfo": "cpp"
   }
 }
+=======
+    "atomic": "cpp",
+    "deque": "cpp",
+    "ios": "cpp",
+    "system_error": "cpp",
+    "xiosbase": "cpp",
+    "xstring": "cpp",
+    "stack": "cpp",
+    "iosfwd": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "disabled"
+}
+>>>>>>> c681f7dc796220bcee0c7d7736fc84eb9766df49

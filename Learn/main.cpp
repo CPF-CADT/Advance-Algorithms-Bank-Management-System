@@ -1,14 +1,16 @@
 //nice
 #include<iostream>
-#include"fileHandling.hpp"
-#include"../utils/arrayList.hpp"
+// #include "../utils/Stu.hpp"
+#include "../utils/arrayList.hpp"
+#include "../utils/fileHandling.hpp"
+
 class Stu{
 private:
-   int id;
+   char id[100];
 public:
-   Stu(){
-      id = 0;
-   }
+   // Stu(){
+   //    id = "sdsd";
+   // }
    void input(){
       cout<<"ID : ";cin>>id;
    }
@@ -23,21 +25,23 @@ int main(){
    // stu.push(s);
    // s.input();
    // stu.push(s);
-   // writeToBinary("test.bin",stu);
-   readFromBinary("test.bin",stu);
+
+   // writeToBinary("testLinkList.bin",stu);
+   readFromBinary("testLinkList.bin",stu);
+
    for(int i=0;i<stu.getLength();i++){
       s = stu.getValue(i);
       s.output();
    }
-   s.input();
-   stu.insertAt(0,s);
-   s.input();
-   stu.updateAt(1,s);
    // s.input();
-   // stu.insertAt(1,s);
-   for(int i=0;i<stu.getLength();i++){
-      s = stu.getValue(i);
-      s.output();
-   }
+   // stu.insertAt(0,s);
+   // s.input();
+   // stu.updateAt(1,s);
+   // // s.input();
+   // // stu.insertAt(1,s);
+   // for(int i=0;i<stu.getLength();i++){
+   //    s = stu.getValue(i);
+   //    s.output();
+   // }
    return 0;
 }
