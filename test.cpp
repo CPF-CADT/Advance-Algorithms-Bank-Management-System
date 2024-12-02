@@ -8,13 +8,13 @@ int main(){
     ArrayList<User> user;
     User tempUser;
     
-    tempUser.input(USER_FILE);
+  /*  tempUser.input(USER_FILE);
     user.push(tempUser);
     writeToBinary(USER_FILE,user);
 
     tempUser.input(USER_FILE);
     user.push(tempUser);
-    writeToBinary(USER_FILE,user);
+   writeToBinary(USER_FILE,user);*/
 
     readFromBinary(USER_FILE,user);
     for(int i=0;i<user.getLength();i++){
