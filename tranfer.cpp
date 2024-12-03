@@ -12,6 +12,7 @@ int main(){
    const char* command4 = "git push";
    User tempUser;
    //if want to add pls run code from 14 to 21
+<<<<<<< HEAD
    // tempUser.input(USER_FILE);
    // user.push(tempUser);
    // writeToBinary(USER_FILE,user);
@@ -27,6 +28,22 @@ int main(){
       tempUser=user.getValue(i);
       tempUser.output();
    }
+=======
+  /* tempUser.input(USER_FILE);
+   user.push(tempUser);
+   writeToBinary(USER_FILE,user);
+   system(command1);
+   system(command2);
+   system(command3);
+   system(command4);*/
+   // for show run code below
+    system(command1);
+    readFromBinary(USER_FILE,user);
+    for(int i=0;i<user.getLength();i++){
+    tempUser=user.getValue(i);
+    tempUser.output();
+    }
+>>>>>>> 09308f647e02505e20879f47fc7efa23b705c020
 
    return 0;
 }

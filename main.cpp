@@ -4,6 +4,7 @@
 int main(){
    bool out=true;
    int choice;
+   User user;
    
    do
    {
@@ -16,11 +17,26 @@ int main(){
       switch (choice)
       {
       case 1:
-         
+         cout<<"user"<<endl;
+         cout<<"creat account"<<endl;
+         cout<<"login "<<endl;
          break;
+      case 2:
+         cout<<"admin"<<endl;
+         cout<<"login "<<endl;
+
+         break;
+      case 3:
+         cout<<"ATM"<<endl;
+         cout<<"login "<<endl;
+         break;
+      case 0:
+      out=false;
+      break;
       
       default:
-      cout<<
+      cout<<"Please try again"<<endl;
+      cout<<"Can i put my ball in your jaw"<<endl;
          break;
       }
 
