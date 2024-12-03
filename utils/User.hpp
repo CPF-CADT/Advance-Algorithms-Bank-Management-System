@@ -57,9 +57,6 @@ public:
       inputPhoneNumber(fileName);
       // inputPassword();
    }
-   char* getPhoneNumber(){
-      return phoneNumber;
-   }
    void inputPhoneNumber(const string &fileName){
       enterPhonenumber:
       cout<<"Phone Number : ";cin>>phoneNumber;
@@ -97,7 +94,114 @@ public:
 
    void output(){
       cout<<firstName<<" "<<phoneNumber<<endl;
-      // cout<<phoneNumber<<" ";
    }
+   char* getPhoneNumber() { 
+   return phoneNumber; 
+   }
+
+   void setPhoneNumber(const char* number) { 
+      strncpy(phoneNumber, number, sizeof(phoneNumber) - 1); 
+      phoneNumber[sizeof(phoneNumber) - 1] = '\0'; 
+   }
+
+   char* getFirstName() { 
+      return firstName; 
+   }
+
+   void setFirstName(const char* name) { 
+      strncpy(firstName, name, sizeof(firstName) - 1); 
+      firstName[sizeof(firstName) - 1] = '\0'; 
+   }
+
+   char* getLastName() { 
+      return lastName; 
+   }
+
+   void setLastName(const char* name) { 
+      strncpy(lastName, name, sizeof(lastName) - 1); 
+      lastName[sizeof(lastName) - 1] = '\0'; 
+   }
+
+   char* getAddress() { 
+      return address; 
+   }
+
+   void setAddress(const char* addr) { 
+      strncpy(address, addr, sizeof(address) - 1); 
+      address[sizeof(address) - 1] = '\0'; 
+   }
+
+   long getNationalIdCard() { 
+      return nationalIdCard; 
+   }
+
+   void setNationalIdCard(long id) { 
+      nationalIdCard = id; 
+   }
+
+   long getBankNumberKHR() { 
+      return bankNumberKHR; 
+   }
+
+   void setBankNumberKHR(long number) { 
+      bankNumberKHR = number; 
+   }
+
+   long getBankNumberUSD() { 
+      return bankNumberUSD; 
+   }
+
+   void setBankNumberUSD(long number) { 
+      bankNumberUSD = number; 
+   }
+
+   double getLoanUSD() { 
+      return loanUSD; 
+   }
+
+   void setLoanUSD(double loan) { 
+      loanUSD = loan; 
+   }
+
+   double getLoanKHR() { 
+      return loanKHR; 
+   }
+
+   void setLoanKHR(double loan) { 
+      loanKHR = loan; 
+   }
+
+   double getTotalMoneyKHR() { 
+      return totalMoneyKHR; 
+   }
+
+   void setTotalMoneyKHR(double total) { 
+      totalMoneyKHR = total; 
+   }
+
+   double getTotalMoneyUSD() { 
+      return totalMoneyUSD; 
+   }
+
+   void setTotalMoneyUSD(double total) { 
+      totalMoneyUSD = total; 
+   }
+
+   char* getPassword() { 
+      return password; 
+   }
+
+   void setPassword(const char* pwd) { 
+      strncpy(password, pwd, sizeof(password) - 1); 
+      password[sizeof(password) - 1] = '\0'; 
+   }
+
+   int getQrCodePayment() { 
+      return qrCodePayment; 
+   }
+
+   void setQrCodePayment(int code) { 
+      qrCodePayment = code; 
+   }      
 };
 #endif
