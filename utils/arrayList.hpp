@@ -42,7 +42,7 @@ public:
    int getLength(){
       return length;
    }
-   Object getValue(int index){
+   Object& getValue(int index){
       validateIndex(index);
       return data[index];
    }

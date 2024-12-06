@@ -103,7 +103,16 @@ int main(){
                                  option = displayOption(transferOption,2);
                                  switch(option){
                                     case 1:
-
+                                       cout<<"Transfer to Own Account"<<endl;
+                                       tempUser.transferOwnAccount(bank.getExchnageRate()); 
+                                    break;
+                                    case 2:
+                                       User destUser; //destination User
+                                       cout<<"Transfer to Account"<<endl;
+                                       cout<<"Phone Number : "<<endl;
+                                       
+                                       break;
+                                    case 0:
                                        break;
                                  }
                                  break;

@@ -53,7 +53,7 @@ template <typename Object> bool readFromBinary(const string& filename, ArrayList
       return true;
    } 
    else {
-      cerr<<"Cannot Read file"<<endl;
+      // cerr<<"Cannot Read file"<<endl;
    }
    return false;
 }

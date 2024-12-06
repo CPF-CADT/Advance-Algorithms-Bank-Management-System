@@ -20,6 +20,9 @@ public:
    void setExchnageRate(float rate){
       this->exchangeRateUSDtoKHR = rate;
    }
+   float getExchnageRate(){
+      return exchangeRateUSDtoKHR;
+   }
    int indexOfUser(char *phone,ArrayList<User> &users){
       //need to apply binary search
       for(int i=0;i<users.getLength();i++){

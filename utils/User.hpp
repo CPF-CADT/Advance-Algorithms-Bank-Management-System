@@ -17,8 +17,8 @@ private:
    char phoneNumber[12];
    char address[100];
 
-   long bankNumberKHR;
-   long bankNumberUSD; //similar to ACLIDA use Phone Number as the Bank number 
+   // long bankNumberKHR;
+   // long bankNumberUSD; //similar to ACLIDA use Phone Number as the Bank number 
 
    double loanUSD;
    double loanKHR;
@@ -99,9 +99,30 @@ public:
       cout << " - KHR: " << totalMoneyKHR <<"R"<< endl;
       cout << " - USD: " << totalMoneyUSD <<"$"<< endl;
    }
-   // bool checkUSDTransfer(double usd){
-
-   // }
+   bool checkSourceUSD(double usd){
+      if(usd<=totalMoneyUSD){
+         if(usd <= 0){
+            throw runtime_error("Invalid Input\n");
+         }else{
+            return true;
+         }
+      }else{
+         throw runtime_error("Not Enough Money\n");
+         return false;
+      }
+   }
+   bool checkSourceKHR(double khr){
+      if(khr<=totalMoneyKHR){
+         if(khr <= 0){
+            throw runtime_error("Invalid Input\n");
+         }else{
+            return true;
+         }
+      }else{
+         throw runtime_error("Not Enough Money\n");
+         return false;
+      }
+   }
    double changeUSDtoKHR(double usd,float exchangeRate){
       usd*=exchangeRate;
       return usd;
@@ -109,7 +130,7 @@ public:
    double changeKHRtoUSD(double khr,float exchangeRate){
       khr/=(double)exchangeRate;
       return round(khr*1000.0)/1000.0;
-   }
+   } 
    void transferOwnAccount(float exchangeRate){
       int op;
       double usd;
@@ -122,38 +143,95 @@ public:
          case 1:
             cout<<"Amount (USD) : ";cin>>usd;
             //check validation when transfer
-            // setTotalMoneyUSD();
-            setTotalMoneyKHR(totalMoneyKHR+changeUSDtoKHR(usd,exchangeRate));
-            setTotalMoneyUSD(totalMoneyUSD-usd);
-            cout<<"Transfer Success";
-            //write History
+            try{
+               checkSourceUSD(usd);
+               setTotalMoneyKHR(totalMoneyKHR+changeUSDtoKHR(usd,exchangeRate));
+               setTotalMoneyUSD(totalMoneyUSD-usd);
+               cout<<"Transfer Success"<<endl;
+            }catch(exception &e){
+               cerr<<e.what();
+            };
             break;
          case 2:
             cout<<"Amount (KHR) : ";cin>>khr;
             //check validation when transfer
-            
-            setTotalMoneyKHR(totalMoneyKHR-khr);
-            setTotalMoneyUSD(totalMoneyUSD+changeKHRtoUSD(khr,exchangeRate));
-            cout<<"Transfer Success";
-            //write History
+            try{
+               checkSourceKHR(khr);
+               setTotalMoneyKHR(totalMoneyKHR-khr);
+               setTotalMoneyUSD(totalMoneyUSD+changeKHRtoUSD(khr,exchangeRate));
+               cout<<"Transfer Success"<<endl;
+            }catch(exception &e){
+               cerr<<e.what();
+            };
             break;
          case 0:
             exit(2);
             break;
       }
    }
-
-
-
-
-
-
-
-
-
-
-
-
+   bool isUSDAccount(){
+      int op;
+      cout<<"Choose Account : "<<endl;
+      cout<<"1 . USD "<<phoneNumber<<endl;
+      cout<<"2 . KHR "<<phoneNumber<<endl;
+      // cout<<"0 . Exit"<<endl; we will improve this function to exit 
+      cout<<"Choose :";cin>>op;
+      if(op == 1) return true;
+      return false;
+   }
+   void transferToOtherAccount(User &destUser,float exchangeRate){
+      double usd,khr;
+      int op;
+      cout<<"Choose Currency"<<endl;
+      cout<<"Destination : "<<destUser.getPhoneNumber()<<destUser.getFirstName()<<endl;;
+      cout<<"1 . USD "<<endl;
+      cout<<"2 . KHR "<<endl;
+      cout<<"0 . Exit"<<endl;
+      cout<<"Choose : ";cin>>op;
+      switch(op){
+         case 1:
+            cout<<"Amount (USD) : ";cin>>usd;
+            //check validation when transfer
+            try{
+               if(isUSDAccount()){
+                  checkSourceUSD(usd);
+                  setTotalMoneyUSD(totalMoneyUSD-usd);
+                  destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
+                  cout<<"Transfer Success"<<endl;
+               }else{
+                  checkSourceKHR(changeUSDtoKHR(usd,exchangeRate));
+                  setTotalMoneyKHR(totalMoneyKHR-changeUSDtoKHR(usd,exchangeRate));
+                  destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
+                  cout<<"Transfer Success"<<endl;
+               }
+            }catch(exception &e){
+               cerr<<e.what();
+            };
+            break;
+         case 2:
+            cout<<"Amount (KHR) : ";cin>>khr;
+            //check validation when transfer
+            try{
+               if(!isUSDAccount()){
+                  checkSourceKHR(khr);
+                  setTotalMoneyKHR(totalMoneyKHR-khr);
+                  destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
+                  cout<<"Transfer Success"<<endl;
+               }else{
+                  checkSourceUSD(changeKHRtoUSD(khr,exchangeRate));
+                  setTotalMoneyUSD(totalMoneyUSD-changeKHRtoUSD(khr,exchangeRate));
+                  destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
+                  cout<<"Transfer Success"<<endl;
+               }   
+            }catch(exception &e){
+               cerr<<e.what();
+            };
+            break;
+         case 0:
+            exit(2);
+            break;
+      }
+   }
    char* getPhoneNumber() { 
    return phoneNumber; 
    }
@@ -198,21 +276,21 @@ public:
       nationalIdCard = id; 
    }
 
-   long getBankNumberKHR() { 
-      return bankNumberKHR; 
-   }
+   // long getBankNumberKHR() { 
+   //    return bankNumberKHR; 
+   // }
 
-   void setBankNumberKHR(long number) { 
-      bankNumberKHR = number; 
-   }
+   // void setBankNumberKHR(long number) { 
+   //    bankNumberKHR = number; 
+   // }
 
-   long getBankNumberUSD() { 
-      return bankNumberUSD; 
-   }
+   // long getBankNumberUSD() { 
+   //    return bankNumberUSD; 
+   // }
 
-   void setBankNumberUSD(long number) { 
-      bankNumberUSD = number; 
-   }
+   // void setBankNumberUSD(long number) { 
+   //    bankNumberUSD = number; 
+   // }
 
    double getLoanUSD() { 
       return loanUSD; 
