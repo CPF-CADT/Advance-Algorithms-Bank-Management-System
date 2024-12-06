@@ -2,13 +2,13 @@
 #define CLASS_USER
 #include<stack>
 #include<cstring>
+#include<cmath>
 #include"./DOB.hpp"
 #include "./fileHandling.hpp"
 #include "./arrayList.hpp"
 
 class User{
 private:
-   static int numberOfUser;
    
    long nationalIdCard;
    DOB dob;
@@ -39,11 +39,9 @@ public:
       totalMoneyKHR=0.00;
       totalMoneyUSD=0.00;
       qrCodePayment = 0;
-      numberOfUser++;
    }
    void input(const string &fileName){
       // string fname;
-      cout<<"Create a User Account "<<endl;
       cout<<"User information "<<endl;
       cout<<"First Name : ";cin>>firstName;
       // stringToChar (&firstName,fname);
@@ -55,7 +53,7 @@ public:
       // cin.ignore();
       cout<<"Security Section "<<endl;
       inputPhoneNumber(fileName);
-      // inputPassword();
+      inputPassword();
    }
    void inputPhoneNumber(const string &fileName){
       enterPhonenumber:
@@ -70,10 +68,10 @@ public:
    bool isPhoneNumberUsed(const string fileName,const char *phoneNumber){
       //add code
       ArrayList<User> tempUser;
-      if((numberOfUser)>0){
-         readFromBinary(fileName,tempUser);
+      char phone[12];
+      if((readFromBinary(fileName,tempUser))){
          for(int i=0;i<tempUser.getLength();i++){        
-            char *phone = tempUser.getValue(i).getPhoneNumber();
+            strcpy(phone,tempUser.getValue(i).getPhoneNumber());
             if(strcmp(phoneNumber,phone)==0) return true;
          }
       }
@@ -82,19 +80,80 @@ public:
 
    void inputPassword(){
       char confirmPassword[16];
+      char pass[16];
       enterPassword:
-      cout<<"Password   : ";cin>>password;
+      cout<<"Password   : ";cin>>pass;
       cout<<"Confirm Password : ";cin>>confirmPassword;
-      if(strcmp(confirmPassword,password)!=0){
-         cerr<<"Confirm Password Incorrect "<<endl;
-         cerr<<"Enter password again"<<endl;
+      if(strcmp(confirmPassword,pass)!=0){
+         cout<<"Confirm Password Incorrect "<<endl;
+         cout<<"Enter password again"<<endl;
          goto enterPassword;
       }
+      strcpy(password,pass);
    }
-
    void output(){
       cout<<firstName<<" "<<phoneNumber<<endl;
    }
+   void showBalance(){
+      cout << "Account Balance:" << endl;
+      cout << " - KHR: " << totalMoneyKHR <<"R"<< endl;
+      cout << " - USD: " << totalMoneyUSD <<"$"<< endl;
+   }
+   // bool checkUSDTransfer(double usd){
+
+   // }
+   double changeUSDtoKHR(double usd,float exchangeRate){
+      usd*=exchangeRate;
+      return usd;
+   }
+   double changeKHRtoUSD(double khr,float exchangeRate){
+      khr/=(double)exchangeRate;
+      return round(khr*1000.0)/1000.0;
+   }
+   void transferOwnAccount(float exchangeRate){
+      int op;
+      double usd;
+      double khr;
+      cout<<"1 . From USD to KHR "<<endl;
+      cout<<"2 . From KHR to USD "<<endl;
+      cout<<"0 . Exit"<<endl;
+      cout<<"Choose :";cin>>op;
+      switch(op){
+         case 1:
+            cout<<"Amount (USD) : ";cin>>usd;
+            //check validation when transfer
+            // setTotalMoneyUSD();
+            setTotalMoneyKHR(totalMoneyKHR+changeUSDtoKHR(usd,exchangeRate));
+            setTotalMoneyUSD(totalMoneyUSD-usd);
+            cout<<"Transfer Success";
+            //write History
+            break;
+         case 2:
+            cout<<"Amount (KHR) : ";cin>>khr;
+            //check validation when transfer
+            
+            setTotalMoneyKHR(totalMoneyKHR-khr);
+            setTotalMoneyUSD(totalMoneyUSD+changeKHRtoUSD(khr,exchangeRate));
+            cout<<"Transfer Success";
+            //write History
+            break;
+         case 0:
+            exit(2);
+            break;
+      }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
    char* getPhoneNumber() { 
    return phoneNumber; 
    }

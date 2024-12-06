@@ -29,7 +29,6 @@
 //       throw runtime_error("Cannot open file");
 //    }
 // }
-
 template <typename Object> void writeToBinary(const string& filename, ArrayList<Object> &array) {
    ofstream file(filename, ios::binary);
    if (file) {
@@ -37,23 +36,26 @@ template <typename Object> void writeToBinary(const string& filename, ArrayList<
          file.write((char *)(&length), sizeof(length));
          file.write((char *)(array.pointerOfAtray()), sizeof(Object) * length); 
          file.close();
+         cout<<"Sucess .."<<endl;
    }else{
       throw runtime_error("Cannot Write file");
    }
 }
 
-template <typename Object> void readFromBinary(const string& filename, ArrayList<Object> &array) {
-   ifstream file(filename, std::ios::in | std::ios::binary);
+template <typename Object> bool readFromBinary(const string& filename, ArrayList<Object> &array) {
+   fstream file(filename, ios::out | ios::in | ios::binary);
    if (file) {
       int length;
       file.read((char *)(&length), sizeof(length));
       array.setSize(length);
       file.read((char *)(array.pointerOfAtray()), sizeof(Object) * length); 
       file.close();
+      return true;
    } 
    else {
       cerr<<"Cannot Read file"<<endl;
    }
+   return false;
 }
 
 #endif
