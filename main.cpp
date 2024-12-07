@@ -5,11 +5,11 @@
 #include <string>
 #define DATA_USER "user.dat"
 void clearScreen() {
-// #ifdef _WIN32
-//    system("cls");
-// #else
-//    system("clear");
-// #endif
+#ifdef _WIN32
+   system("cls");
+#else
+   system("clear");
+#endif
    system("cls");
 
 }
@@ -43,7 +43,6 @@ bool enterPassword(User user){
    }
 }
 int main(){
-
    int option;
    string mainOption[] = {"ATM","User","Administration"};
    string userLoginOption[] = {"Login","Register"};
