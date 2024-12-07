@@ -6,7 +6,6 @@
 #include"./DOB.hpp"
 #include "./fileHandling.hpp"
 #include "./arrayList.hpp"
-
 class User{
 private:
    
@@ -16,10 +15,6 @@ private:
    char lastName[45];
    char phoneNumber[12];
    char address[100];
-
-   // long bankNumberKHR;
-   // long bankNumberUSD; //similar to ACLIDA use Phone Number as the Bank number 
-
    double loanUSD;
    double loanKHR;
    double totalMoneyKHR;
