@@ -1,5 +1,5 @@
-#ifndef ADMIN-HPP
-# define ADMIN
+#ifndef ADMIN_HPP
+#define ADMIN_HPP
 #include<iostream>
 #include"Bank.hpp"
 #include"ATM.hpp"
@@ -11,15 +11,14 @@ using namespace std;
 
 
 
-class bank {
+class Admin {
     private:
-    static int numberUser;
+    // static int numberUser;
     char userFirstName[45];
         
 
-
-
     public:
+
 };
 
 #endif

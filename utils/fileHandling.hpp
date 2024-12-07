@@ -3,6 +3,7 @@
 #include <fstream>
 #include"../utils/arrayList.hpp"
 #include "../utils/LinkList.hpp"
+#include <iomanip>
 #include <cassert>
 
 // template <typename Object> void writeToBinary(const string& filename, const vector<Object>& array) {

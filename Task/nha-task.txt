@@ -1,0 +1,19 @@
+create function to update userinformation
+1 . - void updateInfor(User &user)
+	create Option to Update 
+	first name, last name
+	change phone number
+	address
+	Dob
+    - put it in Bank.hpp
+to access new data to USER use setter and getter in USER
+2 . void updateUserPassword()
+	enter old pass 
+	enter new pass
+	and enter confirm pass
+
+	create some validation 
+	
+	to setnewpasss to user use setPassword() in user.hpp
+     - put in User.hpp
+

@@ -1,2 +1,5 @@
-   s.input();
-   stu.push(s);
+switch(){
+                                 //    case 1:
+
+                                 //       break;
+                                 // }

@@ -51,7 +51,7 @@ public:
       length++;
    }
    
-   Object getValue(int index){
+   Object& getValue(int index){
       validateIndex(index);
       Node<Object> *current=head;
       for(int i=0;i<index;i++){

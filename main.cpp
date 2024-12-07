@@ -1,47 +1,18 @@
 #include "./utils/User.hpp"
 #include "./utils/Bank.hpp"
 #include "./utils/ATM.hpp"
+#include "./utils/Admin.hpp"
 #include <unistd.h>
 #include <string>
 #define DATA_USER "user.dat"
-void clearScreen() {
-#ifdef _WIN32
-   system("cls");
-#else
-   system("clear");
-#endif
-   system("cls");
 
-}
-int displayOption(string *allOption,int size){
-   int op;
-   for(int i=1;i<=size;i++){
-      cout<<i<<" . "<<(allOption[i-1])<<endl;
-   }
-   cout<<"0 . Exit "<<endl;
-   cout<<"Choose : ";cin>>op;
-   return op;
-}
-bool enterPassword(User user){
-   int wrong=0;
-   char password[16];
-   enterPassword:
-   cout<<"Enter Passsword : ";cin>>password;
-   if(strcmp(password,user.getPassword())==0){
-      cout<<"Login Success . . ."<<endl;
-      return true;
-   }else{
-      wrong +=1;
-      cout<<"Incorect Password"<<endl;
-      sleep(1);
-      if(wrong>=3){
-         cout<<"Incorect Password to many time"<<endl;
-         sleep(1);
-         return false;
-      }
-      goto enterPassword;
-   }
-}
+
+bool enterPassword(User user);
+int displayOption(string *allOption,int size);
+void header(const string header);
+void clearScreen();
+
+
 int main(){
    int option;
    string mainOption[] = {"ATM","User","Administration"};
@@ -50,6 +21,7 @@ int main(){
    "Deposit with Interest", "Apply Loan", "Update Information", "Check Information Detail", "Request to Admin"};
    string transferOption[] = {"Transfer to Own Account","Transfer to Other Account"};
    Bank bank;
+   Admin admin;
    ArrayList<User> users;
    User newUser;
    int currentIndexUser=-1;
@@ -59,7 +31,8 @@ int main(){
 
    do{
       clearScreen();
-      cout<<"Welcome To [Bank Name] Please Login "<<endl;
+      // cout<<"Welcome To [Bank Name] Please Login "<<endl;
+      header("KON KHMER BANK");
       option = displayOption(mainOption,3);
       switch(option){
          case 1:
@@ -70,7 +43,7 @@ int main(){
          case 2:
             USER:
             clearScreen();
-            cout<<"[Bank Name] User Login "<<endl;
+            header("USER INTERFACE");
             option = displayOption(userLoginOption,2);
             switch(option){
                case 1:
@@ -86,6 +59,7 @@ int main(){
                         //apply some animetion
                         userInterface:
                            clearScreen();
+                           header("USER ACCOUNT");
                            cout<<"Welcome back "<<users.getValue(currentIndexUser).getFirstName()<<endl;
                            option = displayOption(userInterface,9);
                            switch(option){
@@ -103,7 +77,7 @@ int main(){
                                  switch(option){
                                     case 1:
                                        cout<<"Transfer to Own Account"<<endl;
-                                       tempUser.transferOwnAccount(bank.getExchnageRate()); 
+                                       users.getValue(currentIndexUser).transferOwnAccount(bank.getExchnageRate()); 
                                     break;
                                     case 2:
                                        User destUser; //destination User
@@ -111,8 +85,8 @@ int main(){
                                        cout<<"Phone Number : "<<endl;
                                        
                                        break;
-                                    case 0:
-                                       break;
+                                    // case 0:
+                                    //    break;
                                  }
                                  break;
                               case 4:
@@ -173,4 +147,48 @@ int main(){
       }while(option!=0);
 
    return 0;
+}
+
+void clearScreen() {
+#ifdef _WIN32
+   system("cls");
+#else
+   system("clear");
+#endif
+   system("cls");
+
+}
+void header(const string header){
+   cout << "=========================================" << endl;
+   cout << "         "<<header<<endl;
+   cout << "=========================================" << endl<<endl;
+}
+int displayOption(string *allOption,int size){
+   int op;
+   for(int i=1;i<=size;i++){
+      cout<<i<<" . "<<(allOption[i-1])<<endl;
+   }
+   cout<<"0 . Exit "<<endl;
+   cout<<"Choose : ";cin>>op;
+   return op;
+}
+bool enterPassword(User user){
+   int wrong=0;
+   char password[16];
+   enterPassword:
+   cout<<"Enter Passsword : ";cin>>password;
+   if(strcmp(password,user.getPassword())==0){
+      cout<<"Login Success . . ."<<endl;
+      return true;
+   }else{
+      wrong +=1;
+      cout<<"Incorect Password"<<endl;
+      sleep(1);
+      if(wrong>=3){
+         cout<<"Incorect Password to many time"<<endl;
+         sleep(1);
+         return false;
+      }
+      goto enterPassword;
+   }
 }
