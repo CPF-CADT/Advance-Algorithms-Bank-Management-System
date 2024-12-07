@@ -6,6 +6,7 @@
 #include"./DOB.hpp"
 #include "./fileHandling.hpp"
 #include "./arrayList.hpp"
+#include "./LinkList.hpp"
 class User{
 private:
    
@@ -270,23 +271,9 @@ public:
    void setNationalIdCard(long id) { 
       nationalIdCard = id; 
    }
-
-   // long getBankNumberKHR() { 
-   //    return bankNumberKHR; 
-   // }
-
-   // void setBankNumberKHR(long number) { 
-   //    bankNumberKHR = number; 
-   // }
-
-   // long getBankNumberUSD() { 
-   //    return bankNumberUSD; 
-   // }
-
-   // void setBankNumberUSD(long number) { 
-   //    bankNumberUSD = number; 
-   // }
-
+   string getUserDOB(){
+      return dob.getDOB();
+   }
    double getLoanUSD() { 
       return loanUSD; 
    }
