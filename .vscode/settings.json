@@ -63,7 +63,13 @@
     "ostream": "cpp",
     "string": "cpp",
     "xmemory": "cpp",
-    "cmath": "cpp"
+    "cmath": "cpp",
+    "istream": "cpp",
+    "iosfwd": "cpp",
+    "fstream": "cpp",
+    "xlocmes": "cpp",
+    "xiosbase": "cpp",
+    "stdexcept": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

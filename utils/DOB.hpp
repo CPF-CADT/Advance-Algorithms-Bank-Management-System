@@ -27,12 +27,10 @@ public:
       int daysInMonth[12]={31,28,31,30,31,30,31,31,30,31,30,31};
       // if(year<=currentYear) check = true; //check valid date is grater that now or not
       if((year%4==0&&year%100!=0) || year%400==0) daysInMonth[1]=29;
-
       if(year>currentYear){
          throw runtime_error("Invalid! Year Cannot grater that current Year");
          return false;
       }
-
       if(year>=1900){
          if(month>=1 && month<=12){
             if(day>=1 && day<=daysInMonth[month-1]){
@@ -49,7 +47,6 @@ public:
          throw runtime_error("Year must grater that 1900");
          return false;
       }
-
       if(year < (currentYear-17)) {
          check = true;
       }else{
@@ -82,6 +79,9 @@ public:
          cerr<<"Enter Date Again"<<endl;
          goto inputDate;
       }
+   }
+   void writeToFile(){
+
    }
    string getDOB(){
       return to_string(day)+ " / " + nameOfMonth[month-1] + " / " +to_string(year);

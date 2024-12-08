@@ -1,0 +1,13 @@
+start:
+	check is empty or not
+	
+	loop chek direction 
+
+
+
+
+3A
+Precision: Absolute units allow for precise control over the dimensions of elements, which is critical in certain design contexts where exact measurements are necessary.
+Consistency: Using absolute units ensures that elements appear the same across different devices and resolutions, providing a uniform experience.
+Simplicity: For designers familiar with fixed layouts, working with absolute units can simplify the design process, as they do not have to account for responsive adjustments.
+

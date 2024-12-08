@@ -3,6 +3,7 @@
 #include<iostream>
 #include<exception>
 #include<string>
+#include <fstream>
 using namespace std;
 template<typename Object>
 class ArrayList{
@@ -15,10 +16,15 @@ public:
       length=0;
    }
    //destructor -> free memoty space
-   // ~ArrayList(){
-   //    delete[] data;
-   //    data = nullptr;
-   // }
+   ~ArrayList(){
+      delete[] data;
+      data = nullptr;
+   }
+   void clear() {
+      delete[] data; 
+      data = new Object[0]; 
+      length = 0;    
+   }
    void validateIndex(int index){
       if(index<0 ||index>=length){
          throw runtime_error("Index out of bound");
@@ -72,6 +78,16 @@ public:
    }
    void updateAt(int index,Object value){
       data[index] = value;
+   }
+   void writeArrayList(ofstream &writeFile){
+      writeFile.write((char *)(&length), sizeof(length));
+      writeFile.write((char *)(data), sizeof(length * sizeof(Object)));
+   }
+   void readArrayList(ifstream &readFile){
+      int listLength;
+      readFile.read((char *)(&listLength), sizeof(listLength));
+      setSize(listLength);
+      readFile.read((char *)(data), sizeof(length * sizeof(Object)));
    }
 };
 #endif
