@@ -3,38 +3,36 @@
 #include<stack>
 #include<cstring>
 #include<cmath>
-#include"./DOB.hpp"
+#include "./DOB.hpp"
 #include "./fileHandling.hpp"
 #include "./arrayList.hpp"
-#include "./LinkList.hpp"
+#include "QRCode.hpp"
 class User{
 private:
-   
-   long nationalIdCard;
+   string firstName;
+   string lastName;
    DOB dob;
-   char firstName[45];
-   char lastName[45];
-   char phoneNumber[12];
-   char address[100];
+   long nationalIdCard;
+   char phoneNumber[16];
+   string address;
    double loanUSD;
    double loanKHR;
    double totalMoneyKHR;
    double totalMoneyUSD;
    char password[16];
-   int qrCodePayment; // consider move to dinamic array for many QrCode
+   // ArrayList<QRCode> qrCode;
 public:
    User(){
-      strcpy(firstName, "NULL");
-      strcpy(lastName, "NULL");
+      firstName = "NULL";
+      lastName = "NULL";
+      address = "NULL";
       strcpy(phoneNumber, "NULL");
-      strcpy(address, "NULL");
       strcpy(password, "NULL");
       nationalIdCard=0;
       loanKHR=0.00;
       loanUSD=0.00;
       totalMoneyKHR=0.00;
       totalMoneyUSD=0.00;
-      qrCodePayment = 0;
    }
    void input(const string &fileName){
       // string fname;
@@ -48,14 +46,43 @@ public:
       // dob.inputDate();
       // cin.ignore();
       cout<<"Security Section "<<endl;
-      inputPhoneNumber(fileName);
+      // inputPhoneNumber(fileName);
       inputPassword();
+   }
+   void writeToFile(const string &fileName){
+      ofstream writeFile(fileName, ios::app | ios::binary);
+      writeString(writeFile,firstName);
+      writeString(writeFile,lastName);
+      writeFile.write((char *)(&dob), sizeof(DOB));
+      writeFile.write((char *)(&nationalIdCard), sizeof(nationalIdCard));
+      writeFile.write((char *)(&phoneNumber), sizeof(phoneNumber));
+      writeString(writeFile,address);
+      writeFile.write((char *)(&loanUSD), sizeof(loanUSD));
+      writeFile.write((char *)(&loanKHR), sizeof(loanKHR));
+      writeFile.write((char *)(&totalMoneyKHR), sizeof(totalMoneyUSD));
+      writeFile.write((char *)(&password), sizeof(password));
+      // qrCode.writeArrayList(writeFile);
+      writeFile.close();
+   }
+   void readFileBin(ifstream &readFile){
+      firstName = readString(readFile);
+      lastName = readString(readFile);
+      readFile.read((char *)(&dob), sizeof(dob));
+      readFile.read((char *)(&nationalIdCard), sizeof(nationalIdCard));
+      readFile.read((char *)(&phoneNumber), sizeof(phoneNumber));
+      address = readString(readFile);
+      readFile.read((char *)(&loanUSD), sizeof(loanUSD));
+      readFile.read((char *)(&loanKHR), sizeof(loanKHR));
+      readFile.read((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
+      readFile.read((char *)(&password), sizeof(password));
+      // qrCode.readArrayList(readFile);
    }
    void inputPhoneNumber(const string &fileName){
       enterPhonenumber:
       cout<<"Phone Number : ";cin>>phoneNumber;
       //add validation
       if(isPhoneNumberUsed(fileName,phoneNumber)){
+         cout<<"Check"<<endl;
          cerr<<"Phone Number has been used "<<endl;
          cerr<<"Enter it again"<<endl;
          goto enterPhonenumber;
@@ -64,16 +91,14 @@ public:
    bool isPhoneNumberUsed(const string fileName,const char *phoneNumber){
       //add code
       ArrayList<User> tempUser;
-      char phone[12];
-      if((readFromBinary(fileName,tempUser))){
-         for(int i=0;i<tempUser.getLength();i++){        
-            strcpy(phone,tempUser.getValue(i).getPhoneNumber());
-            if(strcmp(phoneNumber,phone)==0) return true;
-         }
+      readFromBinary(fileName,tempUser);
+      char phone[16];
+      for(int i=0;i<tempUser.getLength();i++){        
+         strcpy(phone,tempUser.getValue(i).getPhoneNumber());
+         if(strcmp(phoneNumber,phone)==0) return true;
       }
       return false;
    }
-
    void inputPassword(){
       char confirmPassword[16];
       char pass[16];
@@ -228,6 +253,43 @@ public:
             break;
       }
    }
+   // void addQR(){
+   //    QRCode newQR;
+   //    newQR.cratePaymentCode();
+   //    cout<<newQR.getCodeData()<<endl;
+   //    qrCode.push(newQR);
+   // }
+   // bool checkQRCode(const int code,int &index){
+   //    for(int i=0;i<qrCode.getLength();i++){
+   //       if(qrCode.getValue(i).getCode() != code) {
+   //          index = i;
+   //          return false;     
+   //       }
+   //    }
+   //    return true;
+   // }
+   // void payMoney(ArrayList<User> &destUsers,int indexSource){
+   //    //code
+   //    int tempCode=0;
+   //    int indexQRCode=0;
+   //    string confirm;
+   //    cout<<"Enter Code : ";cin>>tempCode;
+   //    for(int i = 0; i<destUsers.getLength();i++){
+   //       if(i == indexSource) continue;
+   //       if(checkQRCode(tempCode,indexQRCode)){
+   //          cout<<destUsers.getValue(i).getFirstName()<<endl;
+   //          cout<<destUsers.getValue(i).getPhoneNumber()<<endl;
+   //          QRCode& codeToPay = destUsers.getValue(i).getQR().getValue(i);
+   //          cout<<codeToPay.getCodeData()<<endl;
+   //          // cout<<"press Yes/No to pay";cin>>confirm;
+   //          // if(confirm == "yes" ){
+   //             cout<<"Process Pay..";
+   //          // }
+   //       }else{
+   //          cout<<"Code not found"<<endl;
+   //       }
+   //    }
+   // }
    char* getPhoneNumber() { 
    return phoneNumber; 
    }
@@ -237,31 +299,28 @@ public:
       phoneNumber[sizeof(phoneNumber) - 1] = '\0'; 
    }
 
-   char* getFirstName() { 
+   string getFirstName() { 
       return firstName; 
    }
 
-   void setFirstName(const char* name) { 
-      strncpy(firstName, name, sizeof(firstName) - 1); 
-      firstName[sizeof(firstName) - 1] = '\0'; 
+   void setFirstName(const string firstName) { 
+      this->firstName = firstName;
    }
 
-   char* getLastName() { 
+   string getLastName() { 
       return lastName; 
    }
 
-   void setLastName(const char* name) { 
-      strncpy(lastName, name, sizeof(lastName) - 1); 
-      lastName[sizeof(lastName) - 1] = '\0'; 
+   void setLastName(const string lastName) { 
+      this->lastName = lastName;
    }
 
-   char* getAddress() { 
+   string getAddress() { 
       return address; 
    }
 
-   void setAddress(const char* addr) { 
-      strncpy(address, addr, sizeof(address) - 1); 
-      address[sizeof(address) - 1] = '\0'; 
+   void setAddress(const string address) { 
+      this->address = address;
    }
 
    long getNationalIdCard() { 
@@ -314,13 +373,16 @@ public:
       strncpy(password, pwd, sizeof(password) - 1); 
       password[sizeof(password) - 1] = '\0'; 
    }
+   // ArrayList<QRCode> &getQR(){
+   //    return qrCode;
+   // }
 
-   int getQrCodePayment() { 
-      return qrCodePayment; 
-   }
+   // int getQrCodePayment() { 
+   //    return qrCodePayment; 
+   // }
 
-   void setQrCodePayment(int code) { 
-      qrCodePayment = code; 
-   }      
+   // void setQrCodePayment(int code) { 
+   //    qrCodePayment = code; 
+   // }      
 };
 #endif

@@ -1,7 +1,7 @@
 #ifndef BANK_HPP
 #define BANK_HPP
 #include "./User.hpp"
-#include "algorithms.hpp"
+#include "./arrayList.hpp"
 class Bank{
 private:
    int totalUser;
@@ -49,4 +49,5 @@ public:
    //    return false;
    // }
 };
+
 #endif

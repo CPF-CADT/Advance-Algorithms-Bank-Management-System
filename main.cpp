@@ -124,8 +124,8 @@ int main(){
                   clearScreen();
                   cout<<" Create User Account"<<endl;
                   newUser.input(DATA_USER);
+                  newUser.writeToFile(DATA_USER);
                   users.push(newUser);
-                  writeToBinary(DATA_USER,users);
                   break;
                case 0:
                   //exit

@@ -37,20 +37,32 @@ public:
          throw runtime_error("Index out of bound");
       }
    }
-   void push(Object data){
-      Node<Object> *newNode= new Node<Object>(data);
-      if(head==nullptr){
-         head=newNode;
-      }else{
-         Node<Object>* current=head;
-         while(current->next){ // while next equal to null pointer loop will stop and next curent  will take the new node
-            current=current->next;
-         }
-         current->next=newNode;
+   // void push(Object data){
+   //    Node<Object> *newNode= new Node<Object>(data);
+   //    if(head==nullptr){
+   //       head=newNode;
+   //    }else{
+   //       Node<Object>* current=head;
+   //       while(current->next != nullptr){ // while next equal to null pointer loop will stop and next curent  will take the new node
+   //          current=current->next;
+   //       }
+   //       current->next=newNode;
+   //    }
+   //    length++;
+   // }
+   void push(Object data) {
+      Node<Object>* newNode = new Node<Object>(data);
+      if (head == nullptr) {
+         head = newNode; // If the list is empty, set head to new node
+      } else {
+      Node<Object>* current = head;
+      while (current->next != nullptr) { // Traverse to the end of the list
+         current = current->next;
       }
-      length++;
+      current->next = newNode; // Link the new node at the end
+      }
+      length++; // Increment the length of the list
    }
-   
    Object& getValue(int index){
       validateIndex(index);
       Node<Object> *current=head;
