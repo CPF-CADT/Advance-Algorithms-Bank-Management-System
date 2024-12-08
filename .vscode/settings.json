@@ -69,7 +69,8 @@
     "fstream": "cpp",
     "xlocmes": "cpp",
     "xiosbase": "cpp",
-    "stdexcept": "cpp"
+    "stdexcept": "cpp",
+    "utility": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

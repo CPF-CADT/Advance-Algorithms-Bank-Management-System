@@ -98,8 +98,9 @@ int main(){
             tempUser.input(USER_FILE);
             tempUser.setTotalMoneyUSD(100);
             tempUser.setTotalMoneyKHR(10000);
-            // tempUser.addQR();
+            tempUser.addQR();
             tempUser.writeToFile(USER_FILE);
+            tempUser.output();
             user.push(tempUser);
             break;
          }
