@@ -269,17 +269,6 @@ public:
             //check validation when transfer
             try{
                transferUSDtoOther(usd,destUser,exchangeRate);
-               // if(isUSDAccount()){
-               //    checkSourceUSD(usd);
-               //    setTotalMoneyUSD(totalMoneyUSD-usd);
-               //    destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
-               //    cout<<"Transfer Success"<<endl;
-               // }else{
-               //    checkSourceKHR(changeUSDtoKHR(usd,exchangeRate));
-               //    setTotalMoneyKHR(totalMoneyKHR-changeUSDtoKHR(usd,exchangeRate));
-               //    destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
-               //    cout<<"Transfer Success"<<endl;
-               // }
             }catch(exception &e){
                cerr<<e.what();
             };
@@ -288,18 +277,7 @@ public:
             cout<<"Amount (KHR) : ";cin>>khr;
             //check validation when transfer
             try{
-               transferKHRtoOther(khr,destUser,exchangeRate);
-               // if(!isUSDAccount()){
-               //    checkSourceKHR(khr);
-               //    setTotalMoneyKHR(totalMoneyKHR-khr);
-               //    destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
-               //    cout<<"Transfer Success"<<endl;
-               // }else{
-               //    checkSourceUSD(changeKHRtoUSD(khr,exchangeRate));
-               //    setTotalMoneyUSD(totalMoneyUSD-changeKHRtoUSD(khr,exchangeRate));
-               //    destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
-               //    cout<<"Transfer Success"<<endl;
-               // }   
+               transferKHRtoOther(khr,destUser,exchangeRate); 
             }catch(exception &e){
                cerr<<e.what();
             };
@@ -439,14 +417,6 @@ public:
    }
    vector<QRCode> getQR(){
       return qrCode;
-   }
-
-   // int getQrCodePayment() { 
-   //    return qrCodePayment; 
-   // }
-
-   // void setQrCodePayment(int code) { 
-   //    qrCodePayment = code; 
-   // }      
+   }   
 };
 #endif

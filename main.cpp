@@ -6,14 +6,14 @@
 #include <string>
 #define DATA_USER "user.dat"
 
-
+char* comfirmPassword();
 bool enterPassword(User user);
 int displayOption(string *allOption,int size);
 void header(const string header);
 void clearScreen();
-
-
 int main(){
+
+
    int option;
    string mainOption[] = {"ATM","User","Administration"};
    string userLoginOption[] = {"Login","Register"};
@@ -27,11 +27,11 @@ int main(){
    int currentIndexUser=-1;
 
    //Load data to use
-   readFromBinary(DATA_USER,users);
-
+   bank.setExchnageRate(4100);
    do{
       clearScreen();
       // cout<<"Welcome To [Bank Name] Please Login "<<endl;
+      START:
       header("KON KHMER BANK");
       option = displayOption(mainOption,3);
       switch(option){
@@ -41,6 +41,7 @@ int main(){
             //process ATm
             break;
          case 2:
+            readFromBinary(DATA_USER,users);
             USER:
             clearScreen();
             header("USER INTERFACE");
@@ -66,27 +67,36 @@ int main(){
                               //Code
                               case 1:
                                  //Code Show Money of user 
+                                 header("USER BALANCE");
                                  users.getValue(currentIndexUser).showBalance();
                                  break;
                               case 2:
+                                 header("TRANSACTION HISTORY");
                                  //Code Transaction History
                                  break;
                               case 3:
                                  //Code transfer money ACLIDA Concept
                                  option = displayOption(transferOption,2);
                                  switch(option){
-                                    case 1:
-                                       cout<<"Transfer to Own Account"<<endl;
+                                    case 1:{
+                                       header("TRANSFER TO OWN ACCOUNT");
                                        users.getValue(currentIndexUser).transferOwnAccount(bank.getExchnageRate()); 
+                                       // need to write
+                                       }
                                     break;
-                                    case 2:
-                                       User destUser; //destination User
-                                       cout<<"Transfer to Account"<<endl;
-                                       cout<<"Phone Number : "<<endl;
-                                       
+                                    case 2:{
+                                        //destination User
+                                       char phone[12];
+                                       header("TRANSFER TO OTHER ACCOUNT");
+                                       cout<<"Phone Number : ";cin>>phone;
+                                       User &destUser = users.getValue(bank.indexOfUser(phone,users));
+                                       users.getValue(currentIndexUser).transferToOtherAccount(destUser,bank.getExchnageRate());
                                        break;
-                                    // case 0:
-                                    //    break;
+                                       }
+                                    case 0:{
+                                       goto userInterface;
+                                       break;
+                                       }
                                  }
                                  break;
                               case 4:
@@ -107,11 +117,12 @@ int main(){
                               case 9:
                                  //Code Request to Admin
                                  break;
-                              case 0:
+                              case 0:{
                                  goto USER;
                                  break;
+                              }
                            }
-                        goto userInterface;
+                        goto USER;
                      }
                   }else{
                         currentIndexUser = -1;
@@ -124,11 +135,14 @@ int main(){
                   clearScreen();
                   cout<<" Create User Account"<<endl;
                   newUser.input(DATA_USER);
+                  newUser.setTotalMoneyKHR(100000);
+                  newUser.setTotalMoneyUSD(100);
                   newUser.writeToFile(DATA_USER);
                   users.push(newUser);
                   break;
                case 0:
                   //exit
+                  goto START;
                   break;
             }
             break;
@@ -172,6 +186,27 @@ int displayOption(string *allOption,int size){
    cout<<"Choose : ";cin>>op;
    return op;
 }
+// char comfirmPassword(char *cpassword) { // export from project term 2 year 1
+//    char tempChar[50]="",tempCpass[50]="";
+//    static char cpass[50];
+//    int ascii,i=0;
+//    while(1){
+//       tempChar[i]=getch();
+//       ascii=tempChar[i];
+//       if(ascii==13){
+//          break; 
+//       }else if((ascii==8) && (i>=0)){
+//          printf("\b \b");
+//          tempCpass[i]=tempCpass[i+1];
+//          i--;
+//       }else{
+//          printf("*");
+//          strcpy(tempCpass,tempChar);
+//          i++;
+//       }
+//    }
+
+// } implement next time
 bool enterPassword(User user){
    int wrong=0;
    char password[16];
