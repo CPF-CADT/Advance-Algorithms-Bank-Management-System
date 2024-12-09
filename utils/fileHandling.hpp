@@ -7,6 +7,7 @@
 #include <cassert>
 #include <cstdio>
 #include <fstream>
+#include <vector>
 
 // template <typename Object> void writeToBinary(const string& filename, const vector<Object>& array) {
 //    ofstream file(filename, ios::binary);
@@ -40,22 +41,14 @@ template <typename Object> void writeToBinary(const string& filename, ArrayList<
 }
 
 template <typename Object> bool readFromBinary(const string& filename, ArrayList<Object> &array) {
-   array.clear();
    ifstream readFile(filename, ios::binary);
    Object tempUser;
+   array.clear();
    while(readFile.peek() != EOF){
       tempUser.readFileBin(readFile);
       array.push(tempUser);
    }
    readFile.close();
-   // if (file) {
-   //    int length;
-   //    file.read((char *)(&length), sizeof(length));
-   //    array.setSize(length);
-   //    file.read((char *)(array.pointerOfAtray()), sizeof(Object) * length); 
-   //    file.close();
-   //    return true;
-   // } 
    return false;
 }
 void writeString(ofstream &writeFile, string &str){
@@ -72,5 +65,35 @@ string readString(ifstream &readFile){
    string str(tempString);
    delete[] tempString;
    return str;
+}
+// template <typename Object> void writeArrayList(ofstream &writeFile, ArrayList<Object> &list){
+//    int lengthList = list.getLength();
+//    writeFile.write((char *)(&lengthList), sizeof(lengthList));
+//    for(int i=0;i<lengthList;i++){
+//       Object value = list.getValue(i);
+//       writeFile.write((char *)(&value), sizeof(Object));
+//    }
+// }
+// template <typename Object> void readArrayList(ifstream &readFile,ArrayList<Object> list){
+//    int lengthList;
+//    Object value;
+//    readFile.read((char *)(&lengthList), sizeof(lengthList));
+//    list.setSize(lengthList);
+//    for(int i=0;i<lengthList;i++){
+//       readFile.read((char *)(&value), sizeof(Object));
+//       list.push(value);
+//    }
+// }
+
+template <typename Object> void writeArrayList(ofstream &writeFile, vector<Object> &list){
+   size_t lengthList = list.size();
+   writeFile.write((char *)(&lengthList), sizeof(lengthList));
+   writeFile.write((char *)(list.data()), sizeof(Object) * lengthList);
+}
+template <typename Object> void readArrayList(ifstream &readFile,vector<Object> &list){
+   size_t lengthList;
+   readFile.read((char *)(&lengthList), sizeof(lengthList));
+   list.resize(lengthList);
+   readFile.read((char *)(list.data()), sizeof(Object) * lengthList);
 }
 #endif

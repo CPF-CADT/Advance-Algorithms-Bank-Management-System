@@ -79,15 +79,8 @@ public:
    void updateAt(int index,Object value){
       data[index] = value;
    }
-   void writeArrayList(ofstream &writeFile){
-      writeFile.write((char *)(&length), sizeof(length));
-      writeFile.write((char *)(data), sizeof(length * sizeof(Object)));
-   }
-   void readArrayList(ifstream &readFile){
-      int listLength;
-      readFile.read((char *)(&listLength), sizeof(listLength));
-      setSize(listLength);
-      readFile.read((char *)(data), sizeof(length * sizeof(Object)));
-   }
+   // writeList(ofstream &writeFile, ArrayList<Object> &list){
+
+   // }
 };
 #endif

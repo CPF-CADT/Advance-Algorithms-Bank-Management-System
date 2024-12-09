@@ -2,10 +2,9 @@
 #include<iostream>
 #include"../utils/User.hpp"
 #include"../utils/Bank.hpp"
-#define USER_FILE "ur.dat"
+#define USER_FILE "user.dat"
 int main(){
    ArrayList<User> user;
-   User tempUser;
    int op;
    start:
       cout<<" 1 . Add User"<<endl;
@@ -13,18 +12,25 @@ int main(){
       cout<<"Choose : ";cin>>op;
       switch(op){
          case 1:{
+            User tempUser;
             tempUser.input(USER_FILE);
             tempUser.setTotalMoneyUSD(100);
             tempUser.setTotalMoneyKHR(10000);
-            // tempUser.addQR();
+            tempUser.addQR();
             tempUser.showBalance();
-            // cout<<tempUser.getQR().getValue(0).getCodeData();
-            // tempUser.writeTខoFile(USER_FILE);
             user.push(tempUser);
+            tempUser.writeToFile(USER_FILE);
             break;
             }
          case 2:{  
-            // readFromBinary(USER_FILE,user);
+            readFromBinary(USER_FILE,user);
+            for(int i=0;i<user.getLength();i++){
+               user.getValue(i).output();
+               user.getValue(i).showBalance();
+               for(auto i : user.getValue(i).getQR()){
+                  cout<<i.getCodeData()<<" - "<<endl;
+               }
+            }
             char phone[12];
             int source,destination;
             source=1;
@@ -37,7 +43,7 @@ int main(){
             // if(destination!=-1){
             //    user.getValue(source).transferToOtherAccount(user.getValue(destination),4100.00);
             // }
-            // writeToBinary(USER_FILE,user);
+            writeToBinary(USER_FILE,user);
             break;
             }
          // case 0:

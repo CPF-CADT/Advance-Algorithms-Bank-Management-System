@@ -7,6 +7,7 @@
 #include "./fileHandling.hpp"
 #include "./arrayList.hpp"
 #include "QRCode.hpp"
+#include <vector>
 class User{
 private:
    string firstName;
@@ -20,7 +21,7 @@ private:
    double totalMoneyKHR;
    double totalMoneyUSD;
    char password[16];
-   // ArrayList<QRCode> qrCode;
+   vector<QRCode> qrCode;
 public:
    User(){
       firstName = "NULL";
@@ -46,7 +47,7 @@ public:
       // dob.inputDate();
       // cin.ignore();
       cout<<"Security Section "<<endl;
-      // inputPhoneNumber(fileName);
+      inputPhoneNumber(fileName);
       inputPassword();
    }
    void writeToFile(const string &fileName){
@@ -61,7 +62,7 @@ public:
       writeFile.write((char *)(&loanKHR), sizeof(loanKHR));
       writeFile.write((char *)(&totalMoneyKHR), sizeof(totalMoneyUSD));
       writeFile.write((char *)(&password), sizeof(password));
-      // qrCode.writeArrayList(writeFile);
+      writeArrayList(writeFile,qrCode);
       writeFile.close();
    }
    void readFileBin(ifstream &readFile){
@@ -75,7 +76,7 @@ public:
       readFile.read((char *)(&loanKHR), sizeof(loanKHR));
       readFile.read((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
       readFile.read((char *)(&password), sizeof(password));
-      // qrCode.readArrayList(readFile);
+      readArrayList(readFile,qrCode);
    }
    void inputPhoneNumber(const string &fileName){
       enterPhonenumber:
@@ -200,6 +201,40 @@ public:
       if(op == 1) return true;
       return false;
    }
+   void transferUSDtoOther(double usd,User &destUser,float exchange){
+   try{
+      if(isUSDAccount()){
+         checkSourceUSD(usd);
+         setTotalMoneyUSD(totalMoneyUSD-usd);
+         destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
+         cout<<"Transfer Success"<<endl;
+         }else{
+            checkSourceKHR(changeUSDtoKHR(usd,exchange));
+            setTotalMoneyKHR(totalMoneyKHR-changeUSDtoKHR(usd,exchange));
+            destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
+            cout<<"Transfer Success"<<endl;
+         }
+      }catch(exception &e){
+         cerr<<e.what();
+      };
+   }
+   void transferKHRtoOther(double khr,User &destUser,float exchange){
+   try{
+      if(!isUSDAccount()){
+         checkSourceKHR(khr);
+         setTotalMoneyKHR(totalMoneyKHR-khr);
+         destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
+         cout<<"Transfer Success"<<endl;
+      }else{
+         checkSourceUSD(changeKHRtoUSD(khr,exchange));
+         setTotalMoneyUSD(totalMoneyUSD-changeKHRtoUSD(khr,exchange));
+         destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
+         cout<<"Transfer Success"<<endl;
+      }
+   }catch(exception &e){
+      cerr<<e.what();
+      };
+   }
    void transferToOtherAccount(User &destUser,float exchangeRate){
       double usd,khr;
       int op;
@@ -214,17 +249,18 @@ public:
             cout<<"Amount (USD) : ";cin>>usd;
             //check validation when transfer
             try{
-               if(isUSDAccount()){
-                  checkSourceUSD(usd);
-                  setTotalMoneyUSD(totalMoneyUSD-usd);
-                  destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
-                  cout<<"Transfer Success"<<endl;
-               }else{
-                  checkSourceKHR(changeUSDtoKHR(usd,exchangeRate));
-                  setTotalMoneyKHR(totalMoneyKHR-changeUSDtoKHR(usd,exchangeRate));
-                  destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
-                  cout<<"Transfer Success"<<endl;
-               }
+               transferUSDtoOther(usd,destUser,exchangeRate);
+               // if(isUSDAccount()){
+               //    checkSourceUSD(usd);
+               //    setTotalMoneyUSD(totalMoneyUSD-usd);
+               //    destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
+               //    cout<<"Transfer Success"<<endl;
+               // }else{
+               //    checkSourceKHR(changeUSDtoKHR(usd,exchangeRate));
+               //    setTotalMoneyKHR(totalMoneyKHR-changeUSDtoKHR(usd,exchangeRate));
+               //    destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
+               //    cout<<"Transfer Success"<<endl;
+               // }
             }catch(exception &e){
                cerr<<e.what();
             };
@@ -233,17 +269,18 @@ public:
             cout<<"Amount (KHR) : ";cin>>khr;
             //check validation when transfer
             try{
-               if(!isUSDAccount()){
-                  checkSourceKHR(khr);
-                  setTotalMoneyKHR(totalMoneyKHR-khr);
-                  destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
-                  cout<<"Transfer Success"<<endl;
-               }else{
-                  checkSourceUSD(changeKHRtoUSD(khr,exchangeRate));
-                  setTotalMoneyUSD(totalMoneyUSD-changeKHRtoUSD(khr,exchangeRate));
-                  destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
-                  cout<<"Transfer Success"<<endl;
-               }   
+               transferKHRtoOther(khr,destUser,exchangeRate);
+               // if(!isUSDAccount()){
+               //    checkSourceKHR(khr);
+               //    setTotalMoneyKHR(totalMoneyKHR-khr);
+               //    destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
+               //    cout<<"Transfer Success"<<endl;
+               // }else{
+               //    checkSourceUSD(changeKHRtoUSD(khr,exchangeRate));
+               //    setTotalMoneyUSD(totalMoneyUSD-changeKHRtoUSD(khr,exchangeRate));
+               //    destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
+               //    cout<<"Transfer Success"<<endl;
+               // }   
             }catch(exception &e){
                cerr<<e.what();
             };
@@ -253,43 +290,51 @@ public:
             break;
       }
    }
-   // void addQR(){
-   //    QRCode newQR;
-   //    newQR.cratePaymentCode();
-   //    cout<<newQR.getCodeData()<<endl;
-   //    qrCode.push(newQR);
-   // }
-   // bool checkQRCode(const int code,int &index){
-   //    for(int i=0;i<qrCode.getLength();i++){
-   //       if(qrCode.getValue(i).getCode() != code) {
-   //          index = i;
-   //          return false;     
-   //       }
-   //    }
-   //    return true;
-   // }
-   // void payMoney(ArrayList<User> &destUsers,int indexSource){
-   //    //code
-   //    int tempCode=0;
-   //    int indexQRCode=0;
-   //    string confirm;
-   //    cout<<"Enter Code : ";cin>>tempCode;
-   //    for(int i = 0; i<destUsers.getLength();i++){
-   //       if(i == indexSource) continue;
-   //       if(checkQRCode(tempCode,indexQRCode)){
-   //          cout<<destUsers.getValue(i).getFirstName()<<endl;
-   //          cout<<destUsers.getValue(i).getPhoneNumber()<<endl;
-   //          QRCode& codeToPay = destUsers.getValue(i).getQR().getValue(i);
-   //          cout<<codeToPay.getCodeData()<<endl;
-   //          // cout<<"press Yes/No to pay";cin>>confirm;
-   //          // if(confirm == "yes" ){
-   //             cout<<"Process Pay..";
-   //          // }
-   //       }else{
-   //          cout<<"Code not found"<<endl;
-   //       }
-   //    }
-   // }
+   void addQR(){
+      QRCode newQR;
+      newQR.cratePaymentCode();
+      cout<<newQR.getCodeData()<<endl;
+      qrCode.push_back(newQR);   
+   }
+   bool checkQRCode(const int code,int &index){
+      for(int i=0;i<qrCode.size();i++){
+         if(qrCode.at(i).getCode() != code) {
+            index = i;
+            return false;     
+         }
+      }
+      return true;
+   }
+   void payMoney(ArrayList<User> &destUsers,int indexSource){
+      //code
+      int tempCode=0;
+      int indexQRCode=0;
+      string confirm;
+      bool check=false;
+      cout<<"Enter Code : ";cin>>tempCode;
+      for(int i = 0; i<destUsers.getLength();i++){
+         if(i == indexSource) continue;
+         if(destUsers.getValue(i).checkQRCode(tempCode,indexQRCode)){
+            check = true;
+            cout<<destUsers.getValue(i).getFirstName()<<endl;
+            cout<<destUsers.getValue(i).getPhoneNumber()<<endl;
+            QRCode& codeToPay = destUsers.getValue(i).getQR().at(i);
+            cout<<codeToPay.getCodeData()<<endl;
+            cout<<"press Yes/No to pay";cin>>confirm;
+            if(confirm == "YES" || confirm =="yes" || confirm =="Yes"){
+               cout<<"Process Pay..";
+               if(codeToPay.getAmountKHR()!=0){
+                  transferKHRtoOther(codeToPay.getAmountKHR(),destUsers.getValue(i),4100);
+               }else{
+                  transferUSDtoOther(codeToPay.getAmountUSD(),destUsers.getValue(i),4100);
+               }
+            }
+         }
+      }
+      if(!check){
+         cout<<"Code not found"<<endl;
+      }
+   }
    char* getPhoneNumber() { 
    return phoneNumber; 
    }
@@ -373,9 +418,9 @@ public:
       strncpy(password, pwd, sizeof(password) - 1); 
       password[sizeof(password) - 1] = '\0'; 
    }
-   // ArrayList<QRCode> &getQR(){
-   //    return qrCode;
-   // }
+   vector<QRCode> getQR(){
+      return qrCode;
+   }
 
    // int getQrCodePayment() { 
    //    return qrCodePayment; 
