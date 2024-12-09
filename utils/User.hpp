@@ -35,6 +35,25 @@ public:
       totalMoneyKHR=0.00;
       totalMoneyUSD=0.00;
    }
+   void displayInfo() {
+      cout << "=========================================" << endl;
+      cout << "         Users Account Details        " << endl;
+      cout << "=========================================" << endl;
+      cout << "National ID       : " << nationalIdCard << endl;
+      cout << "Name              : " << firstName << " " << lastName << endl;
+      cout << "Ddate of Birth    : " << dob.getDOB()<<endl;
+      cout << "Phone Number      : " << phoneNumber << endl;
+      cout << "Address           : " << address << endl;
+      cout << "-----------------------------------------" << endl;
+      cout << "         Financial Information           " << endl;
+      cout << "-----------------------------------------" << endl;
+      cout << fixed << setprecision(2);
+      cout << "Loan Amount (USD) : $" << loanUSD << endl;
+      cout << "Loan Amount (KHR) : " << loanKHR << " KHR" << endl;
+      cout << "Total Balance USD : $" << totalMoneyUSD << endl;
+      cout << "Total Balance KHR : " << totalMoneyKHR << " KHR" << endl;
+      cout << "=========================================" << endl;
+   }
    void input(const string &fileName){
       // string fname;
       cout<<"User information "<<endl;
