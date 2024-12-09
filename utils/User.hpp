@@ -39,6 +39,25 @@ public:
       totalMoneyUSD=0.00;
 
    }
+   void displayInfo() {
+      cout << "=========================================" << endl;
+      cout << "         Users Account Details        " << endl;
+      cout << "=========================================" << endl;
+      cout << "National ID       : " << nationalIdCard << endl;
+      cout << "Name              : " << firstName << " " << lastName << endl;
+      cout << "Ddate of Birth    : " << dob.getDOB()<<endl;
+      cout << "Phone Number      : " << phoneNumber << endl;
+      cout << "Address           : " << address << endl;
+      cout << "-----------------------------------------" << endl;
+      cout << "         Financial Information           " << endl;
+      cout << "-----------------------------------------" << endl;
+      cout << fixed << setprecision(2);
+      cout << "Loan Amount (USD) : $" << loanUSD << endl;
+      cout << "Loan Amount (KHR) : " << loanKHR << " KHR" << endl;
+      cout << "Total Balance USD : $" << totalMoneyUSD << endl;
+      cout << "Total Balance KHR : " << totalMoneyKHR << " KHR" << endl;
+      cout << "=========================================" << endl;
+   }
    void input(const string &fileName){
       // string fname;
       cout<<"User information "<<endl;
@@ -254,17 +273,6 @@ public:
             //check validation when transfer
             try{
                transferUSDtoOther(usd,destUser,exchangeRate);
-               // if(isUSDAccount()){
-               //    checkSourceUSD(usd);
-               //    setTotalMoneyUSD(totalMoneyUSD-usd);
-               //    destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
-               //    cout<<"Transfer Success"<<endl;
-               // }else{
-               //    checkSourceKHR(changeUSDtoKHR(usd,exchangeRate));
-               //    setTotalMoneyKHR(totalMoneyKHR-changeUSDtoKHR(usd,exchangeRate));
-               //    destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
-               //    cout<<"Transfer Success"<<endl;
-               // }
             }catch(exception &e){
                cerr<<e.what();
             };
@@ -273,18 +281,7 @@ public:
             cout<<"Amount (KHR) : ";cin>>khr;
             //check validation when transfer
             try{
-               transferKHRtoOther(khr,destUser,exchangeRate);
-               // if(!isUSDAccount()){
-               //    checkSourceKHR(khr);
-               //    setTotalMoneyKHR(totalMoneyKHR-khr);
-               //    destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
-               //    cout<<"Transfer Success"<<endl;
-               // }else{
-               //    checkSourceUSD(changeKHRtoUSD(khr,exchangeRate));
-               //    setTotalMoneyUSD(totalMoneyUSD-changeKHRtoUSD(khr,exchangeRate));
-               //    destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
-               //    cout<<"Transfer Success"<<endl;
-               // }   
+               transferKHRtoOther(khr,destUser,exchangeRate); 
             }catch(exception &e){
                cerr<<e.what();
             };
@@ -424,14 +421,6 @@ public:
    }
    vector<QRCode> getQR(){
       return qrCode;
-   }
-
-   // int getQrCodePayment() { 
-   //    return qrCodePayment; 
-   // }
-
-   // void setQrCodePayment(int code) { 
-   //    qrCodePayment = code; 
-   // }      
+   }   
 };
 #endif
