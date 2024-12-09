@@ -24,21 +24,29 @@ private:
    vector<QRCode> qrCode;
 public:
    // change
-   User( const string &firstName,double loanUSD): firstName(firstName),loanUSD(loanUSD){}
-   //
-   User(){
-      firstName = "NULL";
-      lastName = "NULL";
-      address = "NULL";
-      strcpy(phoneNumber, "NULL");
-      strcpy(password, "NULL");
-      nationalIdCard=0;
-      loanKHR=0.00;
-      loanUSD=0.00;
-      totalMoneyKHR=0.00;
-      totalMoneyUSD=0.00;
+  User(const std::string& firstName, 
+     const std::string& lastName, 
+     const std::string& address, 
+     const char* phoneNumber, 
+     const char* password, 
+     int nationalIdCard, 
+     double loanKHR, 
+     double loanUSD, 
+     double totalMoneyKHR, 
+     double totalMoneyUSD) {
+    
+    this->firstName = firstName;
+    this->lastName = lastName;
+    this->address = address;
+    strcpy(this->phoneNumber, phoneNumber);
+    strcpy(this->password, password);
+    this->nationalIdCard = nationalIdCard;
+    this->loanKHR = loanKHR;
+    this->loanUSD = loanUSD;
+    this->totalMoneyKHR = totalMoneyKHR;
+    this->totalMoneyUSD = totalMoneyUSD;
+}
 
-   }
    void displayInfo() {
       cout << "=========================================" << endl;
       cout << "         Users Account Details        " << endl;
