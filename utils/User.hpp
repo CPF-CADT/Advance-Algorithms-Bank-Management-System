@@ -23,6 +23,9 @@ private:
    char password[16];
    vector<QRCode> qrCode;
 public:
+   // change
+   User( const string &firstName,double loanUSD): firstName(firstName),loanUSD(loanUSD){}
+   //
    User(){
       firstName = "NULL";
       lastName = "NULL";
@@ -34,6 +37,7 @@ public:
       loanUSD=0.00;
       totalMoneyKHR=0.00;
       totalMoneyUSD=0.00;
+
    }
    void input(const string &fileName){
       // string fname;
