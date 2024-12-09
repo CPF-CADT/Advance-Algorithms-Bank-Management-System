@@ -18,6 +18,25 @@ class Admin {
         
 
     public:
+    void dataUserHeader(){
+        cout << "National-ID   First-Name        Last-Name        Loan-USD        Loan-KHR        Total-Money-KHR   Total-Money-USD   DOB         Phone-Number   Address" << endl;
+    }
+    void showAllUsers(User user){
+        cout << left;
+        cout<< setw(15) << user.getNationalIdCard()
+        << setw(20) << user.getFirstName()
+        << setw(15) << user.getLastName()
+        << setw(15) << fixed << setprecision(2) << user.getLoanUSD()
+        << setw(15) << fixed << setprecision(2) << user.getLoanKHR()
+        << setw(25) << fixed << setprecision(2) << user.getTotalMoneyKHR()
+        << setw(10) << fixed << setprecision(2) << user.getTotalMoneyUSD()
+        << setw(10) << user.getUserDOB()
+        << setw(15) << user.getPhoneNumber()
+        << setw(30) << user.getAddress()
+        << endl;
+        cout << "--------------------------------------------------------------------------------------------------------" << endl;
+    }
+
 
 };
 
