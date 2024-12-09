@@ -56,20 +56,14 @@ class Admin {
                 double Nbox2=stod(box2);
                 users.emplace_back(box1,Nbox2);
             }
-
         }
         file.close();
-       for ( auto& User : users) {
-    cout << "Field1: " << User.getFirstName()
-              << ", Field2: " << User.getLoanUSD()
-              << '\n';
-}
-
-        
+        for ( auto& User : users) {
+            cout << "Field1: " << User.getFirstName()
+            << ", Field2: " << User.getLoanUSD()
+            << '\n';
+        }
     }
-   
-
-
 };
 
 #endif

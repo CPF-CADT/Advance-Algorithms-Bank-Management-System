@@ -26,6 +26,9 @@ public:
    // change
    User( const string &firstName,double loanUSD): firstName(firstName),loanUSD(loanUSD){}
    //
+   User(string firstName){
+      this->firstName = firstName;
+   }
    User(){
       firstName = "NULL";
       lastName = "NULL";
@@ -37,7 +40,6 @@ public:
       loanUSD=0.00;
       totalMoneyKHR=0.00;
       totalMoneyUSD=0.00;
-
    }
    void displayInfo() {
       cout << "=========================================" << endl;
