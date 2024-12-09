@@ -6,7 +6,7 @@
 #include <string>
 #define DATA_USER "user.dat"
 
-char* comfirmPassword();
+// char* comfirmPassword();
 bool enterPassword(User user);
 int displayOption(string *allOption,int size);
 void header(const string header);
@@ -27,7 +27,7 @@ int main(){
    int currentIndexUser=-1;
 
    //Load data to use
-   bank.setExchnageRate(4100);
+   bank.setExchnageRate(4100.00);
    do{
       clearScreen();
       // cout<<"Welcome To [Bank Name] Please Login "<<endl;
@@ -170,7 +170,6 @@ void clearScreen() {
    system("clear");
 #endif
    system("cls");
-
 }
 void header(const string header){
    cout << "=========================================" << endl;
