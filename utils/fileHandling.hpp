@@ -49,7 +49,7 @@ template <typename Object> bool readFromBinary(const string& filename, ArrayList
       array.push(tempUser);
    }
    readFile.close();
-   return false;
+   return true;
 }
 void writeString(ofstream &writeFile, string &str){
    size_t sizeStr = str.size();

@@ -14,8 +14,8 @@ int main(){
          case 1:{
             User tempUser;
             tempUser.input(USER_FILE);
-            tempUser.setTotalMoneyUSD(100);
             tempUser.setTotalMoneyKHR(10000);
+            tempUser.setTotalMoneyUSD(100);
             tempUser.addQR();
             tempUser.showBalance();
             user.push(tempUser);
