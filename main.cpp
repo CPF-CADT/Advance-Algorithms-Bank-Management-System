@@ -2,6 +2,7 @@
 #include "./utils/Bank.hpp"
 #include "./utils/ATM.hpp"
 #include "./utils/Admin.hpp"
+#include "./utils/fileHandling.hpp"
 #include <unistd.h>
 #include <string>
 #define DATA_USER "user.dat"
@@ -12,8 +13,6 @@ int displayOption(string *allOption,int size);
 void header(const string header);
 void clearScreen();
 int main(){
-
-
    int option;
    string mainOption[] = {"ATM","User","Administration"};
    string userLoginOption[] = {"Login","Register"};
@@ -41,7 +40,6 @@ int main(){
             //process ATm
             break;
          case 2:
-            readFromBinary(DATA_USER,users);
             USER:
             clearScreen();
             header("USER INTERFACE");
@@ -170,7 +168,6 @@ void clearScreen() {
 #else
    system("clear");
 #endif
-   system("cls");
 }
 void header(const string header){
    cout << "=========================================" << endl;

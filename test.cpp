@@ -1,6 +1,5 @@
-#include"./utils/Admin.hpp"
+#include"./utils/User.hpp"
 int main(){
-    Admin admin;
-    admin.readFromCV("user.csv");
+    ArrayList<User> user;
     return 0;
 }

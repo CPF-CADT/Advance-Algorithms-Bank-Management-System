@@ -1,6 +1,5 @@
 #ifndef CLASS_USER
 #define CLASS_USER
-#include<stack>
 #include<cstring>
 #include<cmath>
 #include "./DOB.hpp"
@@ -8,6 +7,9 @@
 #include "./arrayList.hpp"
 #include "QRCode.hpp"
 #include <vector>
+#include<iostream>
+#include<fstream>
+#include<sstream>
 class User{
 private:
    string firstName;
@@ -24,6 +26,19 @@ private:
    vector<QRCode> qrCode;
 public:
    // change
+   User(){
+      firstName = "NULL";
+      lastName = "NULL";
+      address = "NULL";
+      strcpy(phoneNumber, "NULL");
+      strcpy(password, "NULL");
+      nationalIdCard=0;
+      loanKHR=0.00;
+      loanUSD=0.00;
+      totalMoneyKHR=0.00;
+      totalMoneyUSD=0.00;
+   }
+
   User(const std::string& firstName, 
      const std::string& lastName, 
      const std::string& address, 

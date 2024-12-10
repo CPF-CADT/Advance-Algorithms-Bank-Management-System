@@ -7,7 +7,6 @@
 #include<string>
 #include"Bank.hpp"
 #include"ATM.hpp"
-#include"DOB.hpp"
 // #include"fileHandling.hpp"
 #include"User.hpp"
 
@@ -40,36 +39,6 @@ class Admin {
         << endl;
         cout << "--------------------------------------------------------------------------------------------------------" << endl;
     }
-//     void readFromCV(const string & fileName){ plan B
-//         ifstream file(fileName);
-//         if(!file.is_open()){cerr<<"Error"; 
-//         return ;
-//         }else{
-//             cout<<"yes";
-//         }
-//         vector<User> users;
-//         string line;
-//         while(getline(file,line)){
-//             stringstream ss(line);
-//             string box1,box2;
-//             if((getline(ss,box1,','))&& getline(ss,box2,',')){
-//                 double Nbox2=stod(box2);
-//                 users.emplace_back(box1,Nbox2);
-//             }
-
-//         }
-//         file.close();
-//        for ( auto& User : users) {
-//     cout << "Field1: " << User.getFirstName()
-//               << ", Field2: " << User.getLoanUSD()
-//               << '\n';
-// }
-
-        
-//     }
-
-
-
 };
 
 #endif
