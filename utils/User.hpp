@@ -46,6 +46,7 @@ public:
     this->totalMoneyKHR = totalMoneyKHR;
     this->totalMoneyUSD = totalMoneyUSD;
 }
+//   User( const string &firstName,double loanUSD): firstName(firstName),loanUSD(loanUSD){} plan B
 
    void displayInfo() {
       cout << "=========================================" << endl;
