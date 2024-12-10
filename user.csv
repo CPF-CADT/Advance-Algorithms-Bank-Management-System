@@ -1,5 +1,5 @@
-fname,lname,address,phoneNum,pw,nationCard,loanKHR,loanUSD,totalKHR,totalUSD
-John,Doe,123 Main St,1234567890,pass123,1001,50000,1000,60000,1200
+fname,lname,address,dob,phoneNum,pw,nationCard,loanKHR,loanUSD,totalKHR,totalUSD
+John,Doe,123 Main St,11-03-2006,1234567890,pass123,1001,50000,1000,60000,1200
 Jane,Smith,456 Elm St,0987654321,word321,1002,40000,800,48000,960
 Alice,Johnson,789 Oak St,1122334455,alice123,1003,30000,600,36000,720
 Bob,Williams,321 Pine St,2233445566,bob321,1004,20000,400,24000,480

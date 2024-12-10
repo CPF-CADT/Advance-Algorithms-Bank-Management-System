@@ -8,7 +8,6 @@
 #include <cstdio>
 #include <fstream>
 #include <vector>
-
 // template <typename Object> void writeToBinary(const string& filename, const vector<Object>& array) {
 //    ofstream file(filename, ios::binary);
 //    if (file) {
@@ -66,6 +65,34 @@ string readString(ifstream &readFile){
    delete[] tempString;
    return str;
 }
+template <typename Object> void writeVector(ofstream &writeFile, vector<Object> &list){
+   size_t lengthList = list.size();
+   writeFile.write((char *)(&lengthList), sizeof(lengthList));
+   writeFile.write((char *)(list.data()), sizeof(Object) * lengthList);
+}
+template <typename Object> void readVector(ifstream &readFile,vector<Object> &list){
+   size_t lengthList;
+   readFile.read((char *)(&lengthList), sizeof(lengthList));
+   list.resize(lengthList);
+   readFile.read((char *)(list.data()), sizeof(Object) * lengthList);
+}
+
+void writeVectorStr(ofstream &writeFile, vector<string> str){
+   size_t lengthStr = str.size();
+   writeFile.write((char *)(&lengthStr), sizeof(lengthStr));
+   for(auto s:str){
+      writeString(writeFile,s);
+   }
+}
+void readVectorStr(ifstream &readFile,vector<string> &object){
+   size_t lengthStr;
+   readFile.read((char *)(&lengthStr), sizeof(lengthStr));
+   object.clear();   
+   for(size_t i = 0;i<lengthStr;i++){
+      string tempStr = readString(readFile);
+      object.push_back(tempStr);
+   }
+}
 // template <typename Object> void writeArrayList(ofstream &writeFile, ArrayList<Object> &list){
 //    int lengthList = list.getLength();
 //    writeFile.write((char *)(&lengthList), sizeof(lengthList));
@@ -85,15 +112,4 @@ string readString(ifstream &readFile){
 //    }
 // }
 
-template <typename Object> void writeArrayList(ofstream &writeFile, vector<Object> &list){
-   size_t lengthList = list.size();
-   writeFile.write((char *)(&lengthList), sizeof(lengthList));
-   writeFile.write((char *)(list.data()), sizeof(Object) * lengthList);
-}
-template <typename Object> void readArrayList(ifstream &readFile,vector<Object> &list){
-   size_t lengthList;
-   readFile.read((char *)(&lengthList), sizeof(lengthList));
-   list.resize(lengthList);
-   readFile.read((char *)(list.data()), sizeof(Object) * lengthList);
-}
 #endif

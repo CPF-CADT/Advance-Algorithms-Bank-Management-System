@@ -71,7 +71,8 @@
     "xiosbase": "cpp",
     "stdexcept": "cpp",
     "utility": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "vector": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
