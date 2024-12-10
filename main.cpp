@@ -71,14 +71,12 @@ int main(){
                                  //Code Show Money of user 
                                  header("USER BALANCE");
                                  users.getValue(currentIndexUser).showBalance();
-                                 sleep(1);
                                  puseScreen();
                                  break;
                                  }
                               case 2:
                                  header("TRANSACTION HISTORY");
                                  //Code Transaction History
-                                 sleep(1);
                                  puseScreen();
                                  break;
                               case 3:
@@ -109,28 +107,43 @@ int main(){
                                  break;
                               case 4:
                                  //Code payment
+                                 header("PAYMENT TRANSACTION");
                                  break;
                               case 5:
                                  //Code Deposit with Interest
+                                 header("DEPOSIT WITH INTEREST");
                                  break;
                               case 6:
                                  //Code Apply Loan
+                                 header("APPLY FOR LOAN");
                                  break;
                               case 7:
+                                 header("UPDATE USER INFORMATION ");
                                  //Code Update Information
                                  break;
                               case 8:
                                  //Code Check Information Detail
+                                 clearScreen();
+                                 users.getValue(currentIndexUser).displayInfo();
+                                 cin.ignore();
                                  break;
-                              case 9:
+                              case 9:{
                                  //Code Request to Admin
-                                 
+                                 string request;
+                                 cin.ignore();
+                                 header("SENT REQUEST ");
+                                 cout<<"Enter Request : ";getline(cin,request);
+                                 admin.addRequest(users.getValue(currentIndexUser),request);
+                                 admin.showRequest();
+                                 //ned to sacve to admin
                                  break;
+                                 }
                               case 0:{
                                  goto USER;
                                  break;
                               }
                            }
+                           puseScreen();
                         goto userInterface;
                      }
                   }else{
@@ -140,7 +153,7 @@ int main(){
                         goto USER;
                      }
                   break;
-               case 2:
+               case 2:{
                   clearScreen();
                   cout<<" Create User Account"<<endl;
                   newUser.input(DATA_USER);
@@ -149,6 +162,7 @@ int main(){
                   newUser.writeToFile(DATA_USER);
                   users.push(newUser);
                   break;
+                  }
                case 0:
                   //exit
                   goto START;

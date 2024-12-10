@@ -11,15 +11,10 @@
 #include"User.hpp"
 
 using namespace std;
-
-
-
 class Admin {
     private:
     // static int numberUser;
-    char userFirstName[45];
-        
-
+    vector<string> userRequest;
     public:
     void dataUserHeader(){
         cout << "National-ID   First-Name        Last-Name        Loan-USD        Loan-KHR        Total-Money-KHR   Total-Money-USD   DOB         Phone-Number   Address" << endl;
@@ -39,6 +34,15 @@ class Admin {
         << endl;
         cout << "--------------------------------------------------------------------------------------------------------" << endl;
     }
+    void addRequest(User &source,string text){
+        string request = " - "+source.getName()+" "+source.getPhoneNumber()+" : \n"+"    "+text+". \n";
+        userRequest.push_back(request);
+    }
+    void showRequest(){
+        for (auto request : userRequest) {
+            cout << request << endl;
+        }     
+        cout << "----------------------------------------------------------------------------------------" << endl;
+    }
 };
-
 #endif
