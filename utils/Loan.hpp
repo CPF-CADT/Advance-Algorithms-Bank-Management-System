@@ -57,42 +57,30 @@ class Loan{
             cout << "Take Money Date    : " << takeMoney.getDate() << endl;
             cout << "Return Money Date  : " << returnMoney.getDate() << endl;
         }
-
-        // void setReturnMoney(string& returnMoneyValue) {
-        //     returnMoney = returnMoneyValue;
-        // }
-
-        // void setTakeMoney(string& takeMoneyValue) {
-        //     takeMoney = takeMoneyValue;
-        // }
-
         void setPhoneNumber(char* phone) {
             strncpy(phoneNumber, phone, sizeof(phoneNumber) - 1);
             phoneNumber[sizeof(phoneNumber) - 1] = '\0';
         }
-
         void setName(string& nameValue) {
             name = nameValue;
         }
-
         string getReason() {
             return reason;
         }
-
-        // string getReturnMoney() {
-        //     return returnMoney;
-        // }
-
-        // string getTakeMoney() {
-        //     return takeMoney;
-        // }
-
         string getPhoneNumber() {
             return string(phoneNumber);
         }
-
         string getName() {
             return name;
+        }
+        QRCode & getAmountLoan(){
+            return amountLoan;
+        }
+        Date getRetunDate(){
+            return returnMoney;
+        }
+        Date getTakeDate(){
+            return takeMoney;
         }
       
 };

@@ -57,7 +57,7 @@ int main(){
                   if(currentIndexUser!=-1){
                      cin.ignore();
                      if(enterPassword(users.getValue(currentIndexUser))){
-                        cout<<"Login success ...";
+                        cout<<"Login success ..."<<endl;
                         //apply some animetion
                         userInterface:
                            clearScreen();
@@ -236,7 +236,6 @@ int displayOption(string *allOption,int size){
 //          i++;
 //       }
 //    }
-|}
 // } implement next time
 bool enterPassword(User user){
    int wrong=0;

@@ -84,10 +84,8 @@ public:
       cout << "=========================================" << endl;
    }
    void input(const string &fileName){
-      // string fname;
       cout<<"User information "<<endl;
       cout<<"First Name : ";cin>>firstName;
-      // stringToChar (&firstName,fname);
       // cout<<"Last Name  : ";cin>>lastName;
       // cout<<"National ID Card : ";cin>>nationalIdCard;
       // cin.ignore();
@@ -97,6 +95,25 @@ public:
       cout<<"Security Section "<<endl;
       inputPhoneNumber(fileName);
       inputPassword();
+
+      // cout << "=========================================" << endl;
+      // cout << "          User Information Form          " << endl;
+      // cout << "=========================================" << endl;
+      // cout << "Please enter the following details:" << endl;
+      // cout << "First Name       : "; cin >> firstName;
+      // cout << "Last Name        : "; cin >> lastName;
+      // cout << "National ID      : "; cin >> nationalIdCard;
+      // dob.inputDate();
+      // cin.ignore(); 
+      // cout << "Address          : "; getline(cin, address);
+      // cout << "\n=========================================" << endl;
+      // cout << "          Security Section               " << endl;
+      // cout << "=========================================" << endl;
+      // inputPhoneNumber(fileName);
+      // inputPassword();
+      // cout << "\n=========================================" << endl;
+      // cout << "Thank you, " << firstName << " " << lastName << "! Your details have been recorded." << endl;
+      // cout << "=========================================" << endl;
    }
    void writeToFile(const string &fileName){
       ofstream writeFile(fileName, ios::app | ios::binary);
@@ -130,7 +147,7 @@ public:
    }
    void inputPhoneNumber(const string &fileName){
       enterPhonenumber:
-      cout<<"Phone Number : ";cin>>phoneNumber;
+      cout<<"Phone Number     : ";cin>>phoneNumber;
       //add validation
       if(isPhoneNumberUsed(fileName,phoneNumber)){
          cout<<"Check"<<endl;
@@ -154,7 +171,7 @@ public:
       char confirmPassword[16];
       char pass[16];
       enterPassword:
-      cout<<"Password   : ";cin>>pass;
+      cout<<"Create  Password : ";cin>>pass;
       cout<<"Confirm Password : ";cin>>confirmPassword;
       if(strcmp(confirmPassword,pass)!=0){
          cout<<"Confirm Password Incorrect "<<endl;
@@ -481,7 +498,29 @@ public:
          return "A cash amount of " + to_string(amount) +"R"+ " was received by " + source + " from phone number " + string(phone) + ".\n";
       }
    }
-};
+
+   
+   int findFreeOrder(ArrayList<User> &users, User newUser) {
+      int length = users.getLength();
+      char phone[12];
+      strcpy(phone, newUser.getPhoneNumber()); 
+      int lowIndex = 0, mid;
+      int highIndex = length - 1;
+      if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
+      if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
+      while (lowIndex <= highIndex) {
+         mid = lowIndex + (highIndex - lowIndex) / 2;
+         if (strcmp(phone,users.getValue(mid).getPhoneNumber())>=0 &&(mid==length-1||strcmp(phone,users.getValue(mid+1).getPhoneNumber())<0) ){
+               return mid+1;
+         } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
+               lowIndex = mid + 1;
+         } else {
+               highIndex = mid - 1;
+         }
+      }
+      return lowIndex;
+   }
+  
 void readFromCV(const string fileName,ArrayList<User> &users,const string fileNameBin){ 
         ifstream file(fileName);
          if(!file.is_open()){cerr<<"Error"; 
@@ -550,9 +589,8 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
         }
         
     }
-    writeToBinary(fileNameBin,users);
-
-        file.close();
-        }
-      
+      writeToBinary(fileNameBin,users);
+      file.close();
+   };
+};
 #endif
