@@ -1,3 +1,5 @@
+#ifndef LOAN_HPP
+#define LOAN_HPP
 #include"Date.hpp"
 #include"User.hpp"
 #include"QRCode.hpp"
@@ -34,18 +36,26 @@ class Loan{
             writeFile.write((char *)(&returnMoney), sizeof(Date)); 
             writeFile.write((char *)(&phoneNumber),sizeof(phoneNumber));  
         }
+        void readBin(ifstream &readFile){
+            readFile.read((char *)(&amountLoan), sizeof(QRCode));    
+            name = readString(readFile);
+            reason = readString(readFile);
+            readFile.read((char *)(&takeMoney), sizeof(Date));    
+            readFile.read((char *)(&returnMoney), sizeof(Date)); 
+            readFile.read((char *)(&phoneNumber),sizeof(phoneNumber));  
+        }
         void setReason(string& reasonValue) {
             reason = reasonValue;
         }
         void showLoanDetail(){
             cout << left << setw(20) << "Name" << setw(15) << "Phone" << endl;
-            cout << "---------------------------------------" << endl;
+            cout << "------------------------------------------------------------" << endl;
             cout << left << setw(20) << name << setw(15) << phoneNumber << endl;
             cout << endl;
-            cout << left << amountLoan.getLoanData() << endl;
-            cout << "Reason          : " << reason << endl;
-            cout << "Take Money Date : " << takeMoney.getDate() << endl;
-            cout << "Return Money Date: " << returnMoney.getDate() << endl;
+            cout << "Loan Amount        : " <<amountLoan.getLoanData() << endl;
+            cout << "Reason             : " << reason << endl;
+            cout << "Take Money Date    : " << takeMoney.getDate() << endl;
+            cout << "Return Money Date  : " << returnMoney.getDate() << endl;
         }
 
         // void setReturnMoney(string& returnMoneyValue) {
@@ -86,3 +96,4 @@ class Loan{
         }
       
 };
+#endif
