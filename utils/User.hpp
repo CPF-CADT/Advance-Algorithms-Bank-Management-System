@@ -88,12 +88,12 @@ public:
       cout<<"User information "<<endl;
       cout<<"First Name : ";cin>>firstName;
       // stringToChar (&firstName,fname);
-      // cout<<"Last Name  : ";cin>>lastName;
-      // cout<<"National ID Card : ";cin>>nationalIdCard;
-      // cin.ignore();
-      // cout<<"Address    : ";getline(cin,address);
-      // dob.inputDate();
-      // cin.ignore();
+      cout<<"Last Name  : ";cin>>lastName;
+      cout<<"National ID Card : ";cin>>nationalIdCard;
+      cin.ignore();
+      cout<<"Address    : ";getline(cin,address);
+      dob.inputDate();
+      cin.ignore();
       cout<<"Security Section "<<endl;
       inputPhoneNumber(fileName);
       inputPassword();
