@@ -28,6 +28,14 @@ private:
    vector<string> transactionHistory;
 public:
    // change
+<<<<<<< HEAD
+   User( const string &firstName,double loanUSD): firstName(firstName),loanUSD(loanUSD){}
+   //
+   User(string firstName){
+      this->firstName = firstName;
+   }
+=======
+>>>>>>> main
    User(){
       firstName = "NULL";
       lastName = "NULL";
