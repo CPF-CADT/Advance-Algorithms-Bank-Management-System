@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 #include"utils/Admin.hpp"
+=======
+#include"./utils/User.hpp"
+>>>>>>> main
 int main(){
-    Admin admin;
-    admin.readFromCV("user.csv");
+    ArrayList<User> user;
+    readFromCV("generated_data.csv");
     return 0;
 }

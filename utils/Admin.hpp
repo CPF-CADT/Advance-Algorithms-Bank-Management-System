@@ -7,8 +7,7 @@
 #include<string>
 #include"Bank.hpp"
 #include"ATM.hpp"
-#include"DOB.hpp"
-#include"fileHandling.hpp"
+// #include"fileHandling.hpp"
 #include"User.hpp"
 
 using namespace std;
@@ -40,6 +39,7 @@ class Admin {
         << endl;
         cout << "--------------------------------------------------------------------------------------------------------" << endl;
     }
+<<<<<<< HEAD
     void readFromCV(const string & fileName){
         ifstream file(fileName);
         if(!file.is_open()){cerr<<"Error"; 
@@ -64,6 +64,8 @@ class Admin {
             << '\n';
         }
     }
+=======
+>>>>>>> main
 };
 
 #endif

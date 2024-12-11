@@ -4,7 +4,6 @@
 #include <iostream>
 #include <ctime>
 #include<exception>
-#include<conio.h>
 using namespace std;
 class DOB{
 public:

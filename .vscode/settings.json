@@ -70,7 +70,9 @@
     "xlocmes": "cpp",
     "xiosbase": "cpp",
     "stdexcept": "cpp",
-    "utility": "cpp"
+    "utility": "cpp",
+    "iomanip": "cpp",
+    "vector": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

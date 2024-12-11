@@ -1,6 +1,5 @@
 #ifndef CLASS_USER
 #define CLASS_USER
-#include<stack>
 #include<cstring>
 #include<cmath>
 #include "./DOB.hpp"
@@ -8,6 +7,9 @@
 #include "./arrayList.hpp"
 #include "QRCode.hpp"
 #include <vector>
+#include<iostream>
+#include<fstream>
+#include<sstream>
 class User{
 private:
    string firstName;
@@ -22,13 +24,17 @@ private:
    double totalMoneyUSD;
    char password[16];
    vector<QRCode> qrCode;
+   vector<string> transactionHistory;
 public:
    // change
+<<<<<<< HEAD
    User( const string &firstName,double loanUSD): firstName(firstName),loanUSD(loanUSD){}
    //
    User(string firstName){
       this->firstName = firstName;
    }
+=======
+>>>>>>> main
    User(){
       firstName = "NULL";
       lastName = "NULL";
@@ -41,6 +47,31 @@ public:
       totalMoneyKHR=0.00;
       totalMoneyUSD=0.00;
    }
+
+  User(const string& firstName, 
+     const string& lastName, 
+     const string& address, 
+     const char* phoneNumber, 
+     const char* password, 
+     int nationalIdCard, 
+     double loanKHR, 
+     double loanUSD, 
+     double totalMoneyKHR, 
+     double totalMoneyUSD) {
+    
+    this->firstName = firstName;
+    this->lastName = lastName;
+    this->address = address;
+    strcpy(this->phoneNumber, phoneNumber);
+    strcpy(this->password, password);
+    this->nationalIdCard = nationalIdCard;
+    this->loanKHR = loanKHR;
+    this->loanUSD = loanUSD;
+    this->totalMoneyKHR = totalMoneyKHR;
+    this->totalMoneyUSD = totalMoneyUSD;
+}
+//   User( const string &firstName,double loanUSD): firstName(firstName),loanUSD(loanUSD){} plan B
+
    void displayInfo() {
       cout << "=========================================" << endl;
       cout << "         Users Account Details        " << endl;
@@ -87,7 +118,8 @@ public:
       writeFile.write((char *)(&loanKHR), sizeof(loanKHR));
       writeFile.write((char *)(&totalMoneyKHR), sizeof(totalMoneyUSD));
       writeFile.write((char *)(&password), sizeof(password));
-      writeArrayList(writeFile,qrCode);
+      writeVector(writeFile,qrCode);
+      writeVectorStr(writeFile,transactionHistory);
       writeFile.close();
    }
    void readFileBin(ifstream &readFile){
@@ -101,7 +133,8 @@ public:
       readFile.read((char *)(&loanKHR), sizeof(loanKHR));
       readFile.read((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
       readFile.read((char *)(&password), sizeof(password));
-      readArrayList(readFile,qrCode);
+      readVector(readFile,qrCode);
+      readVectorStr(readFile,transactionHistory);
    }
    void inputPhoneNumber(const string &fileName){
       enterPhonenumber:
@@ -227,16 +260,20 @@ public:
       return false;
    }
    void transferUSDtoOther(double usd,User &destUser,float exchange){
-   try{
-      if(isUSDAccount()){
-         checkSourceUSD(usd);
-         setTotalMoneyUSD(totalMoneyUSD-usd);
-         destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
-         cout<<"Transfer Success"<<endl;
+      try{
+         if(isUSDAccount()){
+            checkSourceUSD(usd);
+            setTotalMoneyUSD(totalMoneyUSD-usd);
+            destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
+            transactionHistory.push_back(logTransactionTransfer(usd,destUser.getName(),phoneNumber,true));
+            destUser.addHistoryTransaction(logTransactionReceive(usd,getName(),destUser.getPhoneNumber(),true));
+            cout<<"Transfer Success"<<endl;
          }else{
             checkSourceKHR(changeUSDtoKHR(usd,exchange));
             setTotalMoneyKHR(totalMoneyKHR-changeUSDtoKHR(usd,exchange));
             destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
+            transactionHistory.push_back(logTransactionTransfer(usd,destUser.getName(),phoneNumber,false));
+            destUser.addHistoryTransaction(logTransactionReceive(usd,getName(),destUser.getPhoneNumber(),false));
             cout<<"Transfer Success"<<endl;
          }
       }catch(exception &e){
@@ -244,21 +281,25 @@ public:
       };
    }
    void transferKHRtoOther(double khr,User &destUser,float exchange){
-   try{
-      if(!isUSDAccount()){
-         checkSourceKHR(khr);
-         setTotalMoneyKHR(totalMoneyKHR-khr);
-         destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
-         cout<<"Transfer Success"<<endl;
-      }else{
-         checkSourceUSD(changeKHRtoUSD(khr,exchange));
-         setTotalMoneyUSD(totalMoneyUSD-changeKHRtoUSD(khr,exchange));
-         destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
-         cout<<"Transfer Success"<<endl;
-      }
-   }catch(exception &e){
-      cerr<<e.what();
-      };
+      try{
+         if(!isUSDAccount()){
+            checkSourceKHR(khr);
+            setTotalMoneyKHR(totalMoneyKHR-khr);
+            destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
+            transactionHistory.push_back(logTransactionTransfer(khr,destUser.getName(),phoneNumber,false));
+            destUser.addHistoryTransaction(logTransactionReceive(khr,getName(),destUser.getPhoneNumber(),false));
+            cout<<"Transfer Success"<<endl;
+         }else{
+            checkSourceUSD(changeKHRtoUSD(khr,exchange));
+            setTotalMoneyUSD(totalMoneyUSD-changeKHRtoUSD(khr,exchange));
+            destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
+            transactionHistory.push_back(logTransactionTransfer(khr,destUser.getName(),phoneNumber,true));
+            destUser.addHistoryTransaction(logTransactionReceive(khr,getName(),destUser.getPhoneNumber(),true));
+            cout<<"Transfer Success"<<endl;
+         }
+      }catch(exception &e){
+         cerr<<e.what();
+         };
    }
    void transferToOtherAccount(User &destUser,float exchangeRate){
       double usd,khr;
@@ -347,6 +388,10 @@ public:
       phoneNumber[sizeof(phoneNumber) - 1] = '\0'; 
    }
 
+   string getName(){
+      return firstName +" "+ lastName;
+   }
+
    string getFirstName() { 
       return firstName; 
    }
@@ -421,8 +466,85 @@ public:
       strncpy(password, pwd, sizeof(password) - 1); 
       password[sizeof(password) - 1] = '\0'; 
    }
+   void addHistoryTransaction(string text){
+      transactionHistory.push_back(text);
+   }
+   vector<string> &getHistoryTransaction(){
+      return transactionHistory;
+   }
    vector<QRCode> getQR(){
       return qrCode;
-   }   
+   }
+   string logTransactionTransfer(double amount, const string destName, char* phone,bool usd){
+      if(usd){
+         return "A cash amount of " + to_string(amount) + "$"+ " was transferred to " + destName + " from account " + phone + ".\n";   
+      }else{
+         return "A cash amount of " + to_string(amount) +"R"+ " was transferred to " + destName + " from account " + phone + ".\n";   
+      }
+   }
+   string logTransactionReceive(double amount, const string& source, const char* phone,bool usd) {
+      if(usd){
+         return "A cash amount of " + to_string(amount) +"$"+ " was received by " + source + " from phone number " + string(phone) + ".\n";
+      }else{
+         return "A cash amount of " + to_string(amount) +"R"+ " was received by " + source + " from phone number " + string(phone) + ".\n";
+      }
+   }
 };
+void readFromCV(const string fileName){ 
+        ifstream file(fileName);
+         if(!file.is_open()){cerr<<"Error"; 
+          return ;
+         }else{
+            cout<<"yes";
+         }
+         string line;
+    // Read the file line by line
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string fname, lname, address,dob, phoneNum, pw, nationCard, loanKHR, loanUSD, totalKHR, totalUSD;
+
+        // Parse the line
+        if (getline(ss, fname, ',') &&
+            getline(ss, lname, ',') &&
+            getline(ss, address, ',') &&
+            getline(ss, dob, ',') &&
+            getline(ss, phoneNum, ',') &&
+            getline(ss, pw, ',') &&
+            getline(ss, nationCard, ',') &&
+            getline(ss, loanKHR, ',') &&
+            getline(ss, loanUSD, ',') &&
+            getline(ss, totalKHR, ',') &&
+            getline(ss, totalUSD, ',')) {
+            
+            try {
+                // Convert strings to appropriate data types
+               //  int N_nationCard = stoi(nationCard);
+               //  double N_loanKHR = stod(loanKHR);
+               //  double N_loanUSD = stod(loanUSD);
+               //  double N_totalKHR = stod(totalKHR);
+               //  double N_totalUSD = stod(totalUSD);
+
+                // Output the parsed data
+                cout << "First Name: " << fname << endl;
+                cout << "Last Name: " << lname << endl;
+                cout << "Address: " << address << endl;
+                cout << "Address: " << dob << endl;
+                cout << "Phone Number: " << phoneNum << endl;
+                cout << "Password: " << pw << endl;
+                cout << "National Card: " << nationCard << endl;
+                cout << "Loan in KHR: " << loanKHR << endl;
+                cout << "Loan in USD: " << loanUSD << endl;
+                cout << "Total in KHR: " << totalKHR << endl;
+                cout << "Total in USD: " << totalUSD << endl;
+                cout << "---------------------------------------" << endl;
+            } catch (const exception& e) {
+                cerr << "Error: Unable to convert one of the numeric values. Skipping this line." << endl;
+            }
+        } else {
+            cerr << "Error: Line format incorrect. Skipping this line." << endl;
+        }
+    }
+        file.close();
+        }
+      
 #endif

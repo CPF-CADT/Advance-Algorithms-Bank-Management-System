@@ -2,8 +2,10 @@
 #include "./utils/Bank.hpp"
 #include "./utils/ATM.hpp"
 #include "./utils/Admin.hpp"
+#include "./utils/fileHandling.hpp"
 #include <unistd.h>
 #include <string>
+#include <cstdlib>
 #define DATA_USER "user.dat"
 
 // char* comfirmPassword();
@@ -11,9 +13,8 @@ bool enterPassword(User user);
 int displayOption(string *allOption,int size);
 void header(const string header);
 void clearScreen();
+void puseScreen();
 int main(){
-
-
    int option;
    string mainOption[] = {"ATM","User","Administration"};
    string userLoginOption[] = {"Login","Register"};
@@ -28,6 +29,7 @@ int main(){
 
    //Load data to use
    bank.setExchnageRate(4100.00);
+   readFromBinary(DATA_USER,users);
    do{
       clearScreen();
       // cout<<"Welcome To [Bank Name] Please Login "<<endl;
@@ -41,7 +43,6 @@ int main(){
             //process ATm
             break;
          case 2:
-            readFromBinary(DATA_USER,users);
             USER:
             clearScreen();
             header("USER INTERFACE");
@@ -61,18 +62,24 @@ int main(){
                         userInterface:
                            clearScreen();
                            header("USER ACCOUNT");
+                           int op;
                            cout<<"Welcome back "<<users.getValue(currentIndexUser).getFirstName()<<endl;
-                           option = displayOption(userInterface,9);
-                           switch(option){
+                           op = displayOption(userInterface,9);
+                           switch(op){
                               //Code
-                              case 1:
+                              case 1:{
                                  //Code Show Money of user 
                                  header("USER BALANCE");
                                  users.getValue(currentIndexUser).showBalance();
+                                 sleep(1);
+                                 puseScreen();
                                  break;
+                                 }
                               case 2:
                                  header("TRANSACTION HISTORY");
                                  //Code Transaction History
+                                 sleep(1);
+                                 puseScreen();
                                  break;
                               case 3:
                                  //Code transfer money ACLIDA Concept
@@ -91,6 +98,7 @@ int main(){
                                        cout<<"Phone Number : ";cin>>phone;
                                        User &destUser = users.getValue(bank.indexOfUser(phone,users));
                                        users.getValue(currentIndexUser).transferToOtherAccount(destUser,bank.getExchnageRate());
+                                       writeToBinary(DATA_USER,users);
                                        break;
                                        }
                                     case 0:{
@@ -123,7 +131,7 @@ int main(){
                                  break;
                               }
                            }
-                        goto USER;
+                        goto userInterface;
                      }
                   }else{
                         currentIndexUser = -1;
@@ -159,6 +167,7 @@ int main(){
             cout<<"Invalid Input "<<endl;
             break;
          }
+         cin.ignore();
       }while(option!=0);
 
    return 0;
@@ -170,7 +179,14 @@ void clearScreen() {
 #else
    system("clear");
 #endif
-   system("cls");
+}
+void puseScreen() {
+#ifdef _WIN32
+   system("pause");
+#else
+   fflush(stdout); // Ensure the message is printed before waiting for input
+   getchar();
+#endif
 }
 void header(const string header){
    cout << "=========================================" << endl;
