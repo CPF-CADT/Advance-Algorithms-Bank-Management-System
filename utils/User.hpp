@@ -10,6 +10,7 @@
 #include<iostream>
 #include<fstream>
 #include<sstream>
+#include<bits/stdc++.h>
 class User{
 private:
    string firstName;
@@ -482,7 +483,7 @@ public:
       }
    }
 };
-void readFromCV(const string fileName){ 
+void readFromCV(const string fileName,ArrayList<User> &users,const string fileNameBin){ 
         ifstream file(fileName);
          if(!file.is_open()){cerr<<"Error"; 
           return ;
@@ -490,11 +491,16 @@ void readFromCV(const string fileName){
             cout<<"yes";
          }
          string line;
+         int i=0;
     // Read the file line by line
     while (getline(file, line)) {
+      i++;
+      if(i==1){
+            getline(file, line);
+         }
         stringstream ss(line);
         string fname, lname, address,dob, phoneNum, pw, nationCard, loanKHR, loanUSD, totalKHR, totalUSD;
-
+         
         // Parse the line
         if (getline(ss, fname, ',') &&
             getline(ss, lname, ',') &&
@@ -509,33 +515,44 @@ void readFromCV(const string fileName){
             getline(ss, totalUSD, ',')) {
             
             try {
-                // Convert strings to appropriate data types
-               //  int N_nationCard = stoi(nationCard);
-               //  double N_loanKHR = stod(loanKHR);
-               //  double N_loanUSD = stod(loanUSD);
-               //  double N_totalKHR = stod(totalKHR);
-               //  double N_totalUSD = stod(totalUSD);
+               //  Convert strings to appropriate data types
+                int N_nationCard = stoi(nationCard);
+                double N_loanKHR = stod(loanKHR);
+                double N_loanUSD = stod(loanUSD);
+                double N_totalKHR = stod(totalKHR);
+                double N_totalUSD = stod(totalUSD);
+              const  char*phoneNumber =phoneNum.c_str();
+                
 
-                // Output the parsed data
-                cout << "First Name: " << fname << endl;
-                cout << "Last Name: " << lname << endl;
-                cout << "Address: " << address << endl;
-                cout << "Address: " << dob << endl;
-                cout << "Phone Number: " << phoneNum << endl;
-                cout << "Password: " << pw << endl;
-                cout << "National Card: " << nationCard << endl;
-                cout << "Loan in KHR: " << loanKHR << endl;
-                cout << "Loan in USD: " << loanUSD << endl;
-                cout << "Total in KHR: " << totalKHR << endl;
-                cout << "Total in USD: " << totalUSD << endl;
-                cout << "---------------------------------------" << endl;
+               const char*password=pw.c_str();
+                
+                
+
+               //  // Output the parsed data
+               //  cout << "First Name: " << fname << endl;
+               //  cout << "Last Name: " << lname << endl;
+               //  cout << "Address: " << address << endl;
+               //  cout << "Address: " << dob << endl;
+               //  cout << "Phone Number: " << phoneNumber << endl;
+               //  cout << "Password: " << pw << endl;
+               //  cout << "National Card: " << nationCard << endl;
+               //  cout << "Loan in KHR: " << loanKHR << endl;
+               //  cout << "Loan in USD: " << loanUSD << endl;
+               //  cout << "Total in KHR: " << totalKHR << endl;
+               //  cout << "Total in USD: " << totalUSD << endl;
+               //  cout << "---------------------------------------" << endl;
+               User temp(fname, lname, address, phoneNum.c_str(), pw.c_str(), N_nationCard, N_loanKHR, N_loanUSD, N_totalKHR, N_totalUSD);
+               users.push(temp);
             } catch (const exception& e) {
                 cerr << "Error: Unable to convert one of the numeric values. Skipping this line." << endl;
             }
         } else {
             cerr << "Error: Line format incorrect. Skipping this line." << endl;
         }
+        
     }
+    writeToBinary(fileNameBin,users);
+
         file.close();
         }
       
