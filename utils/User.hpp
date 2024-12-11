@@ -43,6 +43,7 @@ public:
   User(const string& firstName, 
      const string& lastName, 
      const string& address, 
+     string dob,
      const char* phoneNumber, 
      const char* password, 
      int nationalIdCard, 
@@ -54,6 +55,8 @@ public:
     this->firstName = firstName;
     this->lastName = lastName;
     this->address = address;
+    DOB nDob(dob);
+    this->dob = nDob;
     strcpy(this->phoneNumber, phoneNumber);
     strcpy(this->password, password);
     this->nationalIdCard = nationalIdCard;
@@ -522,80 +525,7 @@ public:
       }
       return lowIndex;
    }
-  
-void readFromCV(const string fileName,ArrayList<User> &users,const string fileNameBin){ 
-        ifstream file(fileName);
-         if(!file.is_open()){cerr<<"Error"; 
-          return ;
-         }else{
-            cout<<"yes";
-         }
-         string line;
-         int i=0;
-    // Read the file line by line
-    while (getline(file, line)) {
-      i++;
-      if(i==1){
-            getline(file, line);
-         }
-        stringstream ss(line);
-        string fname, lname, address,dob, phoneNum, pw, nationCard, loanKHR, loanUSD, totalKHR, totalUSD;
-         
-        // Parse the line
-        if (getline(ss, fname, ',') &&
-            getline(ss, lname, ',') &&
-            getline(ss, address, ',') &&
-            getline(ss, dob, ',') &&
-            getline(ss, phoneNum, ',') &&
-            getline(ss, pw, ',') &&
-            getline(ss, nationCard, ',') &&
-            getline(ss, loanKHR, ',') &&
-            getline(ss, loanUSD, ',') &&
-            getline(ss, totalKHR, ',') &&
-            getline(ss, totalUSD, ',')) {
-            
-            try {
-               //  Convert strings to appropriate data types
-                int N_nationCard = stoi(nationCard);
-                double N_loanKHR = stod(loanKHR);
-                double N_loanUSD = stod(loanUSD);
-                double N_totalKHR = stod(totalKHR);
-                double N_totalUSD = stod(totalUSD);
-              const  char*phoneNumber =phoneNum.c_str();
-                
-
-               const char*password=pw.c_str();
-                
-                
-
-               //  // Output the parsed data
-               //  cout << "First Name: " << fname << endl;
-               //  cout << "Last Name: " << lname << endl;
-               //  cout << "Address: " << address << endl;
-               //  cout << "Address: " << dob << endl;
-               //  cout << "Phone Number: " << phoneNumber << endl;
-               //  cout << "Password: " << pw << endl;
-               //  cout << "National Card: " << nationCard << endl;
-               //  cout << "Loan in KHR: " << loanKHR << endl;
-               //  cout << "Loan in USD: " << loanUSD << endl;
-               //  cout << "Total in KHR: " << totalKHR << endl;
-               //  cout << "Total in USD: " << totalUSD << endl;
-               //  cout << "---------------------------------------" << endl;
-               User temp(fname, lname, address, phoneNum.c_str(), pw.c_str(), N_nationCard, N_loanKHR, N_loanUSD, N_totalKHR, N_totalUSD);
-               users.push(temp);
-            } catch (const exception& e) {
-                cerr << "Error: Unable to convert one of the numeric values. Skipping this line." << endl;
-            }
-        } else {
-            cerr << "Error: Line format incorrect. Skipping this line." << endl;
-        }
-        
-    }
-        file.close();
-        }
-   
-   void updateUserInfo()
-
+   void updateUserInfo(){
    int choice;
    do
    {
@@ -704,5 +634,74 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
          cout << "Invalid choice. Please try again." << endl;
       }
    } while (choice != 8);
+   };
+     
+};
+void readFromCV(const string fileName,ArrayList<User> &users,const string fileNameBin){ 
+        ifstream file(fileName);
+         if(!file.is_open()){cerr<<"Error"; 
+          return ;
+         }
+         string line;
+         int i=0;
+    // Read the file line by line
+    while (getline(file, line)) {
+      i++;
+      if(i==1){
+            getline(file, line);
+         }
+        stringstream ss(line);
+        string fname, lname, address,dob, phoneNum, pw, nationCard, loanKHR, loanUSD, totalKHR, totalUSD;
+         
+        // Parse the line
+        if (getline(ss, fname, ',') &&
+            getline(ss, lname, ',') &&
+            getline(ss, address, ',') &&
+            getline(ss, dob, ',') &&
+            getline(ss, phoneNum, ',') &&
+            getline(ss, pw, ',') &&
+            getline(ss, nationCard, ',') &&
+            getline(ss, loanKHR, ',') &&
+            getline(ss, loanUSD, ',') &&
+            getline(ss, totalKHR, ',') &&
+            getline(ss, totalUSD, ',')) {
+            
+            try {
+               //  Convert strings to appropriate data types
+                int N_nationCard = stoi(nationCard);
+                double N_loanKHR = stod(loanKHR);
+                double N_loanUSD = stod(loanUSD);
+                double N_totalKHR = stod(totalKHR);
+                double N_totalUSD = stod(totalUSD);
+                //need add dob
+               //  DOB dob(dob);
+               const  char*phoneNumber =phoneNum.c_str();
+               const char*password=pw.c_str();
+               User temp(fname, lname, address,dob, phoneNum.c_str(), pw.c_str(), N_nationCard, N_loanKHR, N_loanUSD, N_totalKHR, N_totalUSD);
+               
+               if(users.getLength()>0){
+                     try{
+                        if(temp.findFreeOrder(users,temp) == users.getLength()){
+                           users.push(temp);
+                        }else{
+                           users.insertAt(temp.findFreeOrder(users,temp),temp);
+                        }
+                     }catch(exception &e){
+                        cerr<<e.what();
+                     }
+                  }else{
+                     users.push(temp);
+               }
 
+            } catch (const exception& e) {
+                cerr << "Error: Unable to convert one of the numeric values. Skipping this line." << endl;
+            }
+        } else {
+            cerr << "Error: Line format incorrect. Skipping this line." << endl;
+         }
+      }
+      writeToBinary(fileNameBin,users);
+      file.close();
+      cout<<"Success..."<<endl;
+   }
 #endif

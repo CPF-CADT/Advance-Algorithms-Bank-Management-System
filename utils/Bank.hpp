@@ -25,9 +25,24 @@ public:
    }
    int indexOfUser(char *phone,ArrayList<User> &users){
       //need to apply binary search
-      for(int i=0;i<users.getLength();i++){
-         if(strcmp(phone,users.getValue(i).getPhoneNumber()) == 0 ){
-            return i;
+      // for(int i=0;i<users.getLength();i++){
+      //    if(strcmp(phone,users.getValue(i).getPhoneNumber()) == 0 ){
+      //       return i;
+      //    }
+      // }
+      int length = users.getLength();
+      int lowIndex = 0, mid;
+      int highIndex = length - 1;
+      if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
+      if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
+      while (lowIndex <= highIndex) {
+         mid = lowIndex + (highIndex - lowIndex) / 2;
+         if (strcmp(phone,users.getValue(mid).getPhoneNumber())==0  ){
+               return mid;
+         } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
+               lowIndex = mid + 1;
+         } else {
+               highIndex = mid - 1;
          }
       }
       return -1;
