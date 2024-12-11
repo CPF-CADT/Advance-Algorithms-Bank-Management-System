@@ -1,6 +1,6 @@
 #include<iostream>
-#include"../utils/User.hpp"
 #include"../utils/Admin.hpp"
+
 #define USER_FILE "users.dat"
 
 int main(){
@@ -10,7 +10,7 @@ int main(){
    int op;
    start:
       cout<<" 1 . Add User"<<endl;
-      cout<<" 2 . Apply Laon User"<<endl;
+      cout<<" 2 . Show Laon User"<<endl;
       cout<<" 3 . Approve loan for User"<<endl;
       cout<<"Choose : ";cin>>op;
       switch(op){
@@ -19,13 +19,12 @@ int main(){
             tempUser.setTotalMoneyUSD(100);
             tempUser.setTotalMoneyKHR(10000);
             tempUser.output();
-            // tempUser.writeToFile(USER_FILE);
+            tempUser.writeToFile(USER_FILE);
             Loan loan;
             loan.applyLoan(tempUser);
             admin.requestLoan(loan);
             user.push(tempUser);
             admin.writeToBinary("admin.dat");
-
             break;
          }
          case 2:{  

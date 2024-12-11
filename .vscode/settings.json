@@ -74,7 +74,8 @@
     "iomanip": "cpp",
     "vector": "cpp",
     "*.tcc": "cpp",
-    "string_view": "cpp"
+    "string_view": "cpp",
+    "bitset": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
