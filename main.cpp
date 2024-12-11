@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <string>
 #include <cstdlib>
-#define DATA_USER "user.dat"
+#define DATA_USER "./Data/user.dat"
 
 // char* comfirmPassword();
 bool enterPassword(User user);

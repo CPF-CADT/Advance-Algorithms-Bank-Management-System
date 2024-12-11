@@ -79,9 +79,6 @@ public:
          goto inputDate;
       }
    }
-   void writeToFile(){
-
-   }
    string getDOB(){
       return to_string(day)+ " / " + nameOfMonth[month-1] + " / " +to_string(year);
    }
