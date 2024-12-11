@@ -68,9 +68,9 @@ public:
    void inputDate(){
       inputDate:
       cout<<"Enter Date of Birth "<<endl;
-      cout<<"Day    : ";cin>>day;
-      cout<<"Month  : ";cin>>month;
-      cout<<"year   : ";cin>>year;
+      cout<<"Day              : ";cin>>day;
+      cout<<"Month   (1-12)   : ";cin>>month;
+      cout<<"year             : ";cin>>year;
       try{
          checkInvalidDate(day,month,year);
       }catch(exception &e){
