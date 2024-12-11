@@ -79,7 +79,6 @@ int main(){
                               case 2:
                                  header("TRANSACTION HISTORY");
                                  //Code Transaction History
-                                 
                                  sleep(1);
                                  puseScreen();
                                  break;
