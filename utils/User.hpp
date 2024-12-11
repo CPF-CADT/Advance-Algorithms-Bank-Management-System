@@ -258,6 +258,40 @@ public:
             break;
       }
    }
+   void transferToOtherAccount(User &destUser,float exchangeRate){
+      double usd,khr;
+      int op;
+      cout<<"Choose Currency"<<endl;
+      cout<<"Destination : "<<destUser.getPhoneNumber()<<destUser.getFirstName()<<endl;
+      cout<<"1 . USD "<<endl;
+      cout<<"2 . KHR "<<endl;
+      cout<<"0 . Exit"<<endl;
+      cout<<"Choose : ";cin>>op;
+      switch(op){
+         case 1:
+            cout<<"Amount (USD) : ";cin>>usd;
+            //check validation when transfer
+            try{
+               transferUSDtoOther(usd,destUser,exchangeRate);
+            }catch(exception &e){
+               cerr<<e.what();
+            };
+            break;
+         case 2:
+            cout<<"Amount (KHR) : ";cin>>khr;
+            //check validation when transfer
+            
+            try{
+               transferKHRtoOther(khr,destUser,exchangeRate); 
+            }catch(exception &e){
+               cerr<<e.what();
+            };
+            break;
+         case 0:
+            exit(2);
+            break;
+      }
+   }
    bool isUSDAccount(){
       int op;
       cout<<"Choose Account : "<<endl;
@@ -310,39 +344,7 @@ public:
          cerr<<e.what();
          };
    }
-   void transferToOtherAccount(User &destUser,float exchangeRate){
-      double usd,khr;
-      int op;
-      cout<<"Choose Currency"<<endl;
-      cout<<"Destination : "<<destUser.getPhoneNumber()<<destUser.getFirstName()<<endl;;
-      cout<<"1 . USD "<<endl;
-      cout<<"2 . KHR "<<endl;
-      cout<<"0 . Exit"<<endl;
-      cout<<"Choose : ";cin>>op;
-      switch(op){
-         case 1:
-            cout<<"Amount (USD) : ";cin>>usd;
-            //check validation when transfer
-            try{
-               transferUSDtoOther(usd,destUser,exchangeRate);
-            }catch(exception &e){
-               cerr<<e.what();
-            };
-            break;
-         case 2:
-            cout<<"Amount (KHR) : ";cin>>khr;
-            //check validation when transfer
-            try{
-               transferKHRtoOther(khr,destUser,exchangeRate); 
-            }catch(exception &e){
-               cerr<<e.what();
-            };
-            break;
-         case 0:
-            exit(2);
-            break;
-      }
-   }
+   
    void addQR(){
       QRCode newQR;
       newQR.cratePaymentCode();
@@ -589,8 +591,118 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
         }
         
     }
-      writeToBinary(fileNameBin,users);
-      file.close();
-   };
-};
+        file.close();
+        }
+   
+   void updateUserInfo()
+
+   int choice;
+   do
+   {
+      cout << "\n========== Update User Information ==========" << endl;
+      cout << "1. Update First Name" << endl;
+      cout << "2. Update Last Name" << endl;
+      cout << "3. Update Phone Number" << endl;
+      cout << "4. Update Address" << endl;
+      cout << "5. Update Password" << endl;
+      cout << "6. Update Total Money (USD)" << endl;
+      cout << "7. Update Total Money (KHR)" << endl;
+      cout << "8. Exit Update" << endl;
+      cout << "Enter your choice: ";
+      cin >> choice;
+
+      switch (choice)
+      {
+      case 1:
+      {
+         string newFirstName;
+         cout << "Enter new first name: ";
+         cin >> newFirstName;
+         setFirstName(newFirstName);
+         cout << "First name updated successfully." << endl;
+         break;
+      }
+      case 2:
+      {
+         string newLastName;
+         cout << "Enter new last name: ";
+         cin >> newLastName;
+         setLastName(newLastName);
+         cout << "Last name updated successfully." << endl;
+         break;
+      }
+      case 3:
+      {
+         char newPhoneNumber[16];
+         cout << "Enter new phone number: ";
+         cin >> newPhoneNumber;
+         setPhoneNumber(newPhoneNumber);
+         cout << "Phone number updated successfully." << endl;
+         break;
+      }
+      case 4:
+      {
+         string newAddress;
+         cout << "Enter new address: ";
+         cin.ignore();
+         getline(cin, newAddress);
+         setAddress(newAddress);
+         cout << "Address updated successfully." << endl;
+         break;
+      }
+      case 5:
+      {
+         char currentPassword[16], newPassword[16], confirmPassword[16];
+         cout << "Enter current password: ";
+         cin >> currentPassword;
+
+         // Check if current password matches
+         if (strcmp(currentPassword, password) != 0)
+         {
+            cout << "Incorrect current password!" << endl;
+            break;
+         }
+
+         cout << "Enter new password: ";
+         cin >> newPassword;
+         cout << "Confirm new password: ";
+         cin >> confirmPassword;
+
+         if (strcmp(newPassword, confirmPassword) == 0)
+         {
+            setPassword(newPassword);
+            cout << "Password updated successfully." << endl;
+         }
+         else
+         {
+            cout << "Passwords do not match!" << endl;
+         }
+         break;
+      }
+      case 6:
+      {
+         double newUSDAmount;
+         cout << "Enter new total USD amount: ";
+         cin >> newUSDAmount;
+         setTotalMoneyUSD(newUSDAmount);
+         cout << "Total USD amount updated successfully." << endl;
+         break;
+      }
+      case 7:
+      {
+         double newKHRAmount;
+         cout << "Enter new total KHR amount: ";
+         cin >> newKHRAmount;
+         setTotalMoneyKHR(newKHRAmount);
+         cout << "Total KHR amount updated successfully." << endl;
+         break;
+      }
+      case 8:
+         cout << "Exiting update menu..." << endl;
+         break;
+      default:
+         cout << "Invalid choice. Please try again." << endl;
+      }
+   } while (choice != 8);
+
 #endif

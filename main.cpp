@@ -73,6 +73,7 @@ int main(){
                                  users.getValue(currentIndexUser).showBalance();
                                  puseScreen();
                                  break;
+                                 
                                  }
                               case 2:
                                  header("TRANSACTION HISTORY");
