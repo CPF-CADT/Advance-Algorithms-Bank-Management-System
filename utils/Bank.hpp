@@ -32,22 +32,7 @@ public:
       }
       return -1;
    }
-   // bool loginUser(ArrayList<User> &users,const string filename,int &currentIndexUser){
-   //    char phone[12],password[16];
-   //    cout<<"Phone number : ";cin>>phone;
-   //    currentIndexUser=indexOfUser(phone,users,filename);
-   //    if(currentIndexUser!=-1){
-   //       cin.ignore();
-   //       cout<<"Enter Passsword : ";cin>>password;
-   //       if(strcmp(password,users.getValue(currentIndexUser).getPassword())==0){
-   //          cout<<"Login success ...";
-   //          return true;
-   //       }
-   //    }else{
-   //       currentIndexUser = -1;
-   //    }
-   //    return false;
-   // }
+   
 };
 
 #endif

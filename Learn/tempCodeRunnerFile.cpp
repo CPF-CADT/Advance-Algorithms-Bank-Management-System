@@ -1,3 +1,5 @@
-for(int i=0;i<user.getLength();i++){
-               user.getValue(i).output();
-            }
+
+                                 //Code Show Money of user 
+                                 header("USER BALANCE");
+                                 users.getValue(currentIndexUser).showBalance();
+                              break;
