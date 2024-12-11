@@ -1,5 +1,4 @@
-
-                                 //Code Show Money of user 
-                                 header("USER BALANCE");
-                                 users.getValue(currentIndexUser).showBalance();
-                              break;
+readFromBinary("usr.dat",user);
+    for(int i=0;i<user.getLength();i++){
+        user.getValue(i).displayInfo();
+    }
