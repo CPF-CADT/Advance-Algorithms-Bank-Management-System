@@ -1,16 +1,17 @@
 #include<iostream>
 #include"../utils/User.hpp"
-
-#define USER_FILE "user.dat"
+#include"../utils/Admin.hpp"
+#define USER_FILE "users.dat"
 
 int main(){
    ArrayList<User> user;
    User tempUser;
+   Admin admin;
    int op;
    start:
       cout<<" 1 . Add User"<<endl;
-      cout<<" 1 . Apply User"<<endl;
-      cout<<" 1 . Approve User"<<endl;
+      cout<<" 2 . Apply Laon User"<<endl;
+      cout<<" 3 . Approve loan for User"<<endl;
       cout<<"Choose : ";cin>>op;
       switch(op){
          case 1:{
@@ -18,15 +19,18 @@ int main(){
             tempUser.setTotalMoneyUSD(100);
             tempUser.setTotalMoneyKHR(10000);
             tempUser.output();
-            tempUser.writeToFile(USER_FILE);
+            // tempUser.writeToFile(USER_FILE);
+            Loan loan;
+            loan.applyLoan(tempUser);
+            admin.requestLoan(loan);
             user.push(tempUser);
+            admin.writeToBinary("admin.dat");
+
             break;
          }
          case 2:{  
-            readFromBinary(USER_FILE,user);
-            for(int i=0;i<user.getLength();i++){
-               user.getValue(i).output();
-            }
+               admin.readBin("admin.dat");
+               admin.showLoanRequest();
             break;
          }
          // case 3:

@@ -72,7 +72,9 @@
     "stdexcept": "cpp",
     "utility": "cpp",
     "iomanip": "cpp",
-    "vector": "cpp"
+    "vector": "cpp",
+    "*.tcc": "cpp",
+    "string_view": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
