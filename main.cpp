@@ -71,13 +71,15 @@ int main(){
                                  //Code Show Money of user 
                                  header("USER BALANCE");
                                  users.getValue(currentIndexUser).showBalance();
-                                 sleep(1);
+                                 sleep(10);
                                  puseScreen();
                                  break;
+                                 
                                  }
                               case 2:
                                  header("TRANSACTION HISTORY");
                                  //Code Transaction History
+                                 
                                  sleep(1);
                                  puseScreen();
                                  break;

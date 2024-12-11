@@ -241,6 +241,40 @@ public:
             break;
       }
    }
+   void transferToOtherAccount(User &destUser,float exchangeRate){
+      double usd,khr;
+      int op;
+      cout<<"Choose Currency"<<endl;
+      cout<<"Destination : "<<destUser.getPhoneNumber()<<destUser.getFirstName()<<endl;
+      cout<<"1 . USD "<<endl;
+      cout<<"2 . KHR "<<endl;
+      cout<<"0 . Exit"<<endl;
+      cout<<"Choose : ";cin>>op;
+      switch(op){
+         case 1:
+            cout<<"Amount (USD) : ";cin>>usd;
+            //check validation when transfer
+            try{
+               transferUSDtoOther(usd,destUser,exchangeRate);
+            }catch(exception &e){
+               cerr<<e.what();
+            };
+            break;
+         case 2:
+            cout<<"Amount (KHR) : ";cin>>khr;
+            //check validation when transfer
+            
+            try{
+               transferKHRtoOther(khr,destUser,exchangeRate); 
+            }catch(exception &e){
+               cerr<<e.what();
+            };
+            break;
+         case 0:
+            exit(2);
+            break;
+      }
+   }
    bool isUSDAccount(){
       int op;
       cout<<"Choose Account : "<<endl;
@@ -293,39 +327,7 @@ public:
          cerr<<e.what();
          };
    }
-   void transferToOtherAccount(User &destUser,float exchangeRate){
-      double usd,khr;
-      int op;
-      cout<<"Choose Currency"<<endl;
-      cout<<"Destination : "<<destUser.getPhoneNumber()<<destUser.getFirstName()<<endl;;
-      cout<<"1 . USD "<<endl;
-      cout<<"2 . KHR "<<endl;
-      cout<<"0 . Exit"<<endl;
-      cout<<"Choose : ";cin>>op;
-      switch(op){
-         case 1:
-            cout<<"Amount (USD) : ";cin>>usd;
-            //check validation when transfer
-            try{
-               transferUSDtoOther(usd,destUser,exchangeRate);
-            }catch(exception &e){
-               cerr<<e.what();
-            };
-            break;
-         case 2:
-            cout<<"Amount (KHR) : ";cin>>khr;
-            //check validation when transfer
-            try{
-               transferKHRtoOther(khr,destUser,exchangeRate); 
-            }catch(exception &e){
-               cerr<<e.what();
-            };
-            break;
-         case 0:
-            exit(2);
-            break;
-      }
-   }
+   
    void addQR(){
       QRCode newQR;
       newQR.cratePaymentCode();
