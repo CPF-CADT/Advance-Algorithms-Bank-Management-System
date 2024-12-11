@@ -1,5 +1,5 @@
-#ifndef CLASS_DOB
-#define CLASS_DOB
+#ifndef CLASS_DATE
+#define CLASS_DATE
 #include <string>
 #include <iostream>
 #include <ctime>
@@ -27,10 +27,6 @@ public:
       // if(year<=currentYear) check = true; //check valid date is grater that now or not
       if((year%4==0&&year%100!=0) || year%400==0) daysInMonth[1]=29;
       if(year>currentYear){
-         throw runtime_error("Invalid! Year Cannot grater that current Year");
-         return false;
-      }
-      if(year>currentYear){
          if(month>=1 && month<=12){
             if(day>=1 && day<=daysInMonth[month-1]){
                check = true;
@@ -52,6 +48,13 @@ public:
             return false;
          }
       return check;
+   }
+   void setCurrentDate(){
+      time_t now = time(0);
+      tm *localTime = localtime(&now);
+      day = localTime->tm_mday;
+      month = localTime->tm_mon + 1;
+      year = 1900 + localTime->tm_year; 
    }
    void inputDate(){
       inputDate:

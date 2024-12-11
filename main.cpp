@@ -202,6 +202,7 @@ void puseScreen() {
    getchar();
 #endif
 }
+
 void header(const string header){
    cout << "=========================================" << endl;
    cout << "         "<<header<<endl;
@@ -235,7 +236,7 @@ int displayOption(string *allOption,int size){
 //          i++;
 //       }
 //    }
-
+|}
 // } implement next time
 bool enterPassword(User user){
    int wrong=0;
