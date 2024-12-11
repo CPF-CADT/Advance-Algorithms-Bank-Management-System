@@ -84,19 +84,36 @@ public:
       cout << "=========================================" << endl;
    }
    void input(const string &fileName){
-      // string fname;
       cout<<"User information "<<endl;
       cout<<"First Name : ";cin>>firstName;
-      // stringToChar (&firstName,fname);
-      cout<<"Last Name  : ";cin>>lastName;
-      cout<<"National ID Card : ";cin>>nationalIdCard;
-      cin.ignore();
-      cout<<"Address    : ";getline(cin,address);
-      dob.inputDate();
-      cin.ignore();
+      // cout<<"Last Name  : ";cin>>lastName;
+      // cout<<"National ID Card : ";cin>>nationalIdCard;
+      // cin.ignore();
+      // cout<<"Address    : ";getline(cin,address);
+      // dob.inputDate();
+      // cin.ignore();
       cout<<"Security Section "<<endl;
       inputPhoneNumber(fileName);
       inputPassword();
+
+      // cout << "=========================================" << endl;
+      // cout << "          User Information Form          " << endl;
+      // cout << "=========================================" << endl;
+      // cout << "Please enter the following details:" << endl;
+      // cout << "First Name       : "; cin >> firstName;
+      // cout << "Last Name        : "; cin >> lastName;
+      // cout << "National ID      : "; cin >> nationalIdCard;
+      // dob.inputDate();
+      // cin.ignore(); 
+      // cout << "Address          : "; getline(cin, address);
+      // cout << "\n=========================================" << endl;
+      // cout << "          Security Section               " << endl;
+      // cout << "=========================================" << endl;
+      // inputPhoneNumber(fileName);
+      // inputPassword();
+      // cout << "\n=========================================" << endl;
+      // cout << "Thank you, " << firstName << " " << lastName << "! Your details have been recorded." << endl;
+      // cout << "=========================================" << endl;
    }
    void writeToFile(const string &fileName){
       ofstream writeFile(fileName, ios::app | ios::binary);
@@ -130,7 +147,7 @@ public:
    }
    void inputPhoneNumber(const string &fileName){
       enterPhonenumber:
-      cout<<"Phone Number : ";cin>>phoneNumber;
+      cout<<"Phone Number     : ";cin>>phoneNumber;
       //add validation
       if(isPhoneNumberUsed(fileName,phoneNumber)){
          cout<<"Check"<<endl;
@@ -154,7 +171,7 @@ public:
       char confirmPassword[16];
       char pass[16];
       enterPassword:
-      cout<<"Password   : ";cin>>pass;
+      cout<<"Create  Password : ";cin>>pass;
       cout<<"Confirm Password : ";cin>>confirmPassword;
       if(strcmp(confirmPassword,pass)!=0){
          cout<<"Confirm Password Incorrect "<<endl;
@@ -483,8 +500,30 @@ public:
          return "A cash amount of " + to_string(amount) +"R"+ " was received by " + source + " from phone number " + string(phone) + ".\n";
       }
    }
-};
-void readFromCV(const string fileName){ 
+
+   
+   int findFreeOrder(ArrayList<User> &users, User newUser) {
+      int length = users.getLength();
+      char phone[12];
+      strcpy(phone, newUser.getPhoneNumber()); 
+      int lowIndex = 0, mid;
+      int highIndex = length - 1;
+      if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
+      if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
+      while (lowIndex <= highIndex) {
+         mid = lowIndex + (highIndex - lowIndex) / 2;
+         if (strcmp(phone,users.getValue(mid).getPhoneNumber())>=0 &&(mid==length-1||strcmp(phone,users.getValue(mid+1).getPhoneNumber())<0) ){
+               return mid+1;
+         } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
+               lowIndex = mid + 1;
+         } else {
+               highIndex = mid - 1;
+         }
+      }
+      return lowIndex;
+   }
+  
+void readFromCV(const string fileName,ArrayList<User> &users,const string fileNameBin){ 
         ifstream file(fileName);
          if(!file.is_open()){cerr<<"Error"; 
           return ;
@@ -492,11 +531,16 @@ void readFromCV(const string fileName){
             cout<<"yes";
          }
          string line;
+         int i=0;
     // Read the file line by line
     while (getline(file, line)) {
+      i++;
+      if(i==1){
+            getline(file, line);
+         }
         stringstream ss(line);
         string fname, lname, address,dob, phoneNum, pw, nationCard, loanKHR, loanUSD, totalKHR, totalUSD;
-
+         
         // Parse the line
         if (getline(ss, fname, ',') &&
             getline(ss, lname, ',') &&
@@ -511,32 +555,41 @@ void readFromCV(const string fileName){
             getline(ss, totalUSD, ',')) {
             
             try {
-                // Convert strings to appropriate data types
-               //  int N_nationCard = stoi(nationCard);
-               //  double N_loanKHR = stod(loanKHR);
-               //  double N_loanUSD = stod(loanUSD);
-               //  double N_totalKHR = stod(totalKHR);
-               //  double N_totalUSD = stod(totalUSD);
+               //  Convert strings to appropriate data types
+                int N_nationCard = stoi(nationCard);
+                double N_loanKHR = stod(loanKHR);
+                double N_loanUSD = stod(loanUSD);
+                double N_totalKHR = stod(totalKHR);
+                double N_totalUSD = stod(totalUSD);
+              const  char*phoneNumber =phoneNum.c_str();
+                
 
-                // Output the parsed data
-                cout << "First Name: " << fname << endl;
-                cout << "Last Name: " << lname << endl;
-                cout << "Address: " << address << endl;
-                cout << "Address: " << dob << endl;
-                cout << "Phone Number: " << phoneNum << endl;
-                cout << "Password: " << pw << endl;
-                cout << "National Card: " << nationCard << endl;
-                cout << "Loan in KHR: " << loanKHR << endl;
-                cout << "Loan in USD: " << loanUSD << endl;
-                cout << "Total in KHR: " << totalKHR << endl;
-                cout << "Total in USD: " << totalUSD << endl;
-                cout << "---------------------------------------" << endl;
+               const char*password=pw.c_str();
+                
+                
+
+               //  // Output the parsed data
+               //  cout << "First Name: " << fname << endl;
+               //  cout << "Last Name: " << lname << endl;
+               //  cout << "Address: " << address << endl;
+               //  cout << "Address: " << dob << endl;
+               //  cout << "Phone Number: " << phoneNumber << endl;
+               //  cout << "Password: " << pw << endl;
+               //  cout << "National Card: " << nationCard << endl;
+               //  cout << "Loan in KHR: " << loanKHR << endl;
+               //  cout << "Loan in USD: " << loanUSD << endl;
+               //  cout << "Total in KHR: " << totalKHR << endl;
+               //  cout << "Total in USD: " << totalUSD << endl;
+               //  cout << "---------------------------------------" << endl;
+               User temp(fname, lname, address, phoneNum.c_str(), pw.c_str(), N_nationCard, N_loanKHR, N_loanUSD, N_totalKHR, N_totalUSD);
+               users.push(temp);
             } catch (const exception& e) {
                 cerr << "Error: Unable to convert one of the numeric values. Skipping this line." << endl;
             }
         } else {
             cerr << "Error: Line format incorrect. Skipping this line." << endl;
         }
+        
     }
         file.close();
         }

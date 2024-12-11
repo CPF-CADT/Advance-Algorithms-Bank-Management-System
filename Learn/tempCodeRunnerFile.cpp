@@ -1,3 +1,5 @@
-for(int i=0;i<user.getLength();i++){
-               user.getValue(i).output();
-            }
+try{
+            //    cout<<"/n/n Free : "<<tempUser.findFreeOrder(user,tempUser)<<endl<<endl;
+            // }catch(exception &e){
+            //    cerr<<e.what();
+            // }
