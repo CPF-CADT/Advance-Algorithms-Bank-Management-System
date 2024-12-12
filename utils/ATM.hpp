@@ -26,4 +26,3 @@ class ATM {
             balance = balance + amount;
         }
 };
-#endif
