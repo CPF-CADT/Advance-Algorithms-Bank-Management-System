@@ -30,10 +30,9 @@ public:
          throw runtime_error("Index out of bound");
       }
    }
-   // void push(Object value){
-   //    data[length] = value;
-   //    length+=1;
-   // }
+   void pushMany(Object value,int index){
+      data[index] = value;
+   }
    void push(Object value) {
       Object* newData = new Object[length + 1]; 
       for (int i = 0; i < length; i++) {

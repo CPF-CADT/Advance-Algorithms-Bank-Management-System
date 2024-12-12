@@ -505,26 +505,56 @@ public:
    }
 
    
-   int findFreeOrder(ArrayList<User> &users, User newUser) {
-      int length = users.getLength();
-      char phone[12];
-      strcpy(phone, newUser.getPhoneNumber()); 
-      int lowIndex = 0, mid;
-      int highIndex = length - 1;
-      if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
-      if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
-      while (lowIndex <= highIndex) {
-         mid = lowIndex + (highIndex - lowIndex) / 2;
-         if (strcmp(phone,users.getValue(mid).getPhoneNumber())>=0 &&(mid==length-1||strcmp(phone,users.getValue(mid+1).getPhoneNumber())<0) ){
-               return mid+1;
-         } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
-               lowIndex = mid + 1;
-         } else {
-               highIndex = mid - 1;
-         }
-      }
-      return lowIndex;
-   }
+   // int findFreeOrder(ArrayList<User> &users, User newUser) {
+   //    int length = users.getLength();
+   //    char phone[12];
+   //    strcpy(phone, newUser.getPhoneNumber()); 
+   //    int lowIndex = 0, mid;
+   //    int highIndex = length - 1;
+   //    if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
+   //    if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
+   //    while (lowIndex <= highIndex) {
+   //       mid = lowIndex + (highIndex - lowIndex) / 2;
+   //       if (strcmp(phone,users.getValue(mid).getPhoneNumber())>=0 &&(mid==length-1||strcmp(phone,users.getValue(mid+1).getPhoneNumber())<0) ){
+   //             return mid+1;
+   //       } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
+   //             lowIndex = mid + 1;
+   //       } else {
+   //             highIndex = mid - 1;
+   //       }
+   //    }
+   //    return lowIndex;
+   // }
+   int findFreeOrder(vector<User> &users, User newUser) {
+    int length = users.size();
+    const char* phone = newUser.getPhoneNumber(); // Access the phone number as a C-style string
+    int lowIndex = 0, highIndex = length - 1, mid;
+
+    // Handle edge cases
+    if (strcmp(phone, users[0].getPhoneNumber()) < 0) {
+        return 0; // New phone number comes before the first element
+    }
+    if (strcmp(phone, users[length - 1].getPhoneNumber()) > 0) {
+        return length; // New phone number comes after the last element
+    }
+
+    // Binary search
+    while (lowIndex <= highIndex) {
+        mid = lowIndex + (highIndex - lowIndex) / 2;
+
+        if (strcmp(phone, users[mid].getPhoneNumber()) >= 0 &&
+            (mid == length - 1 || strcmp(phone, users[mid + 1].getPhoneNumber()) < 0)) {
+            return mid + 1; // Correct insertion point
+        } else if (strcmp(phone, users[mid].getPhoneNumber()) > 0) {
+            lowIndex = mid + 1; // Search in the right half
+        } else {
+            highIndex = mid - 1; // Search in the left half
+        }
+    }
+
+    return lowIndex; // Fallback (shouldn't reach here due to logic)
+}
+
    void updateUserInfo(){
    int choice;
    do
@@ -645,6 +675,12 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
          string line;
          int i=0;
     // Read the file line by line
+    vector<User> user;
+    if(users.getLength()!=0){
+      for(int i=0;i<users.getLength();i++){
+         user.push_back(users.getValue(i));
+      }
+    }
     while (getline(file, line)) {
       i++;
       cout<<i<<endl;
@@ -680,18 +716,18 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
                const char*password=pw.c_str();
                User temp(fname, lname, address,dob, phoneNum.c_str(), pw.c_str(), N_nationCard, N_loanKHR, N_loanUSD, N_totalKHR, N_totalUSD);
                
-               if(users.getLength()>0){
+               if(user.size()>0){
                      try{
-                        if(temp.findFreeOrder(users,temp) == users.getLength()){
-                           users.push(temp);
+                        if(temp.findFreeOrder(user,temp) == user.size()){
+                           user.push_back(temp);
                         }else{
-                           users.insertAt(temp.findFreeOrder(users,temp),temp);
+                           user.insert(user.begin()+temp.findFreeOrder(user,temp),temp);
                         }
                      }catch(exception &e){
                         cerr<<e.what();
                      }
                   }else{
-                     users.push(temp);
+                     user.push_back(temp);
                }
 
             } catch (const exception& e) {
@@ -700,6 +736,12 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
         } else {
             cerr << "Error: Line format incorrect. Skipping this line." << endl;
          }
+      }
+      users.setSize(user.size());
+      int index =0;
+      for(auto i:user){
+         users.pushMany(i,index);
+         index++;
       }
       writeToBinary(fileNameBin,users);
       file.close();
