@@ -57,7 +57,7 @@ int main(){
                   clearScreen();
                   cout<<" Enter Information to Login"<<endl;
                   cout<<"Phone number : ";cin>>phone;
-                  currentIndexUser=bank.indexOfUser(phone,users);
+                  currentIndexUser=indexOfUser(phone,users);
                   puseScreen();
                   if(currentIndexUser!=-1){
                      cin.ignore();
@@ -100,7 +100,7 @@ int main(){
                                        char phone[12];
                                        header("TRANSFER TO OTHER ACCOUNT");
                                        cout<<"Phone Number : ";cin>>phone;
-                                       User &destUser = users.getValue(bank.indexOfUser(phone,users));
+                                       User &destUser = users.getValue(indexOfUser(phone,users));
                                        users.getValue(currentIndexUser).transferToOtherAccount(destUser,bank.getExchnageRate());
                                        writeToBinary(DATA_USER,users);
                                        break;

@@ -67,7 +67,6 @@ template <typename Object> bool readFromBinary(const string& filename, ArrayList
    Object tempUser;
    int i=0;
    while(readFile.peek() != EOF){
-      cout<<i<<endl;
       tempUser.readFileBin(readFile);
       obj.push_back(tempUser);
       i++;
