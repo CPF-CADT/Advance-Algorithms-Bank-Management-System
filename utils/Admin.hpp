@@ -80,13 +80,5 @@ class Admin {
         }     
         cout << "----------------------------------------------------------------------------------------" << endl;
     }
-    void requestLoan(Loan &loan){
-        loanRequest.push_back(loan);
-    }
-    void showLoanRequest(){
-        for(auto i:loanRequest){
-            i.showLoanDetail();
-        }
-    }
 };
 #endif

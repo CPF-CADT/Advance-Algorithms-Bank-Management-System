@@ -1,21 +1,25 @@
 #ifndef BANK_HPP
 #define BANK_HPP
-#include "./User.hpp"
 #include "./arrayList.hpp"
+#include<vector>
 class Bank{
 private:
-   int totalUser;
+   long totalUser;
    float exchangeRateUSDtoKHR;
+   float intrestKHR[4];
+   float intrestUSD[4];
    double totalMoneyKHR;
    double totalMoneyUSD;
-   //string report;
-   //string History-Transaction;
+   vector<string> report;
+   vector<string> HistoryTransaction;
 public:
    Bank(){
       totalUser = 0;
       exchangeRateUSDtoKHR = 0.0;
-      totalMoneyKHR = 0.0;
-      totalMoneyUSD = 0.0;
+      intrestKHR[0]  = 10.0;
+      intrestUSD[0]  = 10.0;
+      totalMoneyKHR= 0.0;
+      totalMoneyUSD= 0.0;
    }
    void setExchnageRate(float rate){
       this->exchangeRateUSDtoKHR = rate;
@@ -23,32 +27,20 @@ public:
    float getExchnageRate(){
       return exchangeRateUSDtoKHR;
    }
-   int indexOfUser(char *phone,ArrayList<User> &users){
-      //need to apply binary search
-      // for(int i=0;i<users.getLength();i++){
-      //    if(strcmp(phone,users.getValue(i).getPhoneNumber()) == 0 ){
-      //       return i;
-      //    }
-      // }
-      int length = users.getLength();
-      int lowIndex = 0, mid;
-      int highIndex = length - 1;
-      if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
-      if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
-      while (lowIndex <= highIndex) {
-         mid = lowIndex + (highIndex - lowIndex) / 2;
-         if (strcmp(phone,users.getValue(mid).getPhoneNumber())==0  ){
-               return mid;
-         } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
-               lowIndex = mid + 1;
-         } else {
-               highIndex = mid - 1;
-         }
-         cout<<" Time : "<<endl;
-      }
-      return -1;
+   void addNewUser(){
+      totalUser+=1;
    }
-   
+   void setInterestKHR(int index,float interest){
+      intrestKHR[index] = interest;
+   }
+   void setInterestUSD(int index,float interest){
+      intrestUSD[index] = interest;
+   }
+   float *getInterestKHR(){
+      return intrestKHR;
+   }
+   float *getInterestUSD(){
+      return intrestUSD;
+   }
 };
-
 #endif
