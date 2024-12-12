@@ -3,7 +3,7 @@
 #include<vector>
 #include<iostream>
 #include<string>
-
+#include "User.hpp"
 using namespace std;
 
     class ATM{
@@ -22,4 +22,6 @@ using namespace std;
                 }
                 return nullptr;
             }
-
+            void withdraw(User& user){
+                cout<<"Your current balance : $" << User.getbalance<<
+            }
