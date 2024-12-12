@@ -58,6 +58,7 @@ int main(){
                   cout<<" Enter Information to Login"<<endl;
                   cout<<"Phone number : ";cin>>phone;
                   currentIndexUser=bank.indexOfUser(phone,users);
+                  puseScreen();
                   if(currentIndexUser!=-1){
                      cin.ignore();
                      if(enterPassword(users.getValue(currentIndexUser))){
