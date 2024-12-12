@@ -21,6 +21,12 @@ public:
 
     void setTotalMoneyUSD(double amount) { totalMoneyUSD = amount; }
     void setTotalMoneyKHR(double amount) { totalMoneyKHR = amount; }
+
+    void displayBalances() const {
+        cout << "Current Balances:\n";
+        cout << "USD: $" << totalMoneyUSD << "\n";
+        cout << "KHR: " << totalMoneyKHR << " KHR\n";
+    }
 };
 
 class ATM {
@@ -40,6 +46,7 @@ public:
         } else {
             cerr << "Invalid currency type!\n";
         }
+        user.displayBalances();
     }
 
     static void withdraw(User &user, double amount, const string &currency) {
@@ -65,6 +72,7 @@ public:
         } else {
             cerr << "Invalid currency type!\n";
         }
+        user.displayBalances();
     }
 
     static void exchange(User &user, double amount, const string &fromCurrency, const string &toCurrency) {
@@ -95,6 +103,7 @@ public:
         } else {
             cerr << "Invalid currency types for exchange!\n";
         }
+        user.displayBalances();
     }
 };
 
