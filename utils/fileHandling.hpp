@@ -42,10 +42,13 @@ template <typename Object> void writeToBinary(const string& filename, ArrayList<
 template <typename Object> bool readFromBinary(const string& filename, ArrayList<Object> &array) {
    ifstream readFile(filename, ios::binary);
    Object tempUser;
+   int i=0;
    array.clear();
    while(readFile.peek() != EOF){
+      cout<<i<<endl;
       tempUser.readFileBin(readFile);
       array.push(tempUser);
+      i++;
    }
    readFile.close();
    return true;

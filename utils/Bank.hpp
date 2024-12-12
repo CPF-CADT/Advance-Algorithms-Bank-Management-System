@@ -44,6 +44,7 @@ public:
          } else {
                highIndex = mid - 1;
          }
+         cout<<" Time : "<<endl;
       }
       return -1;
    }

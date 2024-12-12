@@ -647,6 +647,7 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
     // Read the file line by line
     while (getline(file, line)) {
       i++;
+      cout<<i<<endl;
       if(i==1){
             getline(file, line);
          }
