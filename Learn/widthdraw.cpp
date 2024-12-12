@@ -1,6 +1,6 @@
 void withdraw(User &user, double amount, const string &currency, bool isAdmin) {
     try {
-        // Password validation for non-admin users
+      
         if (!isAdmin) {
             int wrongAttempts = 0;
             string password;
@@ -35,7 +35,23 @@ void withdraw(User &user, double amount, const string &currency, bool isAdmin) {
                 cout << "Withdrawal successful!" << endl;
                 cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
             } else {
-                throw runtime_error("Error: Insufficient USD balance!");
+                cout << "Insufficient USD balance!" << endl;
+                char option;
+                cout << "Do you want to deduct this amount from your KHR account instead? (y/n): ";
+                cin >> option;
+
+                if (option == 'y' || option == 'Y') {
+                    if (user.getTotalMoneyKHR() >= amount) {
+                        user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
+                        cout << "Withdrawal successful!" << endl;
+                        cout << "Amount deducted from KHR account." << endl;
+                        cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
+                    } else {
+                        throw runtime_error("Error: Insufficient KHR balance!");
+                    }
+                } else {
+                    cout << "Withdrawal canceled by user." << endl;
+                }
             }
         }
         // Handle KHR withdrawals
@@ -45,7 +61,23 @@ void withdraw(User &user, double amount, const string &currency, bool isAdmin) {
                 cout << "Withdrawal successful!" << endl;
                 cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
             } else {
-                throw runtime_error("Error: Insufficient KHR balance!");
+                cout << "Insufficient KHR balance!" << endl;
+                char option;
+                cout << "Do you want to deduct this amount from your USD account instead? (y/n): ";
+                cin >> option;
+
+                if (option == 'y' || option == 'Y') {
+                    if (user.getTotalMoneyUSD() >= amount) {
+                        user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
+                        cout << "Withdrawal successful!" << endl;
+                        cout << "Amount deducted from USD account." << endl;
+                        cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
+                    } else {
+                        throw runtime_error("Error: Insufficient USD balance!");
+                    }
+                } else {
+                    cout << "Withdrawal canceled by user." << endl;
+                }
             }
         }
         // Invalid currency
