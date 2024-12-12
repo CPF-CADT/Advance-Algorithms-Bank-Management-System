@@ -10,6 +10,7 @@
 #include<iostream>
 #include<fstream>
 #include<sstream>
+#include "./Bank.hpp"
 class User{
 private:
    string firstName;
@@ -22,6 +23,8 @@ private:
    double loanKHR;
    double totalMoneyKHR;
    double totalMoneyUSD;
+   double depositWithInterestKHR;
+   double depositWithInterestUSD;
    char password[16];
    vector<QRCode> qrCode;
    vector<string> transactionHistory;
@@ -38,6 +41,8 @@ public:
       loanUSD=0.00;
       totalMoneyKHR=0.00;
       totalMoneyUSD=0.00;
+      depositWithInterestKHR = 0.00;
+      depositWithInterestUSD = 0.00;
    }
 
   User(const string& firstName, 
@@ -128,7 +133,10 @@ public:
       writeString(writeFile,address);
       writeFile.write((char *)(&loanUSD), sizeof(loanUSD));
       writeFile.write((char *)(&loanKHR), sizeof(loanKHR));
-      writeFile.write((char *)(&totalMoneyKHR), sizeof(totalMoneyUSD));
+      writeFile.write((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
+      writeFile.write((char *)(&totalMoneyUSD), sizeof(totalMoneyUSD));
+      writeFile.write((char *)(&depositWithInterestKHR), sizeof(depositWithInterestKHR));
+      writeFile.write((char *)(&depositWithInterestUSD), sizeof(depositWithInterestUSD));
       writeFile.write((char *)(&password), sizeof(password));
       writeVector(writeFile,qrCode);
       writeVectorStr(writeFile,transactionHistory);
@@ -144,6 +152,9 @@ public:
       readFile.read((char *)(&loanUSD), sizeof(loanUSD));
       readFile.read((char *)(&loanKHR), sizeof(loanKHR));
       readFile.read((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
+      readFile.read((char *)(&totalMoneyUSD), sizeof(totalMoneyUSD));
+      readFile.read((char *)(&depositWithInterestKHR), sizeof(depositWithInterestKHR));
+      readFile.read((char *)(&depositWithInterestUSD), sizeof(depositWithInterestUSD));
       readFile.read((char *)(&password), sizeof(password));
       readVector(readFile,qrCode);
       readVectorStr(readFile,transactionHistory);
@@ -505,51 +516,51 @@ public:
    }
 
    
-   // int findFreeOrder(ArrayList<User> &users, User newUser) {
-   //    int length = users.getLength();
-   //    char phone[12];
-   //    strcpy(phone, newUser.getPhoneNumber()); 
-   //    int lowIndex = 0, mid;
-   //    int highIndex = length - 1;
-   //    if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
-   //    if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
-   //    while (lowIndex <= highIndex) {
-   //       mid = lowIndex + (highIndex - lowIndex) / 2;
-   //       if (strcmp(phone,users.getValue(mid).getPhoneNumber())>=0 &&(mid==length-1||strcmp(phone,users.getValue(mid+1).getPhoneNumber())<0) ){
-   //             return mid+1;
-   //       } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
-   //             lowIndex = mid + 1;
-   //       } else {
-   //             highIndex = mid - 1;
-   //       }
-   //    }
-   //    return lowIndex;
-   // }
+   int findFreeOrder(ArrayList<User> &users, User newUser) {
+      int length = users.getLength();
+      char phone[12];
+      strcpy(phone, newUser.getPhoneNumber()); 
+      int lowIndex = 0, mid;
+      int highIndex = length - 1;
+      if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
+      if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
+      while (lowIndex <= highIndex) {
+         mid = lowIndex + (highIndex - lowIndex) / 2;
+         if (strcmp(phone,users.getValue(mid).getPhoneNumber())>=0 &&(mid==length-1||strcmp(phone,users.getValue(mid+1).getPhoneNumber())<0) ){
+               return mid+1;
+         } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
+               lowIndex = mid + 1;
+         } else {
+               highIndex = mid - 1;
+         }
+      }
+      return lowIndex;
+   }
    int findFreeOrder(vector<User> &users, User newUser) {
-    int length = users.size();
-    const char* phone = newUser.getPhoneNumber(); // Access the phone number as a C-style string
-    int lowIndex = 0, highIndex = length - 1, mid;
+      int length = users.size();
+      const char* phone = newUser.getPhoneNumber(); // Access the phone number as a C-style string
+      int lowIndex = 0, highIndex = length - 1, mid;
 
     // Handle edge cases
-    if (strcmp(phone, users[0].getPhoneNumber()) < 0) {
-        return 0; // New phone number comes before the first element
-    }
-    if (strcmp(phone, users[length - 1].getPhoneNumber()) > 0) {
-        return length; // New phone number comes after the last element
-    }
+      if (strcmp(phone, users[0].getPhoneNumber()) < 0) {
+         return 0; // New phone number comes before the first element
+      }
+      if (strcmp(phone, users[length - 1].getPhoneNumber()) > 0) {
+         return length; // New phone number comes after the last element
+      }
 
     // Binary search
     while (lowIndex <= highIndex) {
         mid = lowIndex + (highIndex - lowIndex) / 2;
 
-        if (strcmp(phone, users[mid].getPhoneNumber()) >= 0 &&
-            (mid == length - 1 || strcmp(phone, users[mid + 1].getPhoneNumber()) < 0)) {
-            return mid + 1; // Correct insertion point
-        } else if (strcmp(phone, users[mid].getPhoneNumber()) > 0) {
-            lowIndex = mid + 1; // Search in the right half
-        } else {
-            highIndex = mid - 1; // Search in the left half
-        }
+         if (strcmp(phone, users[mid].getPhoneNumber()) >= 0 &&
+               (mid == length - 1 || strcmp(phone, users[mid + 1].getPhoneNumber()) < 0)) {
+               return mid + 1; // Correct insertion point
+         } else if (strcmp(phone, users[mid].getPhoneNumber()) > 0) {
+               lowIndex = mid + 1; // Search in the right half
+         } else {
+               highIndex = mid - 1; // Search in the left half
+         }
     }
 
     return lowIndex; // Fallback (shouldn't reach here due to logic)
@@ -665,8 +676,23 @@ public:
       }
    } while (choice != 8);
    };
-     
+   void depositWithInterest(Bank &bank){
+      QRCode depositMoney;
+      float *interest;
+      depositMoney.cratePaymentCode();
+      if(depositMoney.getAmountKHR()>0){
+         interest = bank.getInterestKHR();
+      }else{
+         interest = bank.getInterestUSD();
+      }
+      cout<<"Choose Duration : ";
+      cout<<"1 . 3  Month (interest "<<interest[0]<<" ).";
+      cout<<"2 . 6  Month (interest "<<interest[1]<<" ).";
+      cout<<"3 . 12 Month (interest "<<interest[2]<<" ).";
+      cout<<"4 . 24 Month (interest "<<interest[3]<<" ).";
+   }
 };
+//outside class
 void readFromCV(const string fileName,ArrayList<User> &users,const string fileNameBin){ 
         ifstream file(fileName);
          if(!file.is_open()){cerr<<"Error"; 
@@ -746,5 +772,24 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
       writeToBinary(fileNameBin,users);
       file.close();
       cout<<"Success..."<<endl;
+   }
+   int indexOfUser(char *phone,ArrayList<User> &users){
+      int length = users.getLength();
+      int lowIndex = 0, mid;
+      int highIndex = length - 1;
+      if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
+      if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
+      while (lowIndex <= highIndex) {
+         mid = lowIndex + (highIndex - lowIndex) / 2;
+         if (strcmp(phone,users.getValue(mid).getPhoneNumber())==0  ){
+               return mid;
+         } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
+               lowIndex = mid + 1;
+         } else {
+               highIndex = mid - 1;
+         }
+         cout<<" Time : "<<endl;
+      }
+      return -1;
    }
 #endif

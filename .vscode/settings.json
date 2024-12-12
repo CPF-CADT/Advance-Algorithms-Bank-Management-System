@@ -82,7 +82,9 @@
     "ranges": "cpp",
     "span": "cpp",
     "regex": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "chrono": "cpp",
+    "variant": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
