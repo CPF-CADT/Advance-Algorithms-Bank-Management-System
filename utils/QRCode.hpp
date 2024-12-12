@@ -53,6 +53,13 @@ class QRCode{
             return to_string(code)+ " - " +to_string(amountUSD)+" $";
          }
       }
+      string getLoanData(){
+         if(amountKHR!=0){
+            return to_string(round(amountKHR))+" R" + "  | Loan-Code : " + to_string(code);
+         }else{
+            return to_string(amountUSD)+" $" + "  | Loan-Code : " + to_string(code);
+         }
+      }
       int getCode() {
          return code;
       }

@@ -72,7 +72,19 @@
     "stdexcept": "cpp",
     "utility": "cpp",
     "iomanip": "cpp",
-    "vector": "cpp"
+    "vector": "cpp",
+    "*.tcc": "cpp",
+    "string_view": "cpp",
+    "bitset": "cpp",
+    "array": "cpp",
+    "source_location": "cpp",
+    "initializer_list": "cpp",
+    "ranges": "cpp",
+    "span": "cpp",
+    "regex": "cpp",
+    "valarray": "cpp",
+    "chrono": "cpp",
+    "variant": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
