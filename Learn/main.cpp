@@ -1,47 +1,61 @@
-//nice
-#include<iostream>
-// #include "../utils/Stu.hpp"
-#include "../utils/arrayList.hpp"
-#include "../utils/fileHandling.hpp"
+#include "ATM.hpp"
+#include <iostream>
+using namespace std;
 
-class Stu{
-private:
-   char id[100];
-public:
-   // Stu(){
-   //    id = "sdsd";
-   // }
-   void input(){
-      cout<<"ID : ";cin>>id;
-   }
-   void output(){
-      cout<<id<<endl;
-   }
-};
-int main(){
-   ArrayList<Stu> stu;
-   Stu s;
-   // s.input();
-   // stu.push(s);
-   // s.input();
-   // stu.push(s);
+int main() {
+    // Create a user account
+    User user("John Doe", 100.0, 410000.0); // Initial balance: $100 and 410,000 KHR
 
-   // writeToBinary("testLinkList.bin",stu);
-   readFromBinary("testLinkList.bin",stu);
+    int choice;
+    do {
+        cout << "\n===== ATM Menu =====\n";
+        cout << "1. Deposit\n";
+        cout << "2. Withdraw\n";
+        cout << "3. Exchange\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-   for(int i=0;i<stu.getLength();i++){
-      s = stu.getValue(i);
-      s.output();
-   }
-   // s.input();
-   // stu.insertAt(0,s);
-   // s.input();
-   // stu.updateAt(1,s);
-   // // s.input();
-   // // stu.insertAt(1,s);
-   // for(int i=0;i<stu.getLength();i++){
-   //    s = stu.getValue(i);
-   //    s.output();
-   // }
-   return 0;
+        switch (choice) {
+        case 1: {
+            string currency;
+            double amount;
+            cout << "Enter currency (USD/KHR): ";
+            cin >> currency;
+            cout << "Enter amount: ";
+            cin >> amount;
+            ATM::deposit(user, amount, currency);
+            break;
+        }
+        case 2: {
+            string currency;
+            double amount;
+            cout << "Enter currency (USD/KHR): ";
+            cin >> currency;
+            cout << "Enter amount: ";
+            cin >> amount;
+            ATM::withdraw(user, amount, currency);
+            break;
+        }
+        case 3: {
+            string fromCurrency, toCurrency;
+            double amount;
+            cout << "Enter currency to exchange from (USD/KHR): ";
+            cin >> fromCurrency;
+            cout << "Enter currency to exchange to (USD/KHR): ";
+            cin >> toCurrency;
+            cout << "Enter amount: ";
+            cin >> amount;
+            ATM::exchange(user, amount, fromCurrency, toCurrency);
+            break;
+        }
+        case 4:
+            cout << "Exiting ATM. Thank you!\n";
+            break;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
 }

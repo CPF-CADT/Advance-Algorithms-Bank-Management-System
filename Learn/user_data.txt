@@ -1,0 +1,2 @@
+USD Balance: 200
+KHR Balance: 1e+006
