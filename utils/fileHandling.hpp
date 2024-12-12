@@ -39,16 +39,44 @@ template <typename Object> void writeToBinary(const string& filename, ArrayList<
    }
 }
 
+template <typename Object> void writeToBinary(const string& filename, vector<Object> &array) {
+   remove(filename.c_str()); 
+   for(int i=0;i<array.size();i++){
+      array.at(i).writeToFile(filename);
+   }
+}
+
+// template <typename Object> bool readFromBinary(const string& filename, ArrayList<Object> &array) {
+//    ifstream readFile(filename, ios::binary);
+//    Object tempUser;
+//    int i=0;
+//    array.clear();
+//    while(readFile.peek() != EOF){
+//       cout<<i<<endl;
+//       tempUser.readFileBin(readFile);
+//       array.push(tempUser);
+//       i++;
+//    }
+//    readFile.close();
+//    return true;
+// }
 template <typename Object> bool readFromBinary(const string& filename, ArrayList<Object> &array) {
    ifstream readFile(filename, ios::binary);
+   array.clear();
+   vector<Object> obj;
    Object tempUser;
    int i=0;
-   array.clear();
    while(readFile.peek() != EOF){
       cout<<i<<endl;
       tempUser.readFileBin(readFile);
-      array.push(tempUser);
+      obj.push_back(tempUser);
       i++;
+   }
+   array.setSize(obj.size());
+   int index = 0;
+   for(auto i:obj){
+      array.pushMany(i,index);
+      index++;
    }
    readFile.close();
    return true;
