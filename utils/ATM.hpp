@@ -1,7 +1,4 @@
-#ifndef ATM.HPP
-#define ATM.HPP
 
-#include "User.hpp"
 #include <string>
 #include<iostream>
 
