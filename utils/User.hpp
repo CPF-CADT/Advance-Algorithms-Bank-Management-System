@@ -43,6 +43,7 @@ public:
   User(const string& firstName, 
      const string& lastName, 
      const string& address, 
+     string dob,
      const char* phoneNumber, 
      const char* password, 
      int nationalIdCard, 
@@ -54,6 +55,8 @@ public:
     this->firstName = firstName;
     this->lastName = lastName;
     this->address = address;
+    DOB nDob(dob);
+    this->dob = nDob;
     strcpy(this->phoneNumber, phoneNumber);
     strcpy(this->password, password);
     this->nationalIdCard = nationalIdCard;
@@ -84,10 +87,8 @@ public:
       cout << "=========================================" << endl;
    }
    void input(const string &fileName){
-      // string fname;
       cout<<"User information "<<endl;
       cout<<"First Name : ";cin>>firstName;
-      // stringToChar (&firstName,fname);
       // cout<<"Last Name  : ";cin>>lastName;
       // cout<<"National ID Card : ";cin>>nationalIdCard;
       // cin.ignore();
@@ -97,6 +98,25 @@ public:
       cout<<"Security Section "<<endl;
       inputPhoneNumber(fileName);
       inputPassword();
+
+      // cout << "=========================================" << endl;
+      // cout << "          User Information Form          " << endl;
+      // cout << "=========================================" << endl;
+      // cout << "Please enter the following details:" << endl;
+      // cout << "First Name       : "; cin >> firstName;
+      // cout << "Last Name        : "; cin >> lastName;
+      // cout << "National ID      : "; cin >> nationalIdCard;
+      // dob.inputDate();
+      // cin.ignore(); 
+      // cout << "Address          : "; getline(cin, address);
+      // cout << "\n=========================================" << endl;
+      // cout << "          Security Section               " << endl;
+      // cout << "=========================================" << endl;
+      // inputPhoneNumber(fileName);
+      // inputPassword();
+      // cout << "\n=========================================" << endl;
+      // cout << "Thank you, " << firstName << " " << lastName << "! Your details have been recorded." << endl;
+      // cout << "=========================================" << endl;
    }
    void writeToFile(const string &fileName){
       ofstream writeFile(fileName, ios::app | ios::binary);
@@ -130,7 +150,7 @@ public:
    }
    void inputPhoneNumber(const string &fileName){
       enterPhonenumber:
-      cout<<"Phone Number : ";cin>>phoneNumber;
+      cout<<"Phone Number     : ";cin>>phoneNumber;
       //add validation
       if(isPhoneNumberUsed(fileName,phoneNumber)){
          cout<<"Check"<<endl;
@@ -154,7 +174,7 @@ public:
       char confirmPassword[16];
       char pass[16];
       enterPassword:
-      cout<<"Password   : ";cin>>pass;
+      cout<<"Create  Password : ";cin>>pass;
       cout<<"Confirm Password : ";cin>>confirmPassword;
       if(strcmp(confirmPassword,pass)!=0){
          cout<<"Confirm Password Incorrect "<<endl;
@@ -241,6 +261,40 @@ public:
             break;
       }
    }
+   void transferToOtherAccount(User &destUser,float exchangeRate){
+      double usd,khr;
+      int op;
+      cout<<"Choose Currency"<<endl;
+      cout<<"Destination : "<<destUser.getPhoneNumber()<<destUser.getFirstName()<<endl;
+      cout<<"1 . USD "<<endl;
+      cout<<"2 . KHR "<<endl;
+      cout<<"0 . Exit"<<endl;
+      cout<<"Choose : ";cin>>op;
+      switch(op){
+         case 1:
+            cout<<"Amount (USD) : ";cin>>usd;
+            //check validation when transfer
+            try{
+               transferUSDtoOther(usd,destUser,exchangeRate);
+            }catch(exception &e){
+               cerr<<e.what();
+            };
+            break;
+         case 2:
+            cout<<"Amount (KHR) : ";cin>>khr;
+            //check validation when transfer
+            
+            try{
+               transferKHRtoOther(khr,destUser,exchangeRate); 
+            }catch(exception &e){
+               cerr<<e.what();
+            };
+            break;
+         case 0:
+            exit(2);
+            break;
+      }
+   }
    bool isUSDAccount(){
       int op;
       cout<<"Choose Account : "<<endl;
@@ -293,39 +347,7 @@ public:
          cerr<<e.what();
          };
    }
-   void transferToOtherAccount(User &destUser,float exchangeRate){
-      double usd,khr;
-      int op;
-      cout<<"Choose Currency"<<endl;
-      cout<<"Destination : "<<destUser.getPhoneNumber()<<destUser.getFirstName()<<endl;;
-      cout<<"1 . USD "<<endl;
-      cout<<"2 . KHR "<<endl;
-      cout<<"0 . Exit"<<endl;
-      cout<<"Choose : ";cin>>op;
-      switch(op){
-         case 1:
-            cout<<"Amount (USD) : ";cin>>usd;
-            //check validation when transfer
-            try{
-               transferUSDtoOther(usd,destUser,exchangeRate);
-            }catch(exception &e){
-               cerr<<e.what();
-            };
-            break;
-         case 2:
-            cout<<"Amount (KHR) : ";cin>>khr;
-            //check validation when transfer
-            try{
-               transferKHRtoOther(khr,destUser,exchangeRate); 
-            }catch(exception &e){
-               cerr<<e.what();
-            };
-            break;
-         case 0:
-            exit(2);
-            break;
-      }
-   }
+   
    void addQR(){
       QRCode newQR;
       newQR.cratePaymentCode();
@@ -481,20 +503,157 @@ public:
          return "A cash amount of " + to_string(amount) +"R"+ " was received by " + source + " from phone number " + string(phone) + ".\n";
       }
    }
+
+   
+   int findFreeOrder(ArrayList<User> &users, User newUser) {
+      int length = users.getLength();
+      char phone[12];
+      strcpy(phone, newUser.getPhoneNumber()); 
+      int lowIndex = 0, mid;
+      int highIndex = length - 1;
+      if(strcmp(phone, users.getValue(length-1).getPhoneNumber())>0) return length;
+      if(strcmp(phone, users.getValue(0).getPhoneNumber())<0) return 0;
+      while (lowIndex <= highIndex) {
+         mid = lowIndex + (highIndex - lowIndex) / 2;
+         if (strcmp(phone,users.getValue(mid).getPhoneNumber())>=0 &&(mid==length-1||strcmp(phone,users.getValue(mid+1).getPhoneNumber())<0) ){
+               return mid+1;
+         } else if (strcmp(phone, users.getValue(mid).getPhoneNumber())>0) {
+               lowIndex = mid + 1;
+         } else {
+               highIndex = mid - 1;
+         }
+      }
+      return lowIndex;
+   }
+   void updateUserInfo(){
+   int choice;
+   do
+   {
+      cout << "\n========== Update User Information ==========" << endl;
+      cout << "1. Update First Name" << endl;
+      cout << "2. Update Last Name" << endl;
+      cout << "3. Update Phone Number" << endl;
+      cout << "4. Update Address" << endl;
+      cout << "5. Update Password" << endl;
+      cout << "6. Update Total Money (USD)" << endl;
+      cout << "7. Update Total Money (KHR)" << endl;
+      cout << "8. Exit Update" << endl;
+      cout << "Enter your choice: ";
+      cin >> choice;
+
+      switch (choice)
+      {
+      case 1:
+      {
+         string newFirstName;
+         cout << "Enter new first name: ";
+         cin >> newFirstName;
+         setFirstName(newFirstName);
+         cout << "First name updated successfully." << endl;
+         break;
+      }
+      case 2:
+      {
+         string newLastName;
+         cout << "Enter new last name: ";
+         cin >> newLastName;
+         setLastName(newLastName);
+         cout << "Last name updated successfully." << endl;
+         break;
+      }
+      case 3:
+      {
+         char newPhoneNumber[16];
+         cout << "Enter new phone number: ";
+         cin >> newPhoneNumber;
+         setPhoneNumber(newPhoneNumber);
+         cout << "Phone number updated successfully." << endl;
+         break;
+      }
+      case 4:
+      {
+         string newAddress;
+         cout << "Enter new address: ";
+         cin.ignore();
+         getline(cin, newAddress);
+         setAddress(newAddress);
+         cout << "Address updated successfully." << endl;
+         break;
+      }
+      case 5:
+      {
+         char currentPassword[16], newPassword[16], confirmPassword[16];
+         cout << "Enter current password: ";
+         cin >> currentPassword;
+
+         // Check if current password matches
+         if (strcmp(currentPassword, password) != 0)
+         {
+            cout << "Incorrect current password!" << endl;
+            break;
+         }
+
+         cout << "Enter new password: ";
+         cin >> newPassword;
+         cout << "Confirm new password: ";
+         cin >> confirmPassword;
+
+         if (strcmp(newPassword, confirmPassword) == 0)
+         {
+            setPassword(newPassword);
+            cout << "Password updated successfully." << endl;
+         }
+         else
+         {
+            cout << "Passwords do not match!" << endl;
+         }
+         break;
+      }
+      case 6:
+      {
+         double newUSDAmount;
+         cout << "Enter new total USD amount: ";
+         cin >> newUSDAmount;
+         setTotalMoneyUSD(newUSDAmount);
+         cout << "Total USD amount updated successfully." << endl;
+         break;
+      }
+      case 7:
+      {
+         double newKHRAmount;
+         cout << "Enter new total KHR amount: ";
+         cin >> newKHRAmount;
+         setTotalMoneyKHR(newKHRAmount);
+         cout << "Total KHR amount updated successfully." << endl;
+         break;
+      }
+      case 8:
+         cout << "Exiting update menu..." << endl;
+         break;
+      default:
+         cout << "Invalid choice. Please try again." << endl;
+      }
+   } while (choice != 8);
+   };
+     
 };
-void readFromCV(const string fileName){ 
+void readFromCV(const string fileName,ArrayList<User> &users,const string fileNameBin){ 
         ifstream file(fileName);
          if(!file.is_open()){cerr<<"Error"; 
           return ;
-         }else{
-            cout<<"yes";
          }
          string line;
+         int i=0;
     // Read the file line by line
     while (getline(file, line)) {
+      i++;
+      cout<<i<<endl;
+      if(i==1){
+            getline(file, line);
+         }
         stringstream ss(line);
         string fname, lname, address,dob, phoneNum, pw, nationCard, loanKHR, loanUSD, totalKHR, totalUSD;
-
+         
         // Parse the line
         if (getline(ss, fname, ',') &&
             getline(ss, lname, ',') &&
@@ -509,34 +668,41 @@ void readFromCV(const string fileName){
             getline(ss, totalUSD, ',')) {
             
             try {
-                // Convert strings to appropriate data types
-               //  int N_nationCard = stoi(nationCard);
-               //  double N_loanKHR = stod(loanKHR);
-               //  double N_loanUSD = stod(loanUSD);
-               //  double N_totalKHR = stod(totalKHR);
-               //  double N_totalUSD = stod(totalUSD);
+               //  Convert strings to appropriate data types
+                int N_nationCard = stoi(nationCard);
+                double N_loanKHR = stod(loanKHR);
+                double N_loanUSD = stod(loanUSD);
+                double N_totalKHR = stod(totalKHR);
+                double N_totalUSD = stod(totalUSD);
+                //need add dob
+               //  DOB dob(dob);
+               const  char*phoneNumber =phoneNum.c_str();
+               const char*password=pw.c_str();
+               User temp(fname, lname, address,dob, phoneNum.c_str(), pw.c_str(), N_nationCard, N_loanKHR, N_loanUSD, N_totalKHR, N_totalUSD);
+               
+               if(users.getLength()>0){
+                     try{
+                        if(temp.findFreeOrder(users,temp) == users.getLength()){
+                           users.push(temp);
+                        }else{
+                           users.insertAt(temp.findFreeOrder(users,temp),temp);
+                        }
+                     }catch(exception &e){
+                        cerr<<e.what();
+                     }
+                  }else{
+                     users.push(temp);
+               }
 
-                // Output the parsed data
-                cout << "First Name: " << fname << endl;
-                cout << "Last Name: " << lname << endl;
-                cout << "Address: " << address << endl;
-                cout << "Address: " << dob << endl;
-                cout << "Phone Number: " << phoneNum << endl;
-                cout << "Password: " << pw << endl;
-                cout << "National Card: " << nationCard << endl;
-                cout << "Loan in KHR: " << loanKHR << endl;
-                cout << "Loan in USD: " << loanUSD << endl;
-                cout << "Total in KHR: " << totalKHR << endl;
-                cout << "Total in USD: " << totalUSD << endl;
-                cout << "---------------------------------------" << endl;
             } catch (const exception& e) {
                 cerr << "Error: Unable to convert one of the numeric values. Skipping this line." << endl;
             }
         } else {
             cerr << "Error: Line format incorrect. Skipping this line." << endl;
-        }
-    }
-        file.close();
-        }
-      
+         }
+      }
+      writeToBinary(fileNameBin,users);
+      file.close();
+      cout<<"Success..."<<endl;
+   }
 #endif

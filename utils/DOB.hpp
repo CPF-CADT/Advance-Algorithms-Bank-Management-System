@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ctime>
 #include<exception>
+#include <sstream>
 using namespace std;
 class DOB{
 public:
@@ -15,6 +16,14 @@ public:
       day=0;
       month=0;
       year=0;
+   }
+   DOB(string date){
+      // stringstream ss(date);
+      // char space;
+      // ss>>this->month>>this->day>>this->year;
+      month = stoi(date.substr(0, 2));
+      day = stoi(date.substr(3, 2));
+      year = stoi(date.substr(6,4));
    }
    bool checkInvalidDate(int day,int month,int year){ 
       bool check=false;
@@ -68,9 +77,9 @@ public:
    void inputDate(){
       inputDate:
       cout<<"Enter Date of Birth "<<endl;
-      cout<<"Day    : ";cin>>day;
-      cout<<"Month  : ";cin>>month;
-      cout<<"year   : ";cin>>year;
+      cout<<"Day              : ";cin>>day;
+      cout<<"Month   (1-12)   : ";cin>>month;
+      cout<<"year             : ";cin>>year;
       try{
          checkInvalidDate(day,month,year);
       }catch(exception &e){

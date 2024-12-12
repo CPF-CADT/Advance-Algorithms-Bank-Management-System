@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <string>
 #include <cstdlib>
-#define DATA_USER "./Data/user.dat"
+#define DATA_USER "./Data/usr.dat"
 
 // char* comfirmPassword();
 bool enterPassword(User user);
@@ -40,6 +40,10 @@ int main(){
          case 1:
             clearScreen();
             cout<<"[Bank Name] ATM "<<endl;
+            for(int i=0;i<users.getLength();i++){
+               users.getValue(i).displayInfo();
+            }
+            puseScreen();
             //process ATm
             int choice;
             int amount;
@@ -74,10 +78,11 @@ int main(){
                   cout<<" Enter Information to Login"<<endl;
                   cout<<"Phone number : ";cin>>phone;
                   currentIndexUser=bank.indexOfUser(phone,users);
+                  puseScreen();
                   if(currentIndexUser!=-1){
                      cin.ignore();
                      if(enterPassword(users.getValue(currentIndexUser))){
-                        cout<<"Login success ...";
+                        cout<<"Login success ..."<<endl;
                         //apply some animetion
                         userInterface:
                            clearScreen();
@@ -93,6 +98,7 @@ int main(){
                                  users.getValue(currentIndexUser).showBalance();
                                  puseScreen();
                                  break;
+                                 
                                  }
                               case 2:
                                  header("TRANSACTION HISTORY");
@@ -179,10 +185,25 @@ int main(){
                   newUser.input(DATA_USER);
                   newUser.setTotalMoneyKHR(100000);
                   newUser.setTotalMoneyUSD(100);
-                  newUser.writeToFile(DATA_USER);
-                  users.push(newUser);
-                  break;
+                  // newUser.writeToFile(DATA_USER);
+                  if(users.getLength()>0){
+                     try{
+                        if(newUser.findFreeOrder(users,newUser) == users.getLength()){
+                           users.push(newUser);
+                        }else{
+                           users.insertAt(newUser.findFreeOrder(users,newUser),newUser);
+                        }
+                     }catch(exception &e){
+                        cerr<<e.what();
+                     }
+                  }else{
+                     users.push(newUser);
                   }
+                  writeToBinary(DATA_USER,users);
+                  cout<<"Success ... press any key"<<endl;
+                  puseScreen();
+                  break;
+               }
                case 0:
                   //exit
                   goto START;
@@ -222,6 +243,7 @@ void puseScreen() {
    getchar();
 #endif
 }
+
 void header(const string header){
    cout << "=========================================" << endl;
    cout << "         "<<header<<endl;
@@ -244,7 +266,7 @@ int displayOption(string *allOption,int size){
 //       tempChar[i]=getch();
 //       ascii=tempChar[i];
 //       if(ascii==13){
-//          break; 
+//          break;
 //       }else if((ascii==8) && (i>=0)){
 //          printf("\b \b");
 //          tempCpass[i]=tempCpass[i+1];
@@ -255,7 +277,6 @@ int displayOption(string *allOption,int size){
 //          i++;
 //       }
 //    }
-
 // } implement next time
 bool enterPassword(User user){
    int wrong=0;

@@ -61,9 +61,18 @@ public:
       data = newData;
       length = newLength;
    }
+   void reSize(int newLength) {
+      Object* newData = new Object[newLength];
+      for (int i = 0; i < length && i < newLength; i++) {
+         newData[i] = data[i]; 
+      }
+      delete[] data;
+      data = newData;
+      length = newLength; 
+   }
    void insertAt(int index,Object value){
       validateIndex(index);
-      length++;
+      reSize(length+1);
       for (int i=length-1;i>index;i--) {
          data[i]=data[i-1];
       }
@@ -78,6 +87,9 @@ public:
    }
    void updateAt(int index,Object value){
       data[index] = value;
+   }
+   void increaseLength(){
+      length++;
    }
    // writeList(ofstream &writeFile, ArrayList<Object> &list){
 
