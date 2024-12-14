@@ -16,6 +16,7 @@ class Admin {
     // static int numberUser;
     vector<string> userRequest;
     vector<Loan> loanRequest;
+    Bank* bank;
     public:
     // Admin(){
 
@@ -80,5 +81,101 @@ class Admin {
         }     
         cout << "----------------------------------------------------------------------------------------" << endl;
     }
+    // exchange rate
+   double convertUSDtoKHR(double amountUSD, double exchangeRate) {
+    if (amountUSD < 0) {
+        throw invalid_argument("Amount in USD cannot be negative.");
+    }
+    if (exchangeRate <= 0) {
+        throw invalid_argument("Exchange rate must be positive.");
+    }
+    return amountUSD * exchangeRate;
+}
+
+double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
+    if (amountKHR < 0) {
+        throw invalid_argument("Amount in KHR cannot be negative.");
+    }
+    if (exchangeRate <= 0) {
+        throw invalid_argument("Exchange rate must be positive.");
+    }
+    if (deductionRate < 0 || deductionRate > 1) {
+        throw invalid_argument("Deduction rate must be between 0 and 1.");
+    }
+
+    double amountUSD = amountKHR / exchangeRate;
+    amountUSD -= amountUSD * deductionRate; // Apply deduction
+    return amountUSD;
+}
+
+   
+            
+   void updateUserTotalMoney(User &user) {
+    // Display the updated total money
+     cout << "Updated User's Total Money:" << endl;
+     user.getTotalMoneyKHR(); 
+     user.getTotalMoneyUSD(); 
+    
+}
+ void generateAdminReport() {
+    if (bank->getTotalUsers() == 0) {
+        cout << "Error: No users to report!" << endl;
+        return;
+    }
+
+    string customMessage;
+    cout << "Enter a custom message for the report: ";
+    cin.ignore(); // To handle any leftover newline characters in the input buffer
+    getline(cin, customMessage); // Read the admin's custom message
+
+    stringstream reportStream;
+
+    // Add bank details to the report
+    reportStream << "Bank Report\n";
+    reportStream << "-------------------------\n";
+    reportStream << "Total Users: " << bank->getTotalUsers() << "\n";
+    reportStream << "Exchange Rate (USD to KHR): " << bank->getExchnageRate() << "\n";
+    reportStream << "Admin Remarks: " << customMessage << "\n";
+
+    
+    report.push_back(reportStream.str());
+
+    
+    cout << "Report successfully generated:\n";
+    cout << reportStream.str();
+}
+ 
+    /*
+
+
+    void setInterestRatesKHR(int durationInMonths, float interest) {
+        bank->setInterestKHR(durationInMonths, interest);
+        cout << "Set KHR interest for " << durationInMonths << " months to " << interest << "%.\n";
+    } 
+
+    void setInterestRatesUSD(int durationInMonths, float interest) {
+        bank->setInterestUSD(durationInMonths, interest);
+        cout << "Set USD interest for " << durationInMonths << " months to " << interest << "%.\n";
+    }  
+
+
+     */
+
+    void displayInterestRates() {
+        cout << "Interest Rates for KHR:" << endl;
+        float* khrRates = bank->getInterestKHR();
+        cout << "  3 Months: " << khrRates[0] << "%\n";
+        cout << "  6 Months: " << khrRates[1] << "%\n";
+        cout << "  9 Months: " << khrRates[2] << "%\n";
+        cout << " 12 Months: " << khrRates[3] << "%\n";
+
+        cout << "\nInterest Rates for USD:" << endl;
+        float* usdRates = bank->getInterestUSD();
+        cout << "  3 Months: " << usdRates[0] << "%\n";
+        cout << "  6 Months: " << usdRates[1] << "%\n";
+        cout << " 9 Months: " << usdRates[2] << "%\n";
+        cout << " 12 Months: " << usdRates[3] << "%\n";
+    }
+
 };
 #endif
