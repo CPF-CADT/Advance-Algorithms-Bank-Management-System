@@ -48,7 +48,7 @@ template <typename Object> void writeToBinary(const string& filename, vector<Obj
 
 template <typename Object> bool readFromBinary(const string& filename, ArrayList<Object> &array) {
    ifstream readFile(filename, ios::binary);
-   array.clear();
+   // array.clear();
    vector<Object> obj;
    Object tempUser;
    int i=0;
