@@ -16,6 +16,7 @@ class Admin {
     // static int numberUser;
     vector<string> userRequest;
     LinkList<Loan> loanRequest;
+    LinkList<Loan> ListLoanUser;
     Bank* bank;
     public:
     // Admin()
@@ -98,6 +99,13 @@ class Admin {
    }
     LinkList<Loan> &getLoan(){
         return loanRequest;
+    }
+    LinkList<Loan> & getListLoanUser(){
+        return ListloanUser;
+    }
+    void AddLoanUser(loan AddUserLoan){
+        ListLoanUser.push(AddLoanUser);
+
     }
 
     double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {

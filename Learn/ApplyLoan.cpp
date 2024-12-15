@@ -1,7 +1,7 @@
 #include<iostream>
 #include"../utils/Admin.hpp"
 
-#define USER_FILE "us.dat"
+#define USER_FILE "usds.dat"
 using namespace std;
 int main(){
    ArrayList<User> user;
@@ -49,6 +49,7 @@ int main(){
          }
          case 3:
             int code;
+            int indexOfloan;
             char choice;
             again:
             cout<<"Input the code to aprove :"; cin>>code;
@@ -65,10 +66,12 @@ int main(){
                         /* code */
                            
                      int index = indexOfUser(admin.getLoan().getValue(i).getPhoneNumber(),user);
+                     indexOfloan = indexOfUser()
                      cout<<index<<"hello";
                      if(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR()>0){
                         user.getValue(index).addMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
                         user.getValue(index).addLoanMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
+                        
                      }else {
                         user.getValue(index).addMoneyUSD(admin.getLoan().getValue(i).getAmountLoan().getAmountUSD());
                         user.getValue(index).addLoanMoneyUSD(admin.getLoan().getValue(i).getAmountLoan().getAmountUSD());
@@ -85,6 +88,11 @@ int main(){
                      }
                   
                         break;}
+                        case 'N'{
+                           cout<<"Okey"<<endl;
+                           goto start;
+                        }
+
                      
                      default:
                         break;
