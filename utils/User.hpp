@@ -408,7 +408,7 @@ public:
       }
    }
    char* getPhoneNumber() { 
-   return phoneNumber; 
+      return phoneNumber; 
    }
 
    void setPhoneNumber(const char* number) { 
@@ -484,6 +484,18 @@ public:
 
    void setTotalMoneyUSD(double total) { 
       totalMoneyUSD = total; 
+   }
+   void addMoneyKHR(double total){
+      totalMoneyKHR+=total;
+   }
+   void addMoneyUSD(double total){
+      totalMoneyUSD+=total;
+   }
+   void addLoanMoneyKHR(double total){
+      loanKHR+=total;
+   }
+   void addLoanMoneyUSD(double total){
+      loanUSD+=total;
    }
 
    char* getPassword() { 

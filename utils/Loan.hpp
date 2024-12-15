@@ -67,8 +67,8 @@ class Loan{
         string getReason() {
             return reason;
         }
-        string getPhoneNumber() {
-            return string(phoneNumber);
+        char* getPhoneNumber() {
+            return phoneNumber;
         }
         string getName() {
             return name;

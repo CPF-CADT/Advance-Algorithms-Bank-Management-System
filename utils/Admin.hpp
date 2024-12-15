@@ -93,6 +93,15 @@ class Admin {
     if (exchangeRate <= 0) {
         throw invalid_argument("Exchange rate must be positive.");
     }
+   
+   }
+    vector<Loan> getLoan(){
+        return loanRequest;
+    }
+    void showLoanRequest(){
+        for(auto i:loanRequest){
+            i.showLoanDetail();
+        }
     return amountUSD * exchangeRate;
 }
 
@@ -182,4 +191,5 @@ double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRa
     }
 
 };
+
 #endif
