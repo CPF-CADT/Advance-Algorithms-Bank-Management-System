@@ -198,8 +198,8 @@ public:
       cout << " - KHR: " << totalMoneyKHR <<"R"<< endl;
       cout << " - USD: " << totalMoneyUSD <<"$"<< endl;
       cout << "Account Loan:" << endl;
-      cout << " - KHR: " << totalMoneyKHR <<"R"<< endl;
-      cout << " - USD: " << totalMoneyUSD <<"$"<< endl;
+      cout << " - KHR: " << loanKHR <<"R"<< endl;
+      cout << " - USD: " << loanUSD <<"$"<< endl;
       cout << "Account Deposit Intrest:" << endl;
       for(auto i:deposit){
          i.infor();
@@ -573,7 +573,6 @@ public:
    int choice;
    do
    {
-      cout << "\n========== Update User Information ==========" << endl;
       cout << "1. Update First Name" << endl;
       cout << "2. Update Last Name" << endl;
       cout << "3. Update Phone Number" << endl;

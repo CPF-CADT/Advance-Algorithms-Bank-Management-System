@@ -32,7 +32,6 @@ int main(){
    readFromBinary(DATA_USER,users);
    do{
       clearScreen();
-      cout<<"Welcome To [Bank Name] Please Login "<<endl;
       START:
       header("KON KHMER BANK");
       option = displayOption(mainOption,3);
@@ -78,7 +77,6 @@ int main(){
                   cout<<" Enter Information to Login"<<endl;
                   cout<<"Phone number : ";cin>>phone;
                   currentIndexUser=indexOfUser(phone,users);
-                  puseScreen();
                   if(currentIndexUser!=-1){
                      cin.ignore();
                      if(enterPassword(users.getValue(currentIndexUser))){
@@ -94,6 +92,7 @@ int main(){
                               //Code
                               case 1:{
                                  //Code Show Money of user 
+                                 clearScreen();
                                  header("USER BALANCE");
                                  users.getValue(currentIndexUser).showBalance();
                                  puseScreen();
@@ -101,15 +100,18 @@ int main(){
                                  
                                  }
                               case 2:
+                                 clearScreen();
                                  header("TRANSACTION HISTORY");
                                  //Code Transaction History
                                  puseScreen();
                                  break;
                               case 3:
                                  //Code transfer money ACLIDA Concept
-                                 option = displayOption(transferOption,2);
-                                 switch(option){
+                                 clearScreen();
+                                 header("TRANSFER MONEY");
+                                 switch(displayOption(transferOption,2)){
                                     case 1:{
+                                       clearScreen();
                                        header("TRANSFER TO OWN ACCOUNT");
                                        users.getValue(currentIndexUser).transferOwnAccount(bank.getExchnageRate()); 
                                        // need to write
@@ -117,8 +119,9 @@ int main(){
                                     break;
                                     case 2:{
                                         //destination User
-                                       char phone[12];
+                                       clearScreen();
                                        header("TRANSFER TO OTHER ACCOUNT");
+                                       char phone[12];
                                        cout<<"Phone Number : ";cin>>phone;
                                        User &destUser = users.getValue(indexOfUser(phone,users));
                                        users.getValue(currentIndexUser).transferToOtherAccount(destUser,bank.getExchnageRate());
@@ -133,19 +136,25 @@ int main(){
                                  break;
                               case 4:
                                  //Code payment
+                                 clearScreen();
                                  header("PAYMENT TRANSACTION");
                                  break;
                               case 5:
                                  //Code Deposit with Interest
+                                 clearScreen();
                                  header("DEPOSIT WITH INTEREST");
                                  break;
                               case 6:
                                  //Code Apply Loan
+                                 clearScreen();
                                  header("APPLY FOR LOAN");
                                  break;
                               case 7:
+                                 clearScreen();
                                  header("UPDATE USER INFORMATION ");
                                  //Code Update Information
+                                 users.getValue(currentIndexUser).updateUserInfo();
+                                 writeToBinary(DATA_USER,users);
                                  break;
                               case 8:
                                  //Code Check Information Detail
