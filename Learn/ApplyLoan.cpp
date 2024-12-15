@@ -9,8 +9,18 @@ int main(){
    Admin admin;
    int op;
    Loan loan;
-   readFromBinary(USER_FILE,user);
+   try
+   {
+      /* code */
+       readFromBinary(USER_FILE,user);
    admin.readBin("ad.dat");
+   }
+   catch(const std::exception& e)
+   {
+      std::cerr << e.what() << '\n';
+   }
+   
+  
    start:
       cout<<" 1 . Add User"<<endl;
       cout<<" 2 . Show Laon User"<<endl;
@@ -42,9 +52,9 @@ int main(){
             char choice;
             again:
             cout<<"Input the code to aprove :"; cin>>code;
-            for(auto l:admin.getLoan()){
-                  if(code == l.getAmountLoan().getCode() ){
-                     l.showLoanDetail();
+            for(int i=0;i< admin.getLoan().getLength();i++){
+                  if(code == admin.getLoan().getValue(i).getAmountLoan().getCode() ){
+                     admin.getLoan().getValue(i).showLoanDetail();
                      cout<<"Is it a right one? (Y/N)";cin>>choice;
                      switch (choice)
                      {
@@ -54,17 +64,17 @@ int main(){
                      {
                         /* code */
                            
-                     int index = indexOfUser(l.getPhoneNumber(),user);
+                     int index = indexOfUser(admin.getLoan().getValue(i).getPhoneNumber(),user);
                      cout<<index<<"hello";
-                     if(l.getAmountLoan().getAmountKHR()>0){
-                        user.getValue(index).addMoneyKHR(l.getAmountLoan().getAmountKHR());
-                        user.getValue(index).addLoanMoneyKHR(l.getAmountLoan().getAmountKHR());
+                     if(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR()>0){
+                        user.getValue(index).addMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
+                        user.getValue(index).addLoanMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
                      }else {
-                        user.getValue(index).addMoneyUSD(l.getAmountLoan().getAmountUSD());
-                        user.getValue(index).addLoanMoneyUSD(l.getAmountLoan().getAmountUSD());
+                        user.getValue(index).addMoneyUSD(admin.getLoan().getValue(i).getAmountLoan().getAmountUSD());
+                        user.getValue(index).addLoanMoneyUSD(admin.getLoan().getValue(i).getAmountLoan().getAmountUSD());
 
                      }
-                     cout<<"yes";
+                     cout<<"yes and done!!";
                                  writeToBinary(USER_FILE,user);
 
                      
