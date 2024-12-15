@@ -56,6 +56,7 @@ int main(){
             for(int i=0;i< admin.getLoan().getLength();i++){
                   if(code == admin.getLoan().getValue(i).getAmountLoan().getCode() ){
                      admin.getLoan().getValue(i).showLoanDetail();
+                     indexOfloan = i;
                      cout<<"Is it a right one? (Y/N)";cin>>choice;
                      switch (choice)
                      {
@@ -66,7 +67,6 @@ int main(){
                         /* code */
                            
                      int index = indexOfUser(admin.getLoan().getValue(i).getPhoneNumber(),user);
-                     indexOfloan = indexOfUser()
                      cout<<index<<"hello";
                      if(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR()>0){
                         user.getValue(index).addMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
