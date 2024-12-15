@@ -197,6 +197,13 @@ public:
       cout << "Account Balance:" << endl;
       cout << " - KHR: " << totalMoneyKHR <<"R"<< endl;
       cout << " - USD: " << totalMoneyUSD <<"$"<< endl;
+      cout << "Account Loan:" << endl;
+      cout << " - KHR: " << totalMoneyKHR <<"R"<< endl;
+      cout << " - USD: " << totalMoneyUSD <<"$"<< endl;
+      cout << "Account Deposit Intrest:" << endl;
+      for(auto i:deposit){
+         i.infor();
+      }
    }
    bool checkSourceUSD(double usd){
       if(usd<=totalMoneyUSD){

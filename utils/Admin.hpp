@@ -18,8 +18,7 @@ class Admin {
     vector<Loan> loanRequest;
     Bank* bank;
     public:
-    // Admin(){
-
+    // Admin()
     // }
     void dataUserHeader(){
         cout << "National-ID   First-Name        Last-Name        Loan-USD        Loan-KHR        Total-Money-KHR   Total-Money-USD   DOB         Phone-Number   Address" << endl;

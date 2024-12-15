@@ -6,4 +6,5 @@ int main(){
    Bank bank;
    DepositInterest depo;
    depo.depositWithInterest(bank);
+   depo.infor();
 }
