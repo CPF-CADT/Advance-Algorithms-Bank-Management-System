@@ -14,7 +14,7 @@ using namespace std;
 class Admin {
     private:
     // static int numberUser;
-    // vector<string> userRequest;
+    vector<string> userRequest;
     LinkList<Loan> loanRequest;
     Bank* bank;
     public:
@@ -62,10 +62,10 @@ class Admin {
             loanRequest.push(loan);
         }
     }
-    // void addRequest(User &source,string text){
-    //     string request = " - "+source.getName()+" "+source.getPhoneNumber()+" : \n"+"    "+text+". \n";
-    //     userRequest.push_back(request);
-    // }
+    void addRequest(User &source,string text){
+        string request = " - "+source.getName()+" "+source.getPhoneNumber()+" : \n"+"    "+text+". \n";
+        userRequest.push_back(request);
+    }
     void writeToBinary(const string &fileName){
         ofstream writeFile(fileName, ios::trunc | ios::binary); 
         // writeVectorStr(writeFile,userRequest);
@@ -79,12 +79,12 @@ class Admin {
         readLoan(readFile);
         readFile.close();
     }
-    // void showRequest(){
-    //     for (auto request : userRequest) {
-    //         cout << request << endl;
-    //     }     
-    //     cout << "----------------------------------------------------------------------------------------" << endl;
-    // }
+    void showRequest(){
+        for (auto request : userRequest) {
+            cout << request << endl;
+        }     
+        cout << "----------------------------------------------------------------------------------------" << endl;
+    }
     // exchange rate
    double convertUSDtoKHR(double amountUSD, double exchangeRate) {
     if (amountUSD < 0) {
@@ -94,32 +94,27 @@ class Admin {
         throw invalid_argument("Exchange rate must be positive.");
     }
    
+    return amountUSD * exchangeRate;
    }
-    vector<Loan> getLoan(){
+    LinkList<Loan> &getLoan(){
         return loanRequest;
     }
-    void showLoanRequest(){
-        for(auto i:loanRequest){
-            i.showLoanDetail();
+
+    double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
+        if (amountKHR < 0) {
+            throw invalid_argument("Amount in KHR cannot be negative.");
         }
-    return amountUSD * exchangeRate;
-}
+        if (exchangeRate <= 0) {
+            throw invalid_argument("Exchange rate must be positive.");
+        }
+        if (deductionRate < 0 || deductionRate > 1) {
+            throw invalid_argument("Deduction rate must be between 0 and 1.");
+        }
 
-double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
-    if (amountKHR < 0) {
-        throw invalid_argument("Amount in KHR cannot be negative.");
+        double amountUSD = amountKHR / exchangeRate;
+        amountUSD -= amountUSD * deductionRate; // Apply deduction
+        return amountUSD;
     }
-    if (exchangeRate <= 0) {
-        throw invalid_argument("Exchange rate must be positive.");
-    }
-    if (deductionRate < 0 || deductionRate > 1) {
-        throw invalid_argument("Deduction rate must be between 0 and 1.");
-    }
-
-    double amountUSD = amountKHR / exchangeRate;
-    amountUSD -= amountUSD * deductionRate; // Apply deduction
-    return amountUSD;
-}
 
    
             
