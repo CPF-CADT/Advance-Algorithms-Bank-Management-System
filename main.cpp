@@ -19,7 +19,7 @@ int main(){
    string mainOption[] = {"ATM","User","Administration"};
    string userLoginOption[] = {"Login","Register"};
    string userInterface[] = {"Check Balance", "Transaction History", "Transfer Money", "Payment", 
-   "Deposit with Interest", "Apply Loan", "Update Information", "Check Information Detail", "Request to Admin"};
+   "Deposit with Interest", "Loan", "Update Information", "Check Information Detail", "Request to Admin"};
    string transferOption[] = {"Transfer to Own Account","Transfer to Other Account"};
    Bank bank;
    Admin admin;

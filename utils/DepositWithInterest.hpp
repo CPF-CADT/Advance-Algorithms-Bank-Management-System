@@ -2,6 +2,7 @@
 #define DEPOSIT_INTEREST
 #include"Bank.hpp"
 #include"QRCode.hpp"
+#include"Date.hpp"
 #include <iomanip> 
 class DepositInterest{
    private:
@@ -11,6 +12,8 @@ class DepositInterest{
       double amountWithInterestUSD;
       double interestMoney;
       int numberOfPayBack;
+      Date depositDate;
+      Date endDateOfDeposit;
    public:
       DepositInterest(){
          amountKHR = 0.00;
@@ -50,7 +53,8 @@ class DepositInterest{
             cout << "Amount Deposited:           " << amountUSD << " $" << endl;
             cout << "Total Amount with Interest: "  << fixed <<setprecision(2)<< amountWithInterestUSD << " &" << endl;
          }
-
+            cout<<"Deposit Date : "<<depositDate.getDate()<<endl;
+            cout<<"End of Term  : "<<endDateOfDeposit.getDate()<<endl;
          if (numberOfPayBack == 1) {
             cout << "payout Type: Interest will be paid in one installment at the end of the term." << endl;
          } else if (numberOfPayBack > 1) {
@@ -78,10 +82,19 @@ class DepositInterest{
          if(depositMoney.getAmountKHR()>0){
             interest = bank.getInterestKHR();
             amountKHR = depositMoney.getAmountKHR();
+            if(amountKHR<400000){
+               cerr<<"KHR Must grater that 400000 R"<<endl;
+               return;
+            }
          }else{
             interest = bank.getInterestUSD();
             amountUSD = depositMoney.getAmountUSD();
+            if(amountUSD<100){
+               cerr<<"USD Must grater that 100$"<<endl;
+               return;
+            }
          }
+         depositDate.setCurrentDate();
          cout<<"Duration Type "<<endl;
          cout<<"1 . 3  Month (interest "<<interest[0]<<"% )."<<endl;
          cout<<"2 . 6  Month (interest "<<interest[1]<<"% )."<<endl;
@@ -93,18 +106,22 @@ class DepositInterest{
             case 1:
                numberOfPayBack = choosePayback(3);
                calculateAmount(3,interest[0]);
+               endDateOfDeposit.nextManyMonth(3);
                break;
             case 2:
                numberOfPayBack = choosePayback(6);
                calculateAmount(6,interest[1]);
+               endDateOfDeposit.nextManyMonth(6);
                break;
             case 3:
                numberOfPayBack = choosePayback(12);
                calculateAmount(12,interest[2]);
+               endDateOfDeposit.nextManyMonth(12);
                break;
             case 4:
                numberOfPayBack = choosePayback(24);
                calculateAmount(24,interest[3]);
+               endDateOfDeposit.nextManyMonth(24);
                break;
             case 0:
                return;

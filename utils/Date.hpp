@@ -73,5 +73,13 @@ public:
    string getDate(){
       return to_string(day)+ " / " + nameOfMonth[month-1] + " / " +to_string(year);
    }
+   void nextManyMonth(int nOfMonth){
+      setCurrentDate();
+      this->month +=nOfMonth;
+      while(month>=12){
+         month-=12;
+         year+=1;
+      }
+   }
 };
 #endif
