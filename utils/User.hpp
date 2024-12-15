@@ -11,6 +11,7 @@
 #include<fstream>
 #include<sstream>
 #include "./Bank.hpp"
+#include "./DepositWithInterest.hpp"
 class User{
 private:
    string firstName;
@@ -23,8 +24,7 @@ private:
    double loanKHR;
    double totalMoneyKHR;
    double totalMoneyUSD;
-   double depositWithInterestKHR;
-   double depositWithInterestUSD;
+   vector<DepositInterest> deposit;
    char password[16];
    vector<QRCode> qrCode;
    vector<string> transactionHistory;
@@ -41,8 +41,6 @@ public:
       loanUSD=0.00;
       totalMoneyKHR=0.00;
       totalMoneyUSD=0.00;
-      depositWithInterestKHR = 0.00;
-      depositWithInterestUSD = 0.00;
    }
 
   User(const string& firstName, 
@@ -135,8 +133,7 @@ public:
       writeFile.write((char *)(&loanKHR), sizeof(loanKHR));
       writeFile.write((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
       writeFile.write((char *)(&totalMoneyUSD), sizeof(totalMoneyUSD));
-      writeFile.write((char *)(&depositWithInterestKHR), sizeof(depositWithInterestKHR));
-      writeFile.write((char *)(&depositWithInterestUSD), sizeof(depositWithInterestUSD));
+      writeVector(writeFile,deposit);
       writeFile.write((char *)(&password), sizeof(password));
       writeVector(writeFile,qrCode);
       writeVectorStr(writeFile,transactionHistory);
@@ -153,8 +150,7 @@ public:
       readFile.read((char *)(&loanKHR), sizeof(loanKHR));
       readFile.read((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
       readFile.read((char *)(&totalMoneyUSD), sizeof(totalMoneyUSD));
-      readFile.read((char *)(&depositWithInterestKHR), sizeof(depositWithInterestKHR));
-      readFile.read((char *)(&depositWithInterestUSD), sizeof(depositWithInterestUSD));
+      readVector(readFile,deposit);
       readFile.read((char *)(&password), sizeof(password));
       readVector(readFile,qrCode);
       readVectorStr(readFile,transactionHistory);
@@ -201,6 +197,13 @@ public:
       cout << "Account Balance:" << endl;
       cout << " - KHR: " << totalMoneyKHR <<"R"<< endl;
       cout << " - USD: " << totalMoneyUSD <<"$"<< endl;
+      cout << "Account Loan:" << endl;
+      cout << " - KHR: " << loanKHR <<"R"<< endl;
+      cout << " - USD: " << loanUSD <<"$"<< endl;
+      cout << "Account Deposit Intrest:" << endl;
+      for(auto i:deposit){
+         i.infor();
+      }
    }
    bool checkSourceUSD(double usd){
       if(usd<=totalMoneyUSD){
@@ -582,7 +585,6 @@ public:
    int choice;
    do
    {
-      cout << "\n========== Update User Information ==========" << endl;
       cout << "1. Update First Name" << endl;
       cout << "2. Update Last Name" << endl;
       cout << "3. Update Phone Number" << endl;
@@ -688,21 +690,6 @@ public:
       }
    } while (choice != 8);
    };
-   void depositWithInterest(Bank &bank){
-      QRCode depositMoney;
-      float *interest;
-      depositMoney.cratePaymentCode();
-      if(depositMoney.getAmountKHR()>0){
-         interest = bank.getInterestKHR();
-      }else{
-         interest = bank.getInterestUSD();
-      }
-      cout<<"Choose Duration : ";
-      cout<<"1 . 3  Month (interest "<<interest[0]<<" ).";
-      cout<<"2 . 6  Month (interest "<<interest[1]<<" ).";
-      cout<<"3 . 12 Month (interest "<<interest[2]<<" ).";
-      cout<<"4 . 24 Month (interest "<<interest[3]<<" ).";
-   }
 };
 //outside class
 void readFromCV(const string fileName,ArrayList<User> &users,const string fileNameBin){ 

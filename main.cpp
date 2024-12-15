@@ -1,6 +1,6 @@
 #include "./utils/User.hpp"
 #include "./utils/Bank.hpp"
-#include "./utils/ATM.hpp"
+// #include "./utils/ATM.hpp"
 #include "./utils/Admin.hpp"
 #include "./utils/fileHandling.hpp"
 #include <unistd.h>
@@ -19,7 +19,7 @@ int main(){
    string mainOption[] = {"ATM","User","Administration"};
    string userLoginOption[] = {"Login","Register"};
    string userInterface[] = {"Check Balance", "Transaction History", "Transfer Money", "Payment", 
-   "Deposit with Interest", "Apply Loan", "Update Information", "Check Information Detail", "Request to Admin"};
+   "Deposit with Interest", "Loan", "Update Information", "Check Information Detail", "Request to Admin"};
    string transferOption[] = {"Transfer to Own Account","Transfer to Other Account"};
    Bank bank;
    Admin admin;
@@ -32,20 +32,39 @@ int main(){
    readFromBinary(DATA_USER,users);
    do{
       clearScreen();
-      // cout<<"Welcome To [Bank Name] Please Login "<<endl;
       START:
       header("KON KHMER BANK");
       option = displayOption(mainOption,3);
       switch(option){
          case 1:
-            clearScreen();
-            cout<<"[Bank Name] ATM "<<endl;
-            for(int i=0;i<users.getLength();i++){
-               users.getValue(i).displayInfo();
-            }
-            puseScreen();
-            //process ATm
-            break;
+            // clearScreen();
+            // cout<<"[Bank Name] ATM "<<endl;
+            // for(int i=0;i<users.getLength();i++){
+            //    users.getValue(i).displayInfo();
+            // }
+            // puseScreen();
+            // //process ATm
+            // int choice;
+            // int amount;
+            // int  success;
+            // ATM atm(1000);
+            // cout<<"1. View Your Balance "<<endl;
+            // cout<<"2. Withdraw"<<endl;
+            // cout<<"3. Deposite "<<endl;
+            // cout<<""<<endl;
+            // cout<<"Enter Your Choice : "<<endl; cin<<choice;
+            // switch (choice)
+            // {
+            // case 1:
+            //    cout<<"Your Balance : "<<atm.getBalance();
+            //    break;
+            // case 2:
+            //    cout<<"Enter the amount to withdraw : "; cin<<amount;
+            //    success = atm.withdraw(amount);
+            // default:
+            //    break;
+            // }
+            // break;
          case 2:
             USER:
             clearScreen();
@@ -58,7 +77,6 @@ int main(){
                   cout<<" Enter Information to Login"<<endl;
                   cout<<"Phone number : ";cin>>phone;
                   currentIndexUser=indexOfUser(phone,users);
-                  puseScreen();
                   if(currentIndexUser!=-1){
                      cin.ignore();
                      if(enterPassword(users.getValue(currentIndexUser))){
@@ -74,6 +92,7 @@ int main(){
                               //Code
                               case 1:{
                                  //Code Show Money of user 
+                                 clearScreen();
                                  header("USER BALANCE");
                                  users.getValue(currentIndexUser).showBalance();
                                  puseScreen();
@@ -81,15 +100,18 @@ int main(){
                                  
                                  }
                               case 2:
+                                 clearScreen();
                                  header("TRANSACTION HISTORY");
                                  //Code Transaction History
                                  puseScreen();
                                  break;
                               case 3:
                                  //Code transfer money ACLIDA Concept
-                                 option = displayOption(transferOption,2);
-                                 switch(option){
+                                 clearScreen();
+                                 header("TRANSFER MONEY");
+                                 switch(displayOption(transferOption,2)){
                                     case 1:{
+                                       clearScreen();
                                        header("TRANSFER TO OWN ACCOUNT");
                                        users.getValue(currentIndexUser).transferOwnAccount(bank.getExchnageRate()); 
                                        // need to write
@@ -97,8 +119,9 @@ int main(){
                                     break;
                                     case 2:{
                                         //destination User
-                                       char phone[12];
+                                       clearScreen();
                                        header("TRANSFER TO OTHER ACCOUNT");
+                                       char phone[12];
                                        cout<<"Phone Number : ";cin>>phone;
                                        User &destUser = users.getValue(indexOfUser(phone,users));
                                        users.getValue(currentIndexUser).transferToOtherAccount(destUser,bank.getExchnageRate());
@@ -113,19 +136,25 @@ int main(){
                                  break;
                               case 4:
                                  //Code payment
+                                 clearScreen();
                                  header("PAYMENT TRANSACTION");
                                  break;
                               case 5:
                                  //Code Deposit with Interest
+                                 clearScreen();
                                  header("DEPOSIT WITH INTEREST");
                                  break;
                               case 6:
                                  //Code Apply Loan
+                                 clearScreen();
                                  header("APPLY FOR LOAN");
                                  break;
                               case 7:
+                                 clearScreen();
                                  header("UPDATE USER INFORMATION ");
                                  //Code Update Information
+                                 users.getValue(currentIndexUser).updateUserInfo();
+                                 writeToBinary(DATA_USER,users);
                                  break;
                               case 8:
                                  //Code Check Information Detail

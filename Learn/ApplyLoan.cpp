@@ -10,6 +10,7 @@ int main(){
    int op;
    Loan loan;
    readFromBinary(USER_FILE,user);
+   admin.readBin("ad.dat");
    start:
       cout<<" 1 . Add User"<<endl;
       cout<<" 2 . Show Laon User"<<endl;
@@ -28,7 +29,6 @@ int main(){
             loan.applyLoan(tempUser);
             admin.requestLoan(loan);
             user.push(tempUser);
-            writeToBinary(USER_FILE,user);
             admin.writeToBinary("ad.dat");
             break;
          }
