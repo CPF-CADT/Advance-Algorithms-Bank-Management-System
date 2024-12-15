@@ -2,108 +2,111 @@
 #define ATM_HPP
 
 #include <iostream>
-#include <stdexcept>
 #include <string>
+#include <vector>
+#include <ctime>
+#include <iomanip>
+
 using namespace std;
 
-class User {
-private:
-    string name;
-    double totalMoneyUSD;
-    double totalMoneyKHR;
+struct Transaction {
+    string type;    // "Deposit" or "Withdraw"
+    string currency; // "USD" or "KHR"
+    double amount;
+    string date;
 
-public:
-    User(const string &name, double usd, double khr)
-        : name(name), totalMoneyUSD(usd), totalMoneyKHR(khr) {}
-
-    double getTotalMoneyUSD() const { return totalMoneyUSD; }
-    double getTotalMoneyKHR() const { return totalMoneyKHR; }
-
-    void setTotalMoneyUSD(double amount) { totalMoneyUSD = amount; }
-    void setTotalMoneyKHR(double amount) { totalMoneyKHR = amount; }
-
-    void displayBalances() const {
-        cout << "Current Balances:\n";
-        cout << "USD: $" << totalMoneyUSD << "\n";
-        cout << "KHR: " << totalMoneyKHR << " KHR\n";
-    }
+    Transaction(string t, string c, double a, string d)
+        : type(t), currency(c), amount(a), date(d) {}
 };
 
 class ATM {
+private:
+    vector<Transaction> history;
+
+    string getCurrentDate() {
+        time_t now = time(0);
+        tm *ltm = localtime(&now);
+        stringstream ss;
+        ss << 1900 + ltm->tm_year << "-" << setw(2) << setfill('0') << 1 + ltm->tm_mon
+           << "-" << setw(2) << setfill('0') << ltm->tm_mday;
+        return ss.str();
+    }
+
 public:
-    static void deposit(User &user, double amount, const string &currency) {
+    void deposit(double &balanceUSD, double &balanceKHR, double amount, const string &currency) {
         if (amount <= 0) {
-            cerr << "Invalid deposit amount!\n";
+            cerr << "Error: Invalid deposit amount!" << endl;
             return;
         }
 
         if (currency == "USD") {
-            user.setTotalMoneyUSD(user.getTotalMoneyUSD() + amount);
-            cout << "Deposited $" << amount << " to USD account.\n";
+            if (amount < 100) {
+                cerr << "Error: Minimum deposit for USD is $100." << endl;
+                return;
+            }
+            balanceUSD += amount;
+            cout << "Deposit successful! New USD Balance: $" << balanceUSD << endl;
         } else if (currency == "KHR") {
-            user.setTotalMoneyKHR(user.getTotalMoneyKHR() + amount);
-            cout << "Deposited " << amount << " KHR to KHR account.\n";
+            if (amount < 400000) {
+                cerr << "Error: Minimum deposit for KHR is 400,000 R." << endl;
+                return;
+            }
+            balanceKHR += amount;
+            cout << "Deposit successful! New KHR Balance: " << balanceKHR << " R" << endl;
         } else {
-            cerr << "Invalid currency type!\n";
+            cerr << "Error: Invalid currency!" << endl;
+            return;
         }
-        user.displayBalances();
+
+        // Add to history
+        history.emplace_back("Deposit", currency, amount, getCurrentDate());
     }
 
-    static void withdraw(User &user, double amount, const string &currency) {
+    void withdraw(double &balanceUSD, double &balanceKHR, double amount, const string &currency) {
         if (amount <= 0) {
-            cerr << "Invalid withdrawal amount!\n";
+            cerr << "Error: Invalid withdrawal amount!" << endl;
             return;
         }
 
         if (currency == "USD") {
-            if (user.getTotalMoneyUSD() >= amount) {
-                user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
-                cout << "Withdrew $" << amount << " from USD account.\n";
+            if (balanceUSD >= amount) {
+                balanceUSD -= amount;
+                cout << "Withdrawal successful! New USD Balance: $" << balanceUSD << endl;
             } else {
-                cerr << "Insufficient USD balance!\n";
+                cerr << "Error: Insufficient USD balance!" << endl;
+                return;
             }
         } else if (currency == "KHR") {
-            if (user.getTotalMoneyKHR() >= amount) {
-                user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
-                cout << "Withdrew " << amount << " KHR from KHR account.\n";
+            if (balanceKHR >= amount) {
+                balanceKHR -= amount;
+                cout << "Withdrawal successful! New KHR Balance: " << balanceKHR << " R" << endl;
             } else {
-                cerr << "Insufficient KHR balance!\n";
+                cerr << "Error: Insufficient KHR balance!" << endl;
+                return;
             }
         } else {
-            cerr << "Invalid currency type!\n";
-        }
-        user.displayBalances();
-    }
-
-    static void exchange(User &user, double amount, const string &fromCurrency, const string &toCurrency) {
-        const double exchangeRate = 4100.0; // 1 USD = 4100 KHR
-
-        if (amount <= 0) {
-            cerr << "Invalid exchange amount!\n";
+            cerr << "Error: Invalid currency!" << endl;
             return;
         }
 
-        if (fromCurrency == "USD" && toCurrency == "KHR") {
-            if (user.getTotalMoneyUSD() >= amount) {
-                user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
-                user.setTotalMoneyKHR(user.getTotalMoneyKHR() + amount * exchangeRate);
-                cout << "Exchanged $" << amount << " to " << amount * exchangeRate << " KHR.\n";
-            } else {
-                cerr << "Insufficient USD balance for exchange!\n";
-            }
-        } else if (fromCurrency == "KHR" && toCurrency == "USD") {
-            double requiredKHR = amount * exchangeRate;
-            if (user.getTotalMoneyKHR() >= requiredKHR) {
-                user.setTotalMoneyKHR(user.getTotalMoneyKHR() - requiredKHR);
-                user.setTotalMoneyUSD(user.getTotalMoneyUSD() + amount);
-                cout << "Exchanged " << requiredKHR << " KHR to $" << amount << ".\n";
-            } else {
-                cerr << "Insufficient KHR balance for exchange!\n";
-            }
-        } else {
-            cerr << "Invalid currency types for exchange!\n";
+        // Add to history
+        history.emplace_back("Withdraw", currency, amount, getCurrentDate());
+    }
+
+    void showHistory() const {
+        if (history.empty()) {
+            cout << "No transaction history available.\n";
+            return;
         }
-        user.displayBalances();
+
+        cout << "\n--- Transaction History ---\n";
+        cout << left << setw(12) << "Type" << setw(8) << "Currency" << setw(10) << "Amount"
+             << setw(12) << "Date" << endl;
+        cout << string(40, '-') << endl;
+        for (const auto &txn : history) {
+            cout << left << setw(12) << txn.type << setw(8) << txn.currency
+                 << setw(10) << txn.amount << setw(12) << txn.date << endl;
+        }
     }
 };
 

@@ -82,8 +82,8 @@ class DepositInterest{
          if(depositMoney.getAmountKHR()>0){
             interest = bank.getInterestKHR();
             amountKHR = depositMoney.getAmountKHR();
-            if(amountKHR<400000){
-               cerr<<"KHR Must grater that 400000 R"<<endl;
+            if(amountKHR<40000){
+               cerr<<"KHR Must grater that 40000 R"<<endl;
                return;
             }
          }else{
