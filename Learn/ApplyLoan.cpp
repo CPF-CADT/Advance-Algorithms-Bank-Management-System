@@ -1,13 +1,14 @@
 #include<iostream>
 #include"../utils/Admin.hpp"
 
-#define USER_FILE "users.dat"
+#define USER_FILE "u.dat"
 
 int main(){
    ArrayList<User> user;
    User tempUser;
    Admin admin;
    int op;
+   admin.readBin("ad.dat");
    start:
       cout<<" 1 . Add User"<<endl;
       cout<<" 2 . Show Laon User"<<endl;
@@ -24,11 +25,11 @@ int main(){
             loan.applyLoan(tempUser);
             admin.requestLoan(loan);
             user.push(tempUser);
-            admin.writeToBinary("admin.dat");
+            admin.writeToBinary("ad.dat");
             break;
          }
          case 2:{  
-               admin.readBin("admin.dat");
+               admin.readBin("ad.dat");
                admin.showLoanRequest();
             break;
          }
