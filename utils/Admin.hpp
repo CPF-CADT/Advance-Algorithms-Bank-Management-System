@@ -83,6 +83,9 @@ class Admin {
     void requestLoan(Loan &loan){
         loanRequest.push_back(loan);
     }
+    vector<Loan> getLoan(){
+        return loanRequest;
+    }
     void showLoanRequest(){
         for(auto i:loanRequest){
             i.showLoanDetail();
