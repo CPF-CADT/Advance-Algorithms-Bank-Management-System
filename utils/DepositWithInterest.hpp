@@ -129,5 +129,52 @@ class DepositInterest{
          }
          receipt();
       }
+      void infor(){
+         if(amountKHR>0){
+            cout<<" - KHR: " << amountKHR <<"R"<< endl;
+         }else{
+            cout<<" - USD: " << amountUSD<<"$"<< endl;
+         }
+         cout<<" > Deposit Date : "<<depositDate.getDate()<<endl;
+         cout<<" > Payout Date  : "<<endDateOfDeposit.getDate()<<endl;
+         cout<<"------------------------------------------------------------"<<endl;
+      }
+      void setAmountKHR(double amount) {
+         amountKHR = amount;
+      }
+      double getAmountKHR() const {
+         return amountKHR;
+      }
+      void setAmountUSD(double amount) {
+         amountUSD = amount;
+      }
+      double getAmountUSD() const {
+         return amountUSD;
+      }
+      void setAmountWithInterestKHR(double amount) {
+         amountWithInterestKHR = amount;
+      }
+      double getAmountWithInterestKHR() const {
+         return amountWithInterestKHR;
+      }
+      void setAmountWithInterestUSD(double amount) {
+         amountWithInterestUSD = amount;
+      }
+      double getAmountWithInterestUSD() const {
+         return amountWithInterestUSD;
+      }
+      void setInterestMoney(double interest) {
+         interestMoney = interest;
+      }
+      double getInterestMoney() const {
+         return interestMoney;
+      }
+      void setNumberOfPayBack(int number) {
+         numberOfPayBack = number;
+      }
+      int getNumberOfPayBack() const {
+         return numberOfPayBack;
+      }
+
 };
 #endif
