@@ -81,6 +81,7 @@
 
 #include<iostream>
 #include"../utils/User.hpp"
+#include"../utils/Admin.hpp"
 
 #define USER_FILE "user1.dat"
 
@@ -89,6 +90,7 @@ int main(){
    User tempUser;
    Bank bank;
    int op;
+   Admin admin;
    start:
       cout<<" 1 . Add User"<<endl;
       cout<<" 2 . show"<<endl;
@@ -102,7 +104,11 @@ int main(){
             tempUser.addDepositWithInterest(bank);
             tempUser.output();
             tempUser.writeToFile(USER_FILE);
+            admin.addlistUserDeposit((string)tempUser.getPhoneNumber());
             user.push(tempUser);
+            for(string i:admin.getlistUserDeposit()){
+               cout<<i<<endl;
+            }
             break;
          }
          case 2:{  
