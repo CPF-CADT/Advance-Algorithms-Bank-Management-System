@@ -834,7 +834,6 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
          } else {
                highIndex = mid - 1;
          }
-         cout<<" Time : "<<endl;
       }
       return -1;
    }

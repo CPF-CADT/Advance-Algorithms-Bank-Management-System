@@ -24,6 +24,13 @@ int main(){
    "Deposit with Interest", "Loan", "Update Information", "Check Information Detail", "Request to Admin"};
    string transferOption[] = {"Transfer to Own Account","Transfer to Other Account"};
    string payment[] = {"Create A payment code ","Pay money"};
+   string adminInterface[] = {
+      "Create User Account", "Deposit", "Withdraw",
+      "Search User Information", "Approve Loan", "Check Request",
+      "Update Bank Data", "Show Transaction History", "Block User",
+      "Check ATM History", "Write Report","Bank Information"
+   };
+   string createAccount[] ={"Create User Account","Create Many Account"};
    Bank bank;
    Admin admin;
    ArrayList<User> users;
@@ -96,7 +103,6 @@ int main(){
                            header("USER ACCOUNT");
                            int op;
                            cout<<"Welcome back "<<users.getValue(currentIndexUser).getFirstName()<<endl;
-
                            op = displayOption(userInterface,9);
                            switch(op){
                               //Code
@@ -184,7 +190,7 @@ int main(){
                                  }catch(exception &e){
                                     cerr<<e.what();
                                  }
-                                 cout<<"Press anykey Exit ... "<<endl;               
+                                 cout<<"Press anykey Exit ... "<<endl;              
                                  puseScreen();
                                  break;
                               case 6:
@@ -252,11 +258,10 @@ int main(){
                   break;
                case 2:{
                   clearScreen();
-                  cout<<" Create User Account"<<endl;
+                  header("Create User Account");
                   newUser.input(DATA_USER);
                   newUser.setTotalMoneyKHR(100000);
                   newUser.setTotalMoneyUSD(100);
-                  // newUser.writeToFile(DATA_USER);
                   if(users.getLength()>0){
                      try{
                         if(newUser.findFreeOrder(users,newUser) == users.getLength()){
@@ -284,7 +289,116 @@ int main(){
             break;
          case 3:
             clearScreen();
-            cout<<"[Bank Name] Administration "<<endl;
+            header("KON KHMER Administration");
+            ADMIN_INTER:
+            switch (displayOption(adminInterface,12)) {
+               case 1:
+                     clearScreen();
+                     header("Create User Account");
+                     switch(displayOption(createAccount,2)){
+                        case 1:{
+                           header("Create Account");
+                           User newUser;
+                           newUser.input(DATA_USER);
+                           if(users.getLength()>0){
+                              try{
+                                 if(newUser.findFreeOrder(users,newUser) == users.getLength()){
+                                    users.push(newUser);
+                                 }else{
+                                    users.insertAt(newUser.findFreeOrder(users,newUser),newUser);
+                                 }
+                              }catch(exception &e){
+                                 cerr<<e.what();
+                              }
+                           }else{
+                              users.push(newUser);
+                           }
+                           writeToBinary(DATA_USER,users);
+                           cout<<"Success"<<endl;
+                           cout<<"Press anykey Exit ... "<<endl;
+                           puseScreen();
+                           break;
+                           }
+                        case 2:{
+                           header("Create Many Account");
+                           string fileName;
+                           cout<<"Enter File CSV : ";cin>>fileName;
+                           readFromCV(fileName,users,DATA_USER);
+                           cout<<"Press anykey Exit ... "<<endl;
+                           puseScreen();
+                           break;
+                           }
+                        case 0:{
+                           goto ADMIN_INTER;
+                           break;
+                           }
+                     }
+                     break;
+               case 2:
+                     clearScreen();
+                     header("Deposit");
+                     puseScreen();
+                     break;
+               case 3:
+                     clearScreen();
+                     header("Withdraw");
+                     puseScreen();
+                     break;
+               case 4:
+                     clearScreen();
+                     header("Search User Information");
+                     puseScreen();
+                     break;
+               case 5:
+                     clearScreen();
+                     header("Approve Loan");
+                     puseScreen();
+                     break;
+               case 6:
+                     clearScreen();
+                     header("Check Request");
+                     admin.readBin(DATA_ADMIN);
+                     admin.showRequest();
+                     puseScreen();
+                     break;
+               case 7:
+                     clearScreen();
+                     header("Update Bank Data");
+                     puseScreen();
+                     break;
+               case 8:
+                     clearScreen();
+                     header("Show Transaction History");
+                     puseScreen();
+                     break;
+               case 9:
+                     clearScreen();
+                     header("Block User");
+                     puseScreen();
+                     break;
+               case 10:
+                     clearScreen();
+                     header("Check ATM History");
+                     puseScreen();
+                     break;
+               case 11:
+                     clearScreen();
+                     header("Write Report");
+                     puseScreen();
+                     break;
+               case 12:{
+                     clearScreen();
+                     header("Bank Information");
+                     puseScreen();
+                     break;
+                     }
+               case 0:{
+                  goto START;    
+                  break;
+               }
+            }
+            puseScreen();
+            goto ADMIN_INTER;
             break;
          case 0:
             clearScreen();
