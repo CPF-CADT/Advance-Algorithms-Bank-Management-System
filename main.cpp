@@ -172,8 +172,14 @@ int main(){
                                  //Code Deposit with Interest
                                  clearScreen();
                                  header("DEPOSIT WITH INTEREST");
-                                 users.getValue(currentIndexUser).addDepositWithInterest(bank);
-                                 writeToBinary(DATA_USER,users);
+                                 try{
+                                    users.getValue(currentIndexUser).addDepositWithInterest(bank);
+                                    admin.addlistUserDeposit((string)users.getValue(currentIndexUser).getPhoneNumber());
+                                    writeToBinary(DATA_USER,users);
+                                    admin.writeToBinary(DATA_ADMIN);
+                                 }catch(exception &e){
+                                    cerr<<e.what();
+                                 }
                                  puseScreen();
                                  break;
                               case 6:
@@ -255,7 +261,7 @@ int main(){
                      users.push(newUser);
                   }
                   writeToBinary(DATA_USER,users);
-                  cout<<"Success ... press any key"<<endl;
+                  cout<<"Success"<<endl;
                   puseScreen();
                   break;
                }
@@ -291,12 +297,13 @@ void clearScreen() {
 #endif
 }
 void puseScreen() {
-#ifdef _WIN32
-   system("pause");
-#else
-   fflush(stdout); // Ensure the message is printed before waiting for input
-   getchar();
-#endif
+   cout<<"Press anykey Exit ... "<<endl;
+   #ifdef _WIN32
+      system("pause");
+   #else
+      fflush(stdout); // Ensure the message is printed before waiting for input
+      getchar();
+   #endif
 }
 
 void header(const string header){
