@@ -210,51 +210,6 @@ class Admin {
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
     // search user info
-   void searchUserInformation(const string& searchTerm) {
-    vector<User> users = bank->getAllUsers(); 
-    bool found = false;
-
-    dataUserHeader(); 
-
-    for (const auto& user : users) {
-        // Check if the user's first name or last name matches the search term
-        if (user.getFirstName() == searchTerm || user.getLastName() == searchTerm) {
-            showAllUsers(user); // Show basic user details
-            found = true;
-
-            
-            cout << "Additional Details:" << endl;
-
-            // Show the user's total money in the bank (both KHR and USD)
-            cout << "  Total Money in KHR: " << fixed << setprecision(2) << user.getTotalMoneyKHR() << " KHR" << endl;
-            cout << "  Total Money in USD: " << fixed << setprecision(2) << user.getTotalMoneyUSD() << " USD" << endl;
-
-            // Check if the user has taken a loan
-            if (user.getLoanKHR() > 0 || user.getLoanUSD() > 0) {
-                cout << "  Loan Information:" << endl;
-                if (user.getLoanKHR() > 0) {
-                    cout << "    Loan Amount in KHR: " << fixed << setprecision(2) << user.getLoanKHR() << " KHR" << endl;
-                }
-                if (user.getLoanUSD() > 0) {
-                    cout << "    Loan Amount in USD: " << fixed << setprecision(2) << user.getLoanUSD() << " USD" << endl;
-                }
-            } else {
-                cout << "  No loan taken by this user." << endl;
-            }
-
-            cout << "----------------------------------------------------------------------------------------" << endl;
-        }
-    }
-
-    if (!found) {
-        cout << "No users found with the name: " << searchTerm << endl;
-    }
-}
-
-
-
-
-
 };
 
 #endif
