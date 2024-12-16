@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include "DepositWithInterest.hpp"
 #include "User.hpp"
 using namespace std;
 
@@ -44,7 +43,7 @@ public:
             cerr << e.what() << endl;
         }
     }
-    void checkBalance(const User &user) {
+    void checkBalance(User &user) {
         cout << "\nCurrent Balances:" << endl;
         cout << "USD: $" << user.getTotalMoneyUSD() << endl;
         cout << "KHR: " << user.getTotalMoneyKHR() << " KHR" << endl;
@@ -59,11 +58,10 @@ public:
             cout << "2. Withdraw" << endl;
             cout << "3. Check Balance" << endl;
             cout << "0. Exit" << endl;
-            cout << "Enter your choice: ";
+            cout << "Enter your choice : ";
             cin >> choice;
             switch (choice) {
                 case 1:
-                    deposit.depositWithInterest(totalMoneyUSD, totalMoneyKHR);
                     break;
                 case 2:
                     cout << "Enter currency (USD/KHR): ";
