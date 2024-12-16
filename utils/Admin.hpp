@@ -287,6 +287,40 @@ class Admin {
 
         cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
     }
+    void unblockUser(const char* phone, ArrayList<User>& users, vector<User>& blockedUsers) {
+   
+    int index = indexOfUser(phone, blockedUsers);
+
+    if (index == -1) {
+        cout << "Unable to unblock user. User not found in the blocked list.\n";
+        return;
+    }
+
+    User unblockedUser = blockedUsers.getValue(index);
+
+    
+    if (users.getLength() > 0) {
+        try {
+            if (unblockedUser.findFreeOrder(users, unblockedUser) == users.getLength()) {
+                users.push(unblockedUser);
+            } else {
+                users.insertAt(unblockedUser.findFreeOrder(users, unblockedUser), unblockedUser);
+            }
+        } catch (exception& e) {
+            cerr << e.what();
+        }
+    } else {
+        users.push(unblockedUser);
+    }
+
+   
+    blockedUsers.removeAt(index);
+
+    // Confirm successful unblocking
+    cout << "User with phone number " << phone << " has been unblocked and added back to active users.\n";
+}
+
+
 
 
 };
