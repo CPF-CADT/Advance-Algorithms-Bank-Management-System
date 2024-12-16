@@ -145,7 +145,7 @@ double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRa
     cout << reportStream.str();
 }
  
-    /*
+    
 
 
     void setInterestRatesKHR(int durationInMonths, float interest) {
@@ -159,7 +159,7 @@ double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRa
     }  
 
 
-     */
+     
 
     void displayInterestRates() {
         cout << "Interest Rates for KHR:" << endl;
