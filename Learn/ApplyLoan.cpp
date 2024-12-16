@@ -1,7 +1,7 @@
 #include<iostream>
 #include"../utils/Admin.hpp"
 
-#define USER_FILE "usds.dat"
+#define USER_FILE "usk.dat"
 using namespace std;
 int main(){
    ArrayList<User> user;
@@ -67,7 +67,7 @@ int main(){
                         /* code */
                            
                      int index = indexOfUser(admin.getLoan().getValue(i).getPhoneNumber(),user);
-                     cout<<index<<"hello";
+                     cout<<index<<"hello"<<endl;
                      if(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR()>0){
                         user.getValue(index).addMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
                         user.getValue(index).addLoanMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
@@ -79,6 +79,9 @@ int main(){
                      }
                      cout<<"yes and done!!";
                                  writeToBinary(USER_FILE,user);
+                                  admin.AddLoanUser(admin.getLoan().getValue(i));
+                                   admin.showUserLoan();
+                        
 
                      
                      }
@@ -93,7 +96,7 @@ int main(){
                            cout<<"Okey"<<endl;
                            goto start;
                         }
-
+                        
                      
                      default:
                         break;
@@ -105,6 +108,10 @@ int main(){
             for( int i=0;i<user.getLength();i++){
                user.getValue(i).displayInfo();
             }
+         break;
+          case 5:
+           admin.showUserLoan();
+          
          break;
 
       }
