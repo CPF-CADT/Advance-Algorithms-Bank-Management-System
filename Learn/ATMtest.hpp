@@ -1,55 +1,53 @@
-#ifndef ATM_HPP
-#define ATM_HPP
+#include<iostream>
+#include"User.hpp"
+#include"DepositWithInterest.hpp"
 
-#include <iostream>
-#include <string>
-#include "DepositWithInterest.hpp"
-#include "User.hpp"
+
 using namespace std;
 
 class ATM {
 private:
-    double totalMoneyUSD; // USD balance
-    double totalMoneyKHR; // KHR balance
-    DepositInterest deposit; // DepositWithInterest object for managing deposits
-
+    double totalMoneyUSD;
+    double totalMoneyKHR;
 public:
-    ATM(double usd = 0.0, double khr = 0.0) : totalMoneyUSD(usd), totalMoneyKHR(khr) {}
 
-    void withdraw(User &user, double amount, const string &currency) {
+    ATM() : totalMoneyUSD(0.0), totalMoneyKHR(0.0) {}  // Initialize balances to zero
+    void withdraw(double amount, const string &currency) {
         try {
             if (amount <= 0) {
                 throw runtime_error("Invalid withdrawal amount!");
             }
             if (currency == "USD") {
-                if (user.getTotalMoneyUSD() >= amount) {
-                    user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
+                if (totalMoneyUSD >= amount) {
+                    totalMoneyUSD -= amount;
                     cout << "Withdrawal successful!" << endl;
-                    cout << "Remaining USD balance: $" << user.getTotalMoneyUSD() << endl;
+                    cout << "Remaining balance (USD): $" << totalMoneyUSD << endl;
                 } else {
                     cout << "Insufficient USD balance!" << endl;
                 }
-            } else if (currency == "KHR") {
-                if (user.getTotalMoneyKHR() >= amount) {
-                    user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
+            } 
+            else if (currency == "KHR") {
+                if (totalMoneyKHR >= amount) {
+                    totalMoneyKHR -= amount;
                     cout << "Withdrawal successful!" << endl;
-                    cout << "Remaining KHR balance: " << user.getTotalMoneyKHR() << " KHR" << endl;
+                    cout << "Remaining balance (KHR): " << totalMoneyKHR << " KHR" << endl;
                 } else {
                     cout << "Insufficient KHR balance!" << endl;
                 }
-            } else {
-                throw runtime_error("Invalid currency type!");
+            } 
+            else {
+                throw runtime_error("Error: Invalid currency type!");
             }
         } catch (const exception &e) {
             cerr << e.what() << endl;
         }
     }
-    void checkBalance(const User &user) {
+    void checkBalance() {
         cout << "\nCurrent Balances:" << endl;
-        cout << "USD: $" << user.getTotalMoneyUSD() << endl;
-        cout << "KHR: " << user.getTotalMoneyKHR() << " KHR" << endl;
+        cout << "USD Balance: $" << totalMoneyUSD << endl;
+        cout << "KHR Balance: " << totalMoneyKHR << " KHR" << endl;
     }
-    void displayMenu(User &user) {
+    void displayMenu() {
         int choice;
         double amount;
         string currency;
@@ -61,28 +59,33 @@ public:
             cout << "0. Exit" << endl;
             cout << "Enter your choice: ";
             cin >> choice;
-            switch (choice) {
+
+            switch(choice) {
                 case 1:
                     deposit.depositWithInterest(totalMoneyUSD, totalMoneyKHR);
                     break;
                 case 2:
+                    cout << "Enter the withdrawal amount: ";
+                    cin >> amount;
                     cout << "Enter currency (USD/KHR): ";
                     cin >> currency;
-                    cout << "Enter withdrawal amount: ";
-                    cin >> amount;
-                    withdraw(user, amount, currency);
+                    withdraw(amount, currency);
                     break;
                 case 3:
-                    checkBalance(user);
+                    checkBalance();
                     break;
                 case 0:
                     cout << "Exiting ATM. Thank you!" << endl;
                     break;
                 default:
-                    cout << "Invalid choice. Please try again." << endl;
+                    cout << "Invalid choice! Please try again." << endl;
+                    break;
             }
-        } while (choice != 0);
+        } while(choice != 0);
     }
 };
-
-#endif
+int main() {
+    ATM atm;
+    atm.displayMenu();
+    return 0;
+}

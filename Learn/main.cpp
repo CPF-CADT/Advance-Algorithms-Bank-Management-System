@@ -1,93 +1,56 @@
-#include "ATM.hpp"
 #include <iostream>
+#include "ATM.hpp"
 
 using namespace std;
 
-void showMenu() {
-    cout << "\n--- ATM Menu ---\n";
-    cout << "1. Deposit\n";
-    cout << "2. Withdraw\n";
-    cout << "3. Show Balances\n";
-    cout << "4. Transaction History\n";
-    cout << "5. Exit\n";
-    cout << "Enter your choice: ";
-}
-
-string selectCurrency() {
-    int currencyChoice;
-    cout << "\nSelect currency:\n";
-    cout << "1. USD\n";
-    cout << "2. KHR\n";
-    cout << "Enter your choice: ";
-    cin >> currencyChoice;
-
-    if (currencyChoice == 1) {
-        return "USD";
-    } else if (currencyChoice == 2) {
-        return "KHR";
-    } else {
-        cerr << "Error: Invalid choice. Please select 1 (USD) or 2 (KHR).\n";
-        return "";
-    }
-}
-
-void handleDeposit(ATM &atm, double &balanceUSD, double &balanceKHR) {
-    string currency = selectCurrency();
-    if (currency.empty()) return; // Invalid currency selection
-
-    double amount;
-    cout << "Enter deposit amount: ";
-    cin >> amount;
-
-    atm.deposit(balanceUSD, balanceKHR, amount, currency);
-}
-
-void handleWithdraw(ATM &atm, double &balanceUSD, double &balanceKHR) {
-    string currency = selectCurrency();
-    if (currency.empty()) return; // Invalid currency selection
-
-    double amount;
-    cout << "Enter withdrawal amount: ";
-    cin >> amount;
-
-    atm.withdraw(balanceUSD, balanceKHR, amount, currency);
-}
-
-void showBalances(double balanceUSD, double balanceKHR) {
-    cout << "\n--- Current Balances ---\n";
-    cout << "USD Balance: $" << balanceUSD << "\n";
-    cout << "KHR Balance: " << balanceKHR << " R\n";
-}
-
 int main() {
-    ATM atm;
-    double balanceUSD = 0.0, balanceKHR = 0.0;
+    // Initialize ATM with some initial balances
+    ATM atm(100000.0, 5000.0); // Starting with 100,000 KHR and 5,000 USD
+    cout << "Welcome to the ATM System!\n" << endl;
 
+    // Display initial balances
+    atm.displayBalance();
+
+    // Menu for ATM operations
     int choice;
     do {
-        showMenu();
+        cout << "\nATM Menu:" << endl;
+        cout << "1. Deposit with Interest" << endl;
+        cout << "2. Withdraw Money" << endl;
+        cout << "3. Display ATM Balances" << endl;
+        cout << "0. Exit" << endl;
+        cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
-            case 1:
-                handleDeposit(atm, balanceUSD, balanceKHR);
+            case 1: {
+                cout << "\nProcessing Deposit with Interest..." << endl;
+                atm.depositWithInterest();
                 break;
-            case 2:
-                handleWithdraw(atm, balanceUSD, balanceKHR);
+            }
+            case 2: {
+                double amount;
+                string currency;
+                cout << "\nEnter the withdrawal amount: ";
+                cin >> amount;
+                cout << "Enter the currency (KHR or USD): ";
+                cin >> currency;
+                atm.withdraw(amount, currency);
                 break;
-            case 3:
-                showBalances(balanceUSD, balanceKHR);
+            }
+            case 3: {
+                atm.displayBalance();
                 break;
-            case 4:
-                atm.showHistory();
+            }
+            case 0: {
+                cout << "\nExiting the ATM. Thank you!" << endl;
                 break;
-            case 5:
-                cout << "Exiting...\n";
-                break;
-            default:
-                cout << "Invalid choice. Please try again.\n";
+            }
+            default: {
+                cout << "\nInvalid choice. Please try again." << endl;
+            }
         }
-    } while (choice != 5);
+    } while (choice != 0);
 
     return 0;
 }
