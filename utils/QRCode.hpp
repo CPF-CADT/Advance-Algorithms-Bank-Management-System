@@ -2,6 +2,7 @@
 #define QRCODE
 #include<iostream>
 #include<cstdlib>
+#include<exception>
 #include<cmath>
 using namespace std;
 class QRCode{
@@ -26,13 +27,28 @@ class QRCode{
          cout<<" Choose : ";cin>>op;
          switch(op){
             case 1:
-               cout<<"Amount (KHR) : ";cin>>amountKHR;
-               random = 1000 + rand()%1000;
+               try{
+                  cout<<"Amount (KHR) : ";cin>>amountKHR;
+                  if(amountKHR<=0){
+                     throw runtime_error("Cureency Must greater that 0 .");
+                  }
+               }catch(exception &e){
+                  cerr<<e.what()<<endl;
+               }
+               random = 1000 + rand()%1000;   
                //check validation
                code = random; //check is have or not
             break;
             case 2:
-               cout<<"Amount (USD) : ";cin>>amountUSD;
+               try{
+                  cout<<"Amount (USD) : ";cin>>amountUSD;
+                  if(amountUSD<=0){
+                     throw runtime_error("Cureency Must greater that 0 .");
+                  }
+                  random = 1000 + rand()%1000;
+               }catch(exception &e){
+                  cerr<<e.what()<<endl;
+               }
                random = 1000 + rand()%1000;
                //check validation
                code = random; //check is have or not

@@ -46,23 +46,9 @@ template <typename Object> void writeToBinary(const string& filename, vector<Obj
    }
 }
 
-// template <typename Object> bool readFromBinary(const string& filename, ArrayList<Object> &array) {
-//    ifstream readFile(filename, ios::binary);
-//    Object tempUser;
-//    int i=0;
-//    array.clear();
-//    while(readFile.peek() != EOF){
-//       cout<<i<<endl;
-//       tempUser.readFileBin(readFile);
-//       array.push(tempUser);
-//       i++;
-//    }
-//    readFile.close();
-//    return true;
-// }
 template <typename Object> bool readFromBinary(const string& filename, ArrayList<Object> &array) {
    ifstream readFile(filename, ios::binary);
-   array.clear();
+   // array.clear();
    vector<Object> obj;
    Object tempUser;
    int i=0;
@@ -123,23 +109,23 @@ void readVectorStr(ifstream &readFile,vector<string> &object){
       object.push_back(tempStr);
    }
 }
-// template <typename Object> void writeArrayList(ofstream &writeFile, ArrayList<Object> &list){
-//    int lengthList = list.getLength();
+// template <typename Object> void writeLinkList(ofstream &writeFile, LinkList<Object> obj){
+//    size_t lengthList = obj.getLength();
 //    writeFile.write((char *)(&lengthList), sizeof(lengthList));
-//    for(int i=0;i<lengthList;i++){
-//       Object value = list.getValue(i);
-//       writeFile.write((char *)(&value), sizeof(Object));
+//    for(size_t =0;i<lengthList;i++){
+//       obj.getValue(i).writeToBin();
 //    }
 // }
-// template <typename Object> void readArrayList(ifstream &readFile,ArrayList<Object> list){
-//    int lengthList;
-//    Object value;
-//    readFile.read((char *)(&lengthList), sizeof(lengthList));
-//    list.setSize(lengthList);
-//    for(int i=0;i<lengthList;i++){
-//       readFile.read((char *)(&value), sizeof(Object));
-//       list.push(value);
+// template <typename Object> void readLinkList(ifstream &readFile,LinkList<Object> obj){
+//    size_t lengthStr;
+//    readFile.read((char *)(&lengthStr), sizeof(lengthStr));
+//    obj.clear();   
+//    for(size_t i = 0;i<lengthStr;i++){
+//       obj tempObj;
+//       tempObj.readBin(readFile);
+//       object.push_back(tempObj);
 //    }
 // }
+
 
 #endif

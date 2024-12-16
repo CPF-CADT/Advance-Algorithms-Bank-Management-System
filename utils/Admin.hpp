@@ -15,11 +15,11 @@ class Admin {
     private:
     // static int numberUser;
     vector<string> userRequest;
-    vector<Loan> loanRequest;
+    LinkList<Loan> loanRequest;
+    LinkList<Loan> ListLoanUser;
     Bank* bank;
     public:
-    // Admin(){
-
+    // Admin()
     // }
     void dataUserHeader(){
         cout << "National-ID   First-Name        Last-Name        Loan-USD        Loan-KHR        Total-Money-KHR   Total-Money-USD   DOB         Phone-Number   Address" << endl;
@@ -39,22 +39,45 @@ class Admin {
         << endl;
         cout << "--------------------------------------------------------------------------------------------------------" << endl;
     }
-
+    void requestLoan( Loan loanReq){
+        loanRequest.push(loanReq);
+    }
+    void showLoanRequest(){
+        for(int i=0;i<loanRequest.getLength()/2;i++){
+            loanRequest.getValue(i).showLoanDetail();
+        }
+    }
+    void showUserLoan(){
+        for(int i=0;i<ListLoanUser.getLength()/2;i++){
+            ListLoanUser.getValue(i).showLoanDetail();
+        }
+    }
     void writeLoan(ofstream &writeFile){
-        size_t allLoanReq = loanRequest.size();
+        int allLoanReq = loanRequest.getLength();
         writeFile.write((char *)(&allLoanReq),sizeof(allLoanReq));
-        for(auto s:loanRequest){
-            s.writeToBin(writeFile);
+        for(int i =0;i<allLoanReq ;i ++){
+            loanRequest.getValue(i).writeToBin(writeFile);
+        }
+        int listLoan= ListLoanUser.getLength();
+        writeFile.write((char *)(&listLoan),sizeof(listLoan));
+        for(int i =0;i<listLoan ;i ++){
+            ListLoanUser.getValue(i).writeToBin(writeFile);
         }
     }
     void readLoan(ifstream &readFile){
-        loanRequest.clear();
-        size_t allLoanReq = 0;
+        int allLoanReq = 0;
         readFile.read((char *)(&allLoanReq), sizeof(allLoanReq));
-        for (size_t i = 0; i < allLoanReq; ++i) {
+        for (int i = 0; i < allLoanReq; i++) {
             Loan loan;
             loan.readBin(readFile);
-            loanRequest.push_back(loan);
+            loanRequest.push(loan);
+        }
+        int listLoan=0;
+        readFile.read((char *)(&listLoan), sizeof(listLoan));
+        for (int i = 0; i < listLoan; i++) {
+            Loan loan;
+            loan.readBin(readFile);
+            ListLoanUser.push(loan);
         }
     }
     void addRequest(User &source,string text){
@@ -66,7 +89,6 @@ class Admin {
         writeVectorStr(writeFile,userRequest);
         writeLoan(writeFile);
         writeFile.close();
- 
     }
 
     void readBin(const string &fileName){
@@ -89,24 +111,35 @@ class Admin {
     if (exchangeRate <= 0) {
         throw invalid_argument("Exchange rate must be positive.");
     }
+   
     return amountUSD * exchangeRate;
-}
+   }
+    LinkList<Loan> &getLoan(){
+        return loanRequest;
+    }
+    LinkList<Loan> & getListLoanUser(){
+        return ListLoanUser;
+    }
+    void AddLoanUser(Loan AddUserLoan){
+        ListLoanUser.push(AddUserLoan);
 
-double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
-    if (amountKHR < 0) {
-        throw invalid_argument("Amount in KHR cannot be negative.");
-    }
-    if (exchangeRate <= 0) {
-        throw invalid_argument("Exchange rate must be positive.");
-    }
-    if (deductionRate < 0 || deductionRate > 1) {
-        throw invalid_argument("Deduction rate must be between 0 and 1.");
     }
 
-    double amountUSD = amountKHR / exchangeRate;
-    amountUSD -= amountUSD * deductionRate; // Apply deduction
-    return amountUSD;
-}
+    double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
+        if (amountKHR < 0) {
+            throw invalid_argument("Amount in KHR cannot be negative.");
+        }
+        if (exchangeRate <= 0) {
+            throw invalid_argument("Exchange rate must be positive.");
+        }
+        if (deductionRate < 0 || deductionRate > 1) {
+            throw invalid_argument("Deduction rate must be between 0 and 1.");
+        }
+
+        double amountUSD = amountKHR / exchangeRate;
+        amountUSD -= amountUSD * deductionRate; // Apply deduction
+        return amountUSD;
+    }
 
    
             
@@ -117,8 +150,8 @@ double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRa
      user.getTotalMoneyUSD(); 
     
 }
- void generateAdminReport() {
-    if (bank->getTotalUsers() == 0) {
+ void generateAdminReport(Bank &bank) {
+    if (bank.getTotalUsers() == 0) {
         cout << "Error: No users to report!" << endl;
         return;
     }
@@ -133,12 +166,12 @@ double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRa
     // Add bank details to the report
     reportStream << "Bank Report\n";
     reportStream << "-------------------------\n";
-    reportStream << "Total Users: " << bank->getTotalUsers() << "\n";
-    reportStream << "Exchange Rate (USD to KHR): " << bank->getExchnageRate() << "\n";
+    reportStream << "Total Users: " << bank.getTotalUsers() << "\n";
+    reportStream << "Exchange Rate (USD to KHR): " << bank.getExchnageRate() << "\n";
     reportStream << "Admin Remarks: " << customMessage << "\n";
 
-    
-    report.push_back(reportStream.str());
+
+    bank.setReport(reportStream.str());
 
     
     cout << "Report successfully generated:\n";
@@ -178,4 +211,5 @@ double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRa
     }
 
 };
+
 #endif

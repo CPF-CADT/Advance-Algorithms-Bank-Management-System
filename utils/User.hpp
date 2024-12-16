@@ -197,6 +197,13 @@ public:
       cout << "Account Balance:" << endl;
       cout << " - KHR: " << totalMoneyKHR <<"R"<< endl;
       cout << " - USD: " << totalMoneyUSD <<"$"<< endl;
+      cout << "Account Loan:" << endl;
+      cout << " - KHR: " << loanKHR <<"R"<< endl;
+      cout << " - USD: " << loanUSD <<"$"<< endl;
+      cout << "Account Deposit Intrest:" << endl;
+      for(auto i:deposit){
+         i.infor();
+      }
    }
    bool checkSourceUSD(double usd){
       if(usd<=totalMoneyUSD){
@@ -401,7 +408,7 @@ public:
       }
    }
    char* getPhoneNumber() { 
-   return phoneNumber; 
+      return phoneNumber; 
    }
 
    void setPhoneNumber(const char* number) { 
@@ -477,6 +484,18 @@ public:
 
    void setTotalMoneyUSD(double total) { 
       totalMoneyUSD = total; 
+   }
+   void addMoneyKHR(double total){
+      totalMoneyKHR+=total;
+   }
+   void addMoneyUSD(double total){
+      totalMoneyUSD+=total;
+   }
+   void addLoanMoneyKHR(double total){
+      loanKHR+=total;
+   }
+   void addLoanMoneyUSD(double total){
+      loanUSD+=total;
    }
 
    char* getPassword() { 
@@ -566,7 +585,6 @@ public:
    int choice;
    do
    {
-      cout << "\n========== Update User Information ==========" << endl;
       cout << "1. Update First Name" << endl;
       cout << "2. Update Last Name" << endl;
       cout << "3. Update Phone Number" << endl;

@@ -17,12 +17,10 @@ void withdraw(User &user, double amount, const string &currency, bool isAdmin) {
                     cout << "Incorrect Password!" << endl;
                 }
             }
-
             if (wrongAttempts >= 3) {
                 throw runtime_error("Too many incorrect attempts. Access denied!");
             }
         }
-
         // Validate withdrawal amount
         if (amount <= 0) {
             throw runtime_error("Invalid withdrawal amount!");
