@@ -147,6 +147,7 @@ class Admin {
     //         users.getValue(indexOfUser(phone,users)).payInterest(cur);
     //     }
     // }
+
     double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
         if (amountKHR < 0) {
             throw invalid_argument("Amount in KHR cannot be negative.");
@@ -230,6 +231,46 @@ class Admin {
         cout << " 9 Months: " << usdRates[2] << "%\n";
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
+    int searchUserInformation(const char* phone, ArrayList<User>& users) {
+       
+        if (!validatePhoneNumber(phone)) {
+            cout << "Invalid phone number format. Please enter a valid phone number.\n";
+            return -1;
+        }
+
+        
+        int index = indexOfUser(phone, users);
+
+    
+        if (index != -1) {
+            cout << "User found at index: " << index << endl;
+
+            
+            users.getValue(index).displayInfo(); 
+            return index;
+        } else {
+            cout << "User not found with the phone number: " << phone << endl;
+            return -1;
+        }
+    }
+    // check phone number
+     bool validatePhoneNumber(const char* phone) {
+        // Check for valid length ( between 8 and 15 digits)
+        int length = strlen(phone);
+        if (length < 8 ){
+            return false;
+        }
+
+        
+        for (int i = 0; i < length; i++) {
+            if (!isdigit(phone[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
 };
 
