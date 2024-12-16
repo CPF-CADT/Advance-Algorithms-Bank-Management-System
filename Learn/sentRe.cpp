@@ -6,14 +6,15 @@
 int main(){
    ArrayList<User> users;
    Admin admin;
-   readFromBinary(USER_FILE,users);
-   string request;
-   cout<<"Re : ";getline(cin,request);
-   admin.addRequest(users.getValue(0),request);
+   // readFromBinary(USER_FILE,users);
+   // string request;
+   // cout<<"Re : ";getline(cin,request);
+   // admin.addRequest(users.getValue(0),request);
+   // admin.showRequest();
+   // cout<<"Re : ";getline(cin,request);
+   // admin.addRequest(users.getValue(0),request);
+   admin.readBin("assa.dat");
    admin.showRequest();
-   cout<<"Re : ";getline(cin,request);
-   admin.addRequest(users.getValue(0),request);
-   admin.showRequest();
-
+   // admin.writeToBinary("assa.dat");
    return 0;
 }

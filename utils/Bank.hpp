@@ -1,21 +1,44 @@
 #ifndef BANK_HPP
 #define BANK_HPP
-#include "./User.hpp"
 #include "./arrayList.hpp"
+#include<vector>
 class Bank{
 private:
-   int totalUser;
+   long totalUser;
    float exchangeRateUSDtoKHR;
+   float intrestKHR[4];
+   float intrestUSD[4];
    double totalMoneyKHR;
    double totalMoneyUSD;
-   //string report;
-   //string History-Transaction;
+   vector<string> report;
+   vector<string> HistoryTransaction;
 public:
    Bank(){
       totalUser = 0;
       exchangeRateUSDtoKHR = 0.0;
-      totalMoneyKHR = 0.0;
-      totalMoneyUSD = 0.0;
+<<<<<<< HEAD
+      intrestKHR[0]  = 0.0;
+      interestKHR[1] = 0.0;
+      interestKHR[2] = 0.0;
+      interestKHR[3] = 0.0;
+
+      interestUSD[0] = 0.0;
+      interestUSD[1] = 0.0;
+      interestUSD[2] = 0.0;
+      interestUSD[3] = 0.0;
+=======
+      intrestKHR[0] = 3.20;
+      intrestKHR[1] = 4.20;
+      intrestKHR[2] = 4.40;
+      intrestKHR[3] = 4.95;
+
+      intrestUSD[0] = 1.80;
+      intrestUSD[1] = 2.80;
+      intrestUSD[2] = 3.15;
+      intrestUSD[3] = 3.80;
+>>>>>>> 2a42277b184294deee16da6df796b273e7a375f8
+      totalMoneyKHR= 0.0;
+      totalMoneyUSD= 0.0;
    }
    void setExchnageRate(float rate){
       this->exchangeRateUSDtoKHR = rate;
@@ -23,16 +46,28 @@ public:
    float getExchnageRate(){
       return exchangeRateUSDtoKHR;
    }
-   int indexOfUser(char *phone,ArrayList<User> &users){
-      //need to apply binary search
-      for(int i=0;i<users.getLength();i++){
-         if(strcmp(phone,users.getValue(i).getPhoneNumber()) == 0 ){
-            return i;
-         }
-      }
-      return -1;
+   void addNewUser(){
+      totalUser+=1;
    }
+   void setInterestKHR(int index,float interest){
+      intrestKHR[index] = interest;
+   }
+   void setInterestUSD(int index,float interest){
+      intrestUSD[index] = interest;
+   }
+   float *getInterestKHR(){
+      return intrestKHR;
+   }
+   float *getInterestUSD(){
+      return intrestUSD;
+   }
+   long getTotalUsers(){
+      return totalUser;
+   }
+   void setReport(string text){
+      report.push_back(text);
+   }
+
    
 };
-
 #endif

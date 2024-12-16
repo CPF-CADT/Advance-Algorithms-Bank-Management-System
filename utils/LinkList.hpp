@@ -81,6 +81,27 @@ public:
    Node<Object>* pointerOfNode(){
       return head;
    }
+   // void clear(){
+   //    Node<Object> *current=head;
+   //    while(current){
+   //       Node<Object>* temp=current->next;
+   //       delete current;
+   //       current=temp;
+   //    }
+   //    head=nullptr;
+   // }
+   void clear() {
+      if (head == nullptr) {
+         return; 
+      Node<Object>* current = head;
+      while (current) {
+         Node<Object>* temp = current->next; 
+         delete current;
+         current = temp; 
+      }
+      head = nullptr; 
+      };
+   }
    void insertAt(int index,Object data){
       validateIndex(index);
       Node<Object> *newNode= new Node<Object>(data);
