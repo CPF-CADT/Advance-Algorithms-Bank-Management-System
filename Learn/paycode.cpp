@@ -50,7 +50,7 @@
 //       int getCode() const {
 //          return code;
 //       }
-//       void setCode(int c) {
+//       void setCode(int cj) {
 //          code = c;
 //       }
 //       float getAmountKHR() const {
@@ -82,11 +82,12 @@
 #include<iostream>
 #include"../utils/User.hpp"
 
-#define USER_FILE "user.dat"
+#define USER_FILE "user1.dat"
 
 int main(){
    ArrayList<User> user;
    User tempUser;
+   Bank bank;
    int op;
    start:
       cout<<" 1 . Add User"<<endl;
@@ -97,17 +98,24 @@ int main(){
          case 1:{
             tempUser.input(USER_FILE);
             tempUser.setTotalMoneyUSD(100);
-            tempUser.setTotalMoneyKHR(10000);
-            tempUser.addQR();
-            tempUser.writeToFile(USER_FILE);
+            tempUser.setTotalMoneyKHR(1000000);
+            tempUser.addDepositWithInterest(bank);
             tempUser.output();
+            tempUser.writeToFile(USER_FILE);
             user.push(tempUser);
             break;
          }
          case 2:{  
             readFromBinary(USER_FILE,user);
             for(int i=0;i<user.getLength();i++){
-               user.getValue(i).output();
+               Date cur;
+               cur.nextManyMonth(1);
+               user.getValue(i).payInterest(cur);
+
+               for(auto j :user.getValue(i).getHistoryTransaction()){
+                  cout<<j;
+               }
+               user.getValue(i).displayInfo();
             }
             break;
          }

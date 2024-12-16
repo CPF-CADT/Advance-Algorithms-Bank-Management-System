@@ -73,7 +73,6 @@ class Loan{
         string getName() {
             return name;
         }
-
         void payBackLoan(User& user) {
             try {
                 // Advanced error checking and validation
@@ -233,6 +232,6 @@ class Loan{
         Date getTakeDate(){
             return takeMoney;
         }
-      
+
 };
 #endif

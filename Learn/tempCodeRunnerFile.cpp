@@ -1,3 +1,2 @@
-for(int i=0;i<user.getLength();i++){
-               user.getValue(i).output();
-            }
+  readFromBinary(USER_FILE,user);
+   admin.readBin("ad.dat");
