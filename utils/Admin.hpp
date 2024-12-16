@@ -255,7 +255,7 @@ class Admin {
     }
     // check phone number
      bool validatePhoneNumber(const char* phone) {
-        // Check for valid length ( between 8 and 15 digits)
+        
         int length = strlen(phone);
         if (length < 8 ){
             return false;
