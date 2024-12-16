@@ -231,6 +231,7 @@ class Admin {
         cout << " 9 Months: " << usdRates[2] << "%\n";
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
+<<<<<<< HEAD
     int searchUserInformation(const char* phone, ArrayList<User>& users) {
        
         if (!validatePhoneNumber(phone)) {
@@ -272,6 +273,9 @@ class Admin {
     }
 
 
+=======
+    // search user info
+>>>>>>> 83ba2306742108519242e02174ec9bbdc4a7765f
 };
 
 #endif
