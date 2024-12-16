@@ -17,6 +17,7 @@ class Admin {
     vector<string> userRequest;
     LinkList<Loan> loanRequest;
     LinkList<Loan> ListLoanUser;
+    vector<string> listUserDeposit;
     Bank* bank;
     public:
     // Admin()
@@ -88,14 +89,18 @@ class Admin {
         ofstream writeFile(fileName, ios::trunc | ios::binary); 
         writeVectorStr(writeFile,userRequest);
         writeLoan(writeFile);
+        writeVectorStr(writeFile,listUserDeposit);
         writeFile.close();
     }
 
     void readBin(const string &fileName){
         ifstream readFile(fileName, ios::binary);
-        readVectorStr(readFile,userRequest);
-        readLoan(readFile);
-        readFile.close();
+        if(readFile.is_open()){
+            readVectorStr(readFile,userRequest);
+            readLoan(readFile);
+            readVectorStr(readFile,listUserDeposit);
+            readFile.close();
+        }
     }
     void showRequest(){
         for (auto request : userRequest) {
@@ -105,15 +110,15 @@ class Admin {
     }
     // exchange rate
    double convertUSDtoKHR(double amountUSD, double exchangeRate) {
-    if (amountUSD < 0) {
-        throw invalid_argument("Amount in USD cannot be negative.");
+        if (amountUSD < 0) {
+            throw invalid_argument("Amount in USD cannot be negative.");
+        }
+        if (exchangeRate <= 0) {
+            throw invalid_argument("Exchange rate must be positive.");
+        }
+    
+        return amountUSD * exchangeRate;
     }
-    if (exchangeRate <= 0) {
-        throw invalid_argument("Exchange rate must be positive.");
-    }
-   
-    return amountUSD * exchangeRate;
-   }
     LinkList<Loan> &getLoan(){
         return loanRequest;
     }
@@ -122,9 +127,26 @@ class Admin {
     }
     void AddLoanUser(Loan AddUserLoan){
         ListLoanUser.push(AddUserLoan);
-
     }
-
+    vector<string> &getlistUserDeposit(){
+        return listUserDeposit;
+    }
+    void addlistUserDeposit(string phone){
+        listUserDeposit.push_back(phone);
+    }
+    // void payInterest(ArrayList<User> &users){
+    //     Date cur;
+    //     cur.nextManyMonth(1);
+    //     for(string str:listUserDeposit){
+    //         int n = str.length();
+    //         char phone[n + 1];
+    //         phone[n] = '\0';
+    //         for (int i = 0; i < n; i++){
+    //             phone[i] = str[i];
+    //         }
+    //         users.getValue(indexOfUser(phone,users)).payInterest(cur);
+    //     }
+    // }
     double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
         if (amountKHR < 0) {
             throw invalid_argument("Amount in KHR cannot be negative.");
@@ -201,7 +223,6 @@ class Admin {
         cout << "  6 Months: " << khrRates[1] << "%\n";
         cout << "  9 Months: " << khrRates[2] << "%\n";
         cout << " 12 Months: " << khrRates[3] << "%\n";
-
         cout << "\nInterest Rates for USD:" << endl;
         float* usdRates = bank->getInterestUSD();
         cout << "  3 Months: " << usdRates[0] << "%\n";
