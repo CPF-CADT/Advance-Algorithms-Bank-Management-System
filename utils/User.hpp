@@ -542,7 +542,6 @@ void readFromCV(const string fileName){
         }
    
    void updateUserInfo()
-
    int choice;
    do
    {
