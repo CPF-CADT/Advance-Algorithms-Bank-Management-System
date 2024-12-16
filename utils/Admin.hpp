@@ -18,6 +18,7 @@ class Admin {
     LinkList<Loan> loanRequest;
     LinkList<Loan> ListLoanUser;
     vector<string> listUserDeposit;
+    vector<User> blockUser;
     Bank* bank;
     public:
     // Admin()
@@ -231,7 +232,6 @@ class Admin {
         cout << " 9 Months: " << usdRates[2] << "%\n";
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
-<<<<<<< HEAD
     int searchUserInformation(const char* phone, ArrayList<User>& users) {
        
         if (!validatePhoneNumber(phone)) {
@@ -271,11 +271,24 @@ class Admin {
 
         return true;
     }
+     void blockUser(const char* phone, ArrayList<User>& users) {
+        
+        int index = indexOfUser(phone, users);
+
+        if (index == -1) {
+            cout << "Unable to block user. User not found.\n";
+            return;
+        }
+
+        
+        blockUser.push_back(users.getValue(index));
+
+        users.removeAt(index);
+
+        cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
+    }
 
 
-=======
-    // search user info
->>>>>>> 83ba2306742108519242e02174ec9bbdc4a7765f
 };
 
 #endif
