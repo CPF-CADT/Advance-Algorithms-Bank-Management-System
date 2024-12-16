@@ -287,9 +287,9 @@ class Admin {
 
         cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
     }
-    void unblockUser(const char* phone, ArrayList<User>& users, vector<User>& blockedUsers) {
+    void unblockUser(const char* phone, ArrayList<User>& users,  vector<User> blockUser) {
    
-    int index = indexOfUser(phone, blockedUsers);
+    int index = indexOfUser(phone, blockUser);
 
     if (index == -1) {
         cout << "Unable to unblock user. User not found in the blocked list.\n";
@@ -314,7 +314,7 @@ class Admin {
     }
 
    
-    blockedUsers.removeAt(index);
+    blockUser.removeAt(index);
 
     // Confirm successful unblocking
     cout << "User with phone number " << phone << " has been unblocked and added back to active users.\n";
