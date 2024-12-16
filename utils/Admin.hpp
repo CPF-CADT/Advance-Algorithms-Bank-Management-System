@@ -16,6 +16,7 @@ class Admin {
     // static int numberUser;
     vector<string> userRequest;
     LinkList<Loan> loanRequest;
+    LinkList<Loan> ListLoanUser;
     Bank* bank;
     public:
     // Admin()
@@ -46,11 +47,21 @@ class Admin {
             loanRequest.getValue(i).showLoanDetail();
         }
     }
+    void showUserLoan(){
+        for(int i=0;i<ListLoanUser.getLength()/2;i++){
+            ListLoanUser.getValue(i).showLoanDetail();
+        }
+    }
     void writeLoan(ofstream &writeFile){
         int allLoanReq = loanRequest.getLength();
         writeFile.write((char *)(&allLoanReq),sizeof(allLoanReq));
         for(int i =0;i<allLoanReq ;i ++){
             loanRequest.getValue(i).writeToBin(writeFile);
+        }
+        int listLoan= ListLoanUser.getLength();
+        writeFile.write((char *)(&listLoan),sizeof(listLoan));
+        for(int i =0;i<listLoan ;i ++){
+            ListLoanUser.getValue(i).writeToBin(writeFile);
         }
     }
     void readLoan(ifstream &readFile){
@@ -61,6 +72,13 @@ class Admin {
             loan.readBin(readFile);
             loanRequest.push(loan);
         }
+        int listLoan=0;
+        readFile.read((char *)(&listLoan), sizeof(listLoan));
+        for (int i = 0; i < listLoan; i++) {
+            Loan loan;
+            loan.readBin(readFile);
+            ListLoanUser.push(loan);
+        }
     }
     void addRequest(User &source,string text){
         string request = " - "+source.getName()+" "+source.getPhoneNumber()+" : \n"+"    "+text+". \n";
@@ -68,14 +86,14 @@ class Admin {
     }
     void writeToBinary(const string &fileName){
         ofstream writeFile(fileName, ios::trunc | ios::binary); 
-        // writeVectorStr(writeFile,userRequest);
+        writeVectorStr(writeFile,userRequest);
         writeLoan(writeFile);
         writeFile.close();
     }
 
     void readBin(const string &fileName){
         ifstream readFile(fileName, ios::binary);
-        // readVectorStr(readFile,userRequest);
+        readVectorStr(readFile,userRequest);
         readLoan(readFile);
         readFile.close();
     }
@@ -98,6 +116,13 @@ class Admin {
    }
     LinkList<Loan> &getLoan(){
         return loanRequest;
+    }
+    LinkList<Loan> & getListLoanUser(){
+        return ListLoanUser;
+    }
+    void AddLoanUser(Loan AddUserLoan){
+        ListLoanUser.push(AddUserLoan);
+
     }
 
     double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
