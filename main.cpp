@@ -6,7 +6,9 @@
 #include <unistd.h>
 #include <string>
 #include <cstdlib>
-#define DATA_USER "./Data/usr.dat"
+#define DATA_USER "./Data/users.dat"
+#define DATA_ADMIN "./Data/admin.dat"
+#define BANK_USER "./Data/bank.dat"
 
 // char* comfirmPassword();
 bool enterPassword(User user);
@@ -21,6 +23,7 @@ int main(){
    string userInterface[] = {"Check Balance", "Transaction History", "Transfer Money", "Payment", 
    "Deposit with Interest", "Loan", "Update Information", "Check Information Detail", "Request to Admin"};
    string transferOption[] = {"Transfer to Own Account","Transfer to Other Account"};
+   string payment[] = {"Create A payment code ","Pay money"};
    Bank bank;
    Admin admin;
    ArrayList<User> users;
@@ -30,15 +33,17 @@ int main(){
    //Load data to use
    bank.setExchnageRate(4100.00);
    readFromBinary(DATA_USER,users);
+   admin.readBin(DATA_ADMIN);
+   // admin.payInterest(users);
    do{
       clearScreen();
       START:
       header("KON KHMER BANK");
-      option = displayOption(mainOption,3);
-      switch(option){
+      switch(displayOption(mainOption,3)){
          case 1:
-            // clearScreen();
-            // cout<<"[Bank Name] ATM "<<endl;
+            clearScreen();
+            cout<<"[Bank Name] ATM "<<endl;
+            puseScreen();
             // for(int i=0;i<users.getLength();i++){
             //    users.getValue(i).displayInfo();
             // }
@@ -65,6 +70,7 @@ int main(){
             //    break;
             // }
             // break;
+            break;
          case 2:
             USER:
             clearScreen();
@@ -74,6 +80,9 @@ int main(){
                case 1:
                   char phone[12],password[16];
                   clearScreen();
+                  // for(int i=0;i<users.getLength();i++){
+                  //    users.getValue(i).output();
+                  // }
                   cout<<" Enter Information to Login"<<endl;
                   cout<<"Phone number : ";cin>>phone;
                   currentIndexUser=indexOfUser(phone,users);
@@ -87,6 +96,7 @@ int main(){
                            header("USER ACCOUNT");
                            int op;
                            cout<<"Welcome back "<<users.getValue(currentIndexUser).getFirstName()<<endl;
+
                            op = displayOption(userInterface,9);
                            switch(op){
                               //Code
@@ -103,6 +113,9 @@ int main(){
                                  clearScreen();
                                  header("TRANSACTION HISTORY");
                                  //Code Transaction History
+                                 for(string i:users.getValue(currentIndexUser).getHistoryTransaction()){
+                                    cout<<i;
+                                 }
                                  puseScreen();
                                  break;
                               case 3:
@@ -138,16 +151,46 @@ int main(){
                                  //Code payment
                                  clearScreen();
                                  header("PAYMENT TRANSACTION");
+                                 switch(displayOption(payment,2)){
+                                    case 1:
+                                       users.getValue(currentIndexUser).addQR();
+                                       writeToBinary(DATA_USER,users);
+                                       break;
+                                    case 2:{
+                                       users.getValue(currentIndexUser).payMoney(users,currentIndexUser);
+                                       writeToBinary(DATA_USER,users);
+                                       break;
+                                    }
+                                    case 0:{
+                                       goto userInterface;
+                                       break;
+                                    }
+                                 }
+                                 puseScreen();
                                  break;
                               case 5:
                                  //Code Deposit with Interest
                                  clearScreen();
                                  header("DEPOSIT WITH INTEREST");
+                                 users.getValue(currentIndexUser).addDepositWithInterest(bank);
+                                 writeToBinary(DATA_USER,users);
+                                 puseScreen();
                                  break;
                               case 6:
                                  //Code Apply Loan
                                  clearScreen();
                                  header("APPLY FOR LOAN");
+                                 //check loan is exit or not
+                                 if(!users.getValue(currentIndexUser).isHaveLoan()){
+                                    Loan loan;
+                                    loan.applyLoan(users.getValue(currentIndexUser));
+                                    admin.requestLoan(loan);
+                                    admin.writeToBinary(DATA_ADMIN);
+                                    //write admin
+                                 }else{
+                                    cout<<"You Have Loan. Need pay back money to Loan again"<<endl;
+                                 }
+                                 puseScreen();
                                  break;
                               case 7:
                                  clearScreen();
@@ -165,9 +208,12 @@ int main(){
                               case 9:{
                                  //Code Request to Admin
                                  string request;
+                                 Date date;
                                  cin.ignore();
                                  header("SENT REQUEST ");
                                  cout<<"Enter Request : ";getline(cin,request);
+                                 date.setCurrentDate();
+                                 request = request +"\n\n" + date.getDate();
                                  admin.addRequest(users.getValue(currentIndexUser),request);
                                  admin.showRequest();
                                  //ned to sacve to admin
@@ -259,13 +305,21 @@ void header(const string header){
    cout << "=========================================" << endl<<endl;
 }
 int displayOption(string *allOption,int size){
-   int op;
+   string op;
+   int choise;
    for(int i=1;i<=size;i++){
       cout<<i<<" . "<<(allOption[i-1])<<endl;
    }
    cout<<"0 . Exit "<<endl;
    cout<<"Choose : ";cin>>op;
-   return op;
+   try{
+      choise = stoi(op);
+      return choise;
+   }catch(invalid_argument &e){
+      cerr<<"Input Must be a number"<<endl;
+      sleep(1);
+      return -1;
+   }
 }
 // char comfirmPassword(char *cpassword) { // export from project term 2 year 1
 //    char tempChar[50]="",tempCpass[50]="";

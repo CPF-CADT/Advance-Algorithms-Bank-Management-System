@@ -12,7 +12,7 @@ int main(){
    try
    {
       /* code */
-       readFromBinary(USER_FILE,user);
+   readFromBinary(USER_FILE,user);
    admin.readBin("ad.dat");
    }
    catch(const std::exception& e)
@@ -87,8 +87,9 @@ int main(){
                         std::cerr << e.what() << '\n';
                      }
                   
-                        break;}
-                        case 'N'{
+                        break;
+                        }
+                        case 'N':{
                            cout<<"Okey"<<endl;
                            goto start;
                         }

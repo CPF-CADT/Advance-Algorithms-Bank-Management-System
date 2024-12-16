@@ -91,3 +91,20 @@ int binarySearch(vector<T> &array,T dataToSearch){
    }
    return -1;
 }
+
+template <typename T>
+int binarySearch(ArrayList<T> &array,T dataToSearch){
+   int lowIndex=0,mid;
+   int highIndex=array.getLength()-1;
+   while(lowIndex<=highIndex){
+      mid=lowIndex+(highIndex-lowIndex)/2;
+      if(dataToSearch==array.getVaue(mid)){
+         return mid;
+      }else if(dataToSearch>array.getVaue(mid)){
+         lowIndex=(mid+1);
+      }else{
+         highIndex=mid-1;
+      }
+   }
+   return -1;
+}

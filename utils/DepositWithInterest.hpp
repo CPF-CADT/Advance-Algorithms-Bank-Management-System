@@ -4,6 +4,7 @@
 #include"QRCode.hpp"
 #include"Date.hpp"
 #include <iomanip> 
+#define DATA_USER_DEPOSIT "../Data/dataUserDepositt.dat"
 class DepositInterest{
    private:
       double amountKHR;
@@ -12,8 +13,10 @@ class DepositInterest{
       double amountWithInterestUSD;
       double interestMoney;
       int numberOfPayBack;
+      int countPayback;
       Date depositDate;
       Date endDateOfDeposit;
+      Date payDaily[24];
    public:
       DepositInterest(){
          amountKHR = 0.00;
@@ -22,6 +25,7 @@ class DepositInterest{
          amountWithInterestUSD = 0.00;
          numberOfPayBack = 0;
          interestMoney = 0.0;
+         countPayback = 0;
       }
       int choosePayback(int month){
          int op;
@@ -59,6 +63,9 @@ class DepositInterest{
             cout << "payout Type: Interest will be paid in one installment at the end of the term." << endl;
          } else if (numberOfPayBack > 1) {
             cout << "payout Type: Interest will be paid "  << fixed <<setprecision(2)<< (interestMoney/numberOfPayBack)<<curency << " monthly" << endl;
+            for(int i = 0 ;i<numberOfPayBack;i++){
+               cout<<i+1<<" . "<<payDaily[i].getDate()<<endl;
+            }
          } else {
             cout << "payout Type: Invalid selection. Please check again." << endl;
          }
@@ -74,7 +81,7 @@ class DepositInterest{
             this->interestMoney = amountUSD * interestType;
          }
       }
-      void depositWithInterest(Bank &bank){
+      void depositWithInterest(Bank &bank,double totalUSD,double totalKHR){
          QRCode depositMoney;
          float *interest;
          int op;
@@ -83,16 +90,17 @@ class DepositInterest{
             interest = bank.getInterestKHR();
             amountKHR = depositMoney.getAmountKHR();
             if(amountKHR<400000){
-               cerr<<"KHR Must grater that 400000 R"<<endl;
-               return;
+               throw runtime_error ("KHR Must grater that 400000 R");
             }
          }else{
             interest = bank.getInterestUSD();
             amountUSD = depositMoney.getAmountUSD();
             if(amountUSD<100){
-               cerr<<"USD Must grater that 100$"<<endl;
-               return;
+               throw runtime_error("USD Must grater that 100$");
             }
+         }
+         if(totalUSD<depositMoney.getAmountUSD() || totalKHR < depositMoney.getAmountKHR()){
+            throw runtime_error("Not Enough Money");
          }
          depositDate.setCurrentDate();
          cout<<"Duration Type "<<endl;
@@ -127,6 +135,11 @@ class DepositInterest{
                return;
                break;
          }
+         Date payDate;
+         for(int i=1;i<=numberOfPayBack;i++){
+            payDate.nextManyMonth(i);
+            payDaily[i-1]=payDate;
+         }
          receipt();
       }
       void infor(){
@@ -136,8 +149,28 @@ class DepositInterest{
             cout<<" - USD: " << amountUSD<<"$"<< endl;
          }
          cout<<" > Deposit Date : "<<depositDate.getDate()<<endl;
-         cout<<" > Payout Date  : "<<endDateOfDeposit.getDate()<<endl;
-         cout<<"------------------------------------------------------------"<<endl;
+         if(numberOfPayBack>1){
+            cout<<"> Payout Date  : "<<endl;
+            for(int i = countPayback ;i<numberOfPayBack;i++){
+               cout<<i+1<<" . "<<payDaily[i].getDate()<<endl;
+            }
+         }else{
+            cout<<" > Payout Date  : "<<endDateOfDeposit.getDate()<<endl;
+         }
+         cout<<"--------------------------------------"<<endl;
+      }
+      double payBack(Date current){
+         if(numberOfPayBack == 1 && numberOfPayBack!=countPayback){
+            countPayback+=1;
+            return interestMoney;
+         }
+         if(numberOfPayBack>1 && numberOfPayBack!=countPayback){
+            if(current.getDate() == payDaily[countPayback].getDate()){
+               countPayback+=1;
+               return(interestMoney/numberOfPayBack);
+            }
+         }
+         return 0.00;
       }
       void setAmountKHR(double amount) {
          amountKHR = amount;
