@@ -24,6 +24,13 @@ int main(){
    "Deposit with Interest", "Loan", "Update Information", "Check Information Detail", "Request to Admin"};
    string transferOption[] = {"Transfer to Own Account","Transfer to Other Account"};
    string payment[] = {"Create A payment code ","Pay money"};
+   string adminInterface[] = {
+      "Create User Account", "Deposit", "Withdraw",
+      "Search User Information", "Approve Loan", "Check Request",
+      "Update Bank Data", "Show Transaction History", "Block User",
+      "Check ATM History", "Write Report","Bank Information"
+   };
+   string createAccount[] ={"Create User Account","Create Many Account"};
    Bank bank;
    Admin admin;
    ArrayList<User> users;
@@ -96,7 +103,6 @@ int main(){
                            header("USER ACCOUNT");
                            int op;
                            cout<<"Welcome back "<<users.getValue(currentIndexUser).getFirstName()<<endl;
-
                            op = displayOption(userInterface,9);
                            switch(op){
                               //Code
@@ -105,9 +111,9 @@ int main(){
                                  clearScreen();
                                  header("USER BALANCE");
                                  users.getValue(currentIndexUser).showBalance();
+                                 cout<<"Press anykey Exit ... "<<endl;               
                                  puseScreen();
                                  break;
-                                 
                                  }
                               case 2:
                                  clearScreen();
@@ -116,6 +122,7 @@ int main(){
                                  for(string i:users.getValue(currentIndexUser).getHistoryTransaction()){
                                     cout<<i;
                                  }
+                                 cout<<"Press anykey Exit ... "<<endl;               
                                  puseScreen();
                                  break;
                               case 3:
@@ -146,6 +153,8 @@ int main(){
                                        break;
                                        }
                                  }
+                                 cout<<"Press anykey Exit ... "<<endl;               
+                                 puseScreen();
                                  break;
                               case 4:
                                  //Code payment
@@ -166,14 +175,22 @@ int main(){
                                        break;
                                     }
                                  }
+                                 cout<<"Press anykey Exit ... "<<endl;               
                                  puseScreen();
                                  break;
                               case 5:
                                  //Code Deposit with Interest
                                  clearScreen();
                                  header("DEPOSIT WITH INTEREST");
-                                 users.getValue(currentIndexUser).addDepositWithInterest(bank);
-                                 writeToBinary(DATA_USER,users);
+                                 try{
+                                    users.getValue(currentIndexUser).addDepositWithInterest(bank);
+                                    admin.addlistUserDeposit((string)users.getValue(currentIndexUser).getPhoneNumber());
+                                    writeToBinary(DATA_USER,users);
+                                    admin.writeToBinary(DATA_ADMIN);
+                                 }catch(exception &e){
+                                    cerr<<e.what();
+                                 }
+                                 cout<<"Press anykey Exit ... "<<endl;              
                                  puseScreen();
                                  break;
                               case 6:
@@ -190,6 +207,7 @@ int main(){
                                  }else{
                                     cout<<"You Have Loan. Need pay back money to Loan again"<<endl;
                                  }
+                                 cout<<"Press anykey Exit ... "<<endl;               
                                  puseScreen();
                                  break;
                               case 7:
@@ -204,6 +222,8 @@ int main(){
                                  clearScreen();
                                  users.getValue(currentIndexUser).displayInfo();
                                  cin.ignore();
+                                 cout<<"Press anykey Exit ... "<<endl;               
+                                 puseScreen();
                                  break;
                               case 9:{
                                  //Code Request to Admin
@@ -217,14 +237,16 @@ int main(){
                                  admin.addRequest(users.getValue(currentIndexUser),request);
                                  admin.showRequest();
                                  //ned to sacve to admin
+                                 cout<<"Press anykey Exit ... "<<endl;                 
+                                 puseScreen();
                                  break;
                                  }
                               case 0:{
                                  goto USER;
                                  break;
                               }
-                           }
-                           puseScreen();
+                           }           
+                        puseScreen();
                         goto userInterface;
                      }
                   }else{
@@ -236,11 +258,10 @@ int main(){
                   break;
                case 2:{
                   clearScreen();
-                  cout<<" Create User Account"<<endl;
+                  header("Create User Account");
                   newUser.input(DATA_USER);
                   newUser.setTotalMoneyKHR(100000);
                   newUser.setTotalMoneyUSD(100);
-                  // newUser.writeToFile(DATA_USER);
                   if(users.getLength()>0){
                      try{
                         if(newUser.findFreeOrder(users,newUser) == users.getLength()){
@@ -255,7 +276,8 @@ int main(){
                      users.push(newUser);
                   }
                   writeToBinary(DATA_USER,users);
-                  cout<<"Success ... press any key"<<endl;
+                  cout<<"Success"<<endl;
+                  cout<<"Press anykey Exit ... "<<endl;
                   puseScreen();
                   break;
                }
@@ -267,7 +289,116 @@ int main(){
             break;
          case 3:
             clearScreen();
-            cout<<"[Bank Name] Administration "<<endl;
+            header("KON KHMER Administration");
+            ADMIN_INTER:
+            switch (displayOption(adminInterface,12)) {
+               case 1:
+                     clearScreen();
+                     header("Create User Account");
+                     switch(displayOption(createAccount,2)){
+                        case 1:{
+                           header("Create Account");
+                           User newUser;
+                           newUser.input(DATA_USER);
+                           if(users.getLength()>0){
+                              try{
+                                 if(newUser.findFreeOrder(users,newUser) == users.getLength()){
+                                    users.push(newUser);
+                                 }else{
+                                    users.insertAt(newUser.findFreeOrder(users,newUser),newUser);
+                                 }
+                              }catch(exception &e){
+                                 cerr<<e.what();
+                              }
+                           }else{
+                              users.push(newUser);
+                           }
+                           writeToBinary(DATA_USER,users);
+                           cout<<"Success"<<endl;
+                           cout<<"Press anykey Exit ... "<<endl;
+                           puseScreen();
+                           break;
+                           }
+                        case 2:{
+                           header("Create Many Account");
+                           string fileName;
+                           cout<<"Enter File CSV : ";cin>>fileName;
+                           readFromCV(fileName,users,DATA_USER);
+                           cout<<"Press anykey Exit ... "<<endl;
+                           puseScreen();
+                           break;
+                           }
+                        case 0:{
+                           goto ADMIN_INTER;
+                           break;
+                           }
+                     }
+                     break;
+               case 2:
+                     clearScreen();
+                     header("Deposit");
+                     puseScreen();
+                     break;
+               case 3:
+                     clearScreen();
+                     header("Withdraw");
+                     puseScreen();
+                     break;
+               case 4:
+                     clearScreen();
+                     header("Search User Information");
+                     puseScreen();
+                     break;
+               case 5:
+                     clearScreen();
+                     header("Approve Loan");
+                     puseScreen();
+                     break;
+               case 6:
+                     clearScreen();
+                     header("Check Request");
+                     admin.readBin(DATA_ADMIN);
+                     admin.showRequest();
+                     puseScreen();
+                     break;
+               case 7:
+                     clearScreen();
+                     header("Update Bank Data");
+                     puseScreen();
+                     break;
+               case 8:
+                     clearScreen();
+                     header("Show Transaction History");
+                     puseScreen();
+                     break;
+               case 9:
+                     clearScreen();
+                     header("Block User");
+                     puseScreen();
+                     break;
+               case 10:
+                     clearScreen();
+                     header("Check ATM History");
+                     puseScreen();
+                     break;
+               case 11:
+                     clearScreen();
+                     header("Write Report");
+                     puseScreen();
+                     break;
+               case 12:{
+                     clearScreen();
+                     header("Bank Information");
+                     puseScreen();
+                     break;
+                     }
+               case 0:{
+                  goto START;    
+                  break;
+               }
+            }
+            puseScreen();
+            goto ADMIN_INTER;
             break;
          case 0:
             clearScreen();
@@ -291,12 +422,12 @@ void clearScreen() {
 #endif
 }
 void puseScreen() {
-#ifdef _WIN32
-   system("pause");
-#else
-   fflush(stdout); // Ensure the message is printed before waiting for input
-   getchar();
-#endif
+   #ifdef _WIN32
+      system("pause");
+   #else
+      fflush(stdout); // Ensure the message is printed before waiting for input
+      getchar();
+   #endif
 }
 
 void header(const string header){

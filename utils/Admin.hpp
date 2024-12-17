@@ -18,6 +18,7 @@ class Admin {
     LinkList<Loan> loanRequest;
     LinkList<Loan> ListLoanUser;
     vector<string> listUserDeposit;
+    vector<User> blockUser;
     Bank* bank;
     public:
     // Admin()
@@ -44,17 +45,18 @@ class Admin {
         loanRequest.push(loanReq);
     }
     void showLoanRequest(){
-        for(int i=0;i<loanRequest.getLength()/2;i++){
+        for(int i=0;i<loanRequest.getLength();i++){
             loanRequest.getValue(i).showLoanDetail();
         }
     }
     void showUserLoan(){
-        for(int i=0;i<ListLoanUser.getLength()/2;i++){
+        for(int i=0;i<ListLoanUser.getLength();i++){
             ListLoanUser.getValue(i).showLoanDetail();
         }
     }
     void writeLoan(ofstream &writeFile){
         int allLoanReq = loanRequest.getLength();
+        cout<<"LOAN _ "<<allLoanReq<<endl;
         writeFile.write((char *)(&allLoanReq),sizeof(allLoanReq));
         for(int i =0;i<allLoanReq ;i ++){
             loanRequest.getValue(i).writeToBin(writeFile);
@@ -66,8 +68,11 @@ class Admin {
         }
     }
     void readLoan(ifstream &readFile){
+        ListLoanUser.clear();
+        loanRequest.clear();
         int allLoanReq = 0;
         readFile.read((char *)(&allLoanReq), sizeof(allLoanReq));
+        cout<<"LOAN _ "<<allLoanReq<<endl;
         for (int i = 0; i < allLoanReq; i++) {
             Loan loan;
             loan.readBin(readFile);
@@ -86,15 +91,19 @@ class Admin {
         userRequest.push_back(request);
     }
     void writeToBinary(const string &fileName){
-        ofstream writeFile(fileName, ios::trunc | ios::binary); 
-        writeVectorStr(writeFile,userRequest);
+        ofstream writeFile(fileName,ios::binary); 
+        writeVectorStr(writeFile,userRequest);  
         writeLoan(writeFile);
         writeVectorStr(writeFile,listUserDeposit);
         writeFile.close();
     }
 
     void readBin(const string &fileName){
-        ifstream readFile(fileName, ios::binary);
+        ifstream readFile(fileName,ios::binary);
+        userRequest.clear();
+        listUserDeposit.clear();
+        loanRequest.clear();
+        ListLoanUser.clear();
         if(readFile.is_open()){
             readVectorStr(readFile,userRequest);
             readLoan(readFile);
@@ -122,16 +131,19 @@ class Admin {
     LinkList<Loan> &getLoan(){
         return loanRequest;
     }
-    LinkList<Loan> & getListLoanUser(){
+    Loan getLoanAt(int index){
+        return loanRequest.getValue(index);
+    }
+    LinkList<Loan> &getListLoanUser(){
         return ListLoanUser;
     }
-    void AddLoanUser(Loan AddUserLoan){
+    void AddLoanUser(const Loan AddUserLoan){
         ListLoanUser.push(AddUserLoan);
     }
     vector<string> &getlistUserDeposit(){
         return listUserDeposit;
     }
-    void addlistUserDeposit(string phone){
+    void addlistUserDeposit(const string phone){
         listUserDeposit.push_back(phone);
     }
     // void payInterest(ArrayList<User> &users){
@@ -147,6 +159,7 @@ class Admin {
     //         users.getValue(indexOfUser(phone,users)).payInterest(cur);
     //     }
     // }
+
     double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
         if (amountKHR < 0) {
             throw invalid_argument("Amount in KHR cannot be negative.");
@@ -200,7 +213,7 @@ class Admin {
     cout << reportStream.str();
 }
  
-    
+    /*
 
 
     void setInterestRatesKHR(int durationInMonths, float interest) {
@@ -214,7 +227,7 @@ class Admin {
     }  
 
 
-     
+     */
 
     void displayInterestRates() {
         cout << "Interest Rates for KHR:" << endl;
@@ -230,48 +243,93 @@ class Admin {
         cout << " 9 Months: " << usdRates[2] << "%\n";
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
-    // search user info
-   void searchUserInformation(const string& searchTerm) {
-    vector<User> users = bank->getAllUsers(); 
-    bool found = false;
+    int searchUserInformation(const char* phone, ArrayList<User>& users) {
+       
+        if (!validatePhoneNumber(phone)) {
+            cout << "Invalid phone number format. Please enter a valid phone number.\n";
+            return -1;
+        }
 
-    dataUserHeader(); 
+        
+        int index = indexOfUser(phone, users);
 
-    for (const auto& user : users) {
-        // Check if the user's first name or last name matches the search term
-        if (user.getFirstName() == searchTerm || user.getLastName() == searchTerm) {
-            showAllUsers(user); // Show basic user details
-            found = true;
+    
+        if (index != -1) {
+            cout << "User found at index: " << index << endl;
 
             
-            cout << "Additional Details:" << endl;
-
-            // Show the user's total money in the bank (both KHR and USD)
-            cout << "  Total Money in KHR: " << fixed << setprecision(2) << user.getTotalMoneyKHR() << " KHR" << endl;
-            cout << "  Total Money in USD: " << fixed << setprecision(2) << user.getTotalMoneyUSD() << " USD" << endl;
-
-            // Check if the user has taken a loan
-            if (user.getLoanKHR() > 0 || user.getLoanUSD() > 0) {
-                cout << "  Loan Information:" << endl;
-                if (user.getLoanKHR() > 0) {
-                    cout << "    Loan Amount in KHR: " << fixed << setprecision(2) << user.getLoanKHR() << " KHR" << endl;
-                }
-                if (user.getLoanUSD() > 0) {
-                    cout << "    Loan Amount in USD: " << fixed << setprecision(2) << user.getLoanUSD() << " USD" << endl;
-                }
-            } else {
-                cout << "  No loan taken by this user." << endl;
-            }
-
-            cout << "----------------------------------------------------------------------------------------" << endl;
+            users.getValue(index).displayInfo(); 
+            return index;
+        } else {
+            cout << "User not found with the phone number: " << phone << endl;
+            return -1;
         }
     }
+    // check phone number
+     bool validatePhoneNumber(const char* phone) {
+        
+        int length = strlen(phone);
+        if (length < 8 ){
+            return false;
+        }
 
-    if (!found) {
-        cout << "No users found with the name: " << searchTerm << endl;
+        
+        for (int i = 0; i < length; i++) {
+            if (!isdigit(phone[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
-}
+     void blockUser(const char* phone, ArrayList<User>& users) {
+        
+        int index = indexOfUser(phone, users);
 
+        if (index == -1) {
+            cout << "Unable to block user. User not found.\n";
+            return;
+        }
+
+        
+        blockUser.push_back(users.getValue(index));
+
+        users.removeAt(index);
+
+        cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
+    }
+    void unblockUser(const char* phone, ArrayList<User>& users,  vector<User> blockUser) {
+   
+    int index = indexOfUser(phone, blockUser);
+
+    if (index == -1) {
+        cout << "Unable to unblock user. User not found in the blocked list.\n";
+        return;
+    }
+
+    User unblockedUser = blockedUsers.getValue(index);
+
+    
+    if (users.getLength() > 0) {
+        try {
+            if (unblockedUser.findFreeOrder(users, unblockedUser) == users.getLength()) {
+                users.push(unblockedUser);
+            } else {
+                users.insertAt(unblockedUser.findFreeOrder(users, unblockedUser), unblockedUser);
+            }
+        } catch (exception& e) {
+            cerr << e.what();
+        }
+    } else {
+        users.push(unblockedUser);
+    }
+
+   
+    blockUser.removeAt(index);
+
+    // Confirm successful unblocking
+    cout << "User with phone number " << phone << " has been unblocked and added back to active users.\n";
+}
 
 
 

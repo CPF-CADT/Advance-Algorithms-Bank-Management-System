@@ -53,15 +53,15 @@ public:
    void push(Object data) {
       Node<Object>* newNode = new Node<Object>(data);
       if (head == nullptr) {
-         head = newNode; // If the list is empty, set head to new node
+         head = newNode; 
       } else {
       Node<Object>* current = head;
-      while (current->next != nullptr) { // Traverse to the end of the list
+      while (current->next != nullptr) { 
          current = current->next;
       }
-      current->next = newNode; // Link the new node at the end
+      current->next = newNode; 
       }
-      length++; // Increment the length of the list
+      length++; 
    }
    Object& getValue(int index){
       validateIndex(index);
@@ -91,17 +91,23 @@ public:
    //    head=nullptr;
    // }
    void clear() {
-      if (head == nullptr) {
-         return; 
-      Node<Object>* current = head;
-      while (current) {
-         Node<Object>* temp = current->next; 
-         delete current;
-         current = temp; 
-      }
-      head = nullptr; 
-      };
+      this->~LinkList(); 
+      head = nullptr;   
+      length = 0;        
    }
+
+   // void clear() {
+   //    if (head == nullptr) {
+   //       return; 
+   //    Node<Object>* current = head;
+   //    while (current) {
+   //       Node<Object>* temp = current->next; 
+   //       delete current;
+   //       current = temp; 
+   //    }
+   //    head = nullptr; 
+   //    };
+   // }
    void insertAt(int index,Object data){
       validateIndex(index);
       Node<Object> *newNode= new Node<Object>(data);

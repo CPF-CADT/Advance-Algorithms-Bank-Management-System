@@ -16,15 +16,6 @@ public:
    Bank(){
       totalUser = 0;
       exchangeRateUSDtoKHR = 0.0;
-      intrestKHR[0]  = 0.0;
-      intrestKHR[1] = 0.0;
-      intrestKHR[2] = 0.0;
-      intrestKHR[3] = 0.0;
-
-      intrestUSD[0] = 0.0;
-      intrestUSD[1] = 0.0;
-      intrestUSD[2] = 0.0;
-      intrestUSD[3] = 0.0;
       intrestKHR[0] = 3.20;
       intrestKHR[1] = 4.20;
       intrestKHR[2] = 4.40;

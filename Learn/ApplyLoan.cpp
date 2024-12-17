@@ -1,7 +1,7 @@
 #include<iostream>
 #include"../utils/Admin.hpp"
 
-#define USER_FILE "usds.dat"
+#define USER_FILE "usds2.dat"
 using namespace std;
 int main(){
    ArrayList<User> user;
@@ -13,7 +13,7 @@ int main(){
    {
       /* code */
    readFromBinary(USER_FILE,user);
-   admin.readBin("ad.dat");
+   admin.readBin("ad12.dat");
    }
    catch(const std::exception& e)
    {
@@ -34,16 +34,16 @@ int main(){
             tempUser.setTotalMoneyUSD(100);
             tempUser.setTotalMoneyKHR(10000);
             tempUser.output();
-            tempUser.writeToFile(USER_FILE);
             
             loan.applyLoan(tempUser);
-            admin.requestLoan(loan);
+            admin.getLoan().push(loan);
             user.push(tempUser);
-            admin.writeToBinary("ad.dat");
+            tempUser.writeToFile(USER_FILE);
+            admin.writeToBinary("ad12.dat");
             break;
          }
          case 2:{  
-               admin.readBin("ad.dat");
+               admin.readBin("ad12.dat");
                admin.showLoanRequest();
             break;
          }
@@ -56,7 +56,6 @@ int main(){
             for(int i=0;i< admin.getLoan().getLength();i++){
                   if(code == admin.getLoan().getValue(i).getAmountLoan().getCode() ){
                      admin.getLoan().getValue(i).showLoanDetail();
-                     indexOfloan = i;
                      cout<<"Is it a right one? (Y/N)";cin>>choice;
                      switch (choice)
                      {
@@ -67,7 +66,7 @@ int main(){
                         /* code */
                            
                      int index = indexOfUser(admin.getLoan().getValue(i).getPhoneNumber(),user);
-                     cout<<index<<"hello";
+                     cout<<index<<"hello"<<endl<<endl;
                      if(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR()>0){
                         user.getValue(index).addMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
                         user.getValue(index).addLoanMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
@@ -77,10 +76,12 @@ int main(){
                         user.getValue(index).addLoanMoneyUSD(admin.getLoan().getValue(i).getAmountLoan().getAmountUSD());
 
                      }
-                     cout<<"yes and done!!";
-                                 writeToBinary(USER_FILE,user);
-
-                     
+                     cout<<"yes and done!!"<<endl;
+                     admin.showUserLoan();
+                     admin.getListLoanUser().push(admin.getLoan().getValue(i));
+                     admin.getLoan().removeAt(i);
+                     admin.writeToBinary("ad12.dat");
+                     writeToBinary(USER_FILE,user);           
                      }
                      catch(const std::exception& e)
                      {
@@ -93,11 +94,12 @@ int main(){
                            cout<<"Okey"<<endl;
                            goto start;
                         }
-
+                        
                      
                      default:
                         break;
                      }
+               break; 
             }
         }
          break;
@@ -106,6 +108,12 @@ int main(){
                user.getValue(i).displayInfo();
             }
          break;
+         case 5:{
+            admin.readBin("ad12.dat");
+            admin.showUserLoan();
+            admin.showRequest();
+            break;
+            }
 
       }
    goto start;
