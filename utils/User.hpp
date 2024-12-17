@@ -575,6 +575,7 @@ public:
    }
 
    
+   void updateUserInfo();
    int findFreeOrder(ArrayList<User> &users, User newUser) {
       int length = users.getLength();
       char phone[12];
@@ -834,7 +835,6 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
          } else {
                highIndex = mid - 1;
          }
-         cout<<" Time : "<<endl;
       }
       return -1;
    }
