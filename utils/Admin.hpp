@@ -18,6 +18,7 @@ class Admin {
     LinkList<Loan> loanRequest;
     LinkList<Loan> ListLoanUser;
     vector<string> listUserDeposit;
+    vector<User> blockUser;
     Bank* bank;
     public:
     // Admin()
@@ -158,6 +159,7 @@ class Admin {
     //         users.getValue(indexOfUser(phone,users)).payInterest(cur);
     //     }
     // }
+
     double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
         if (amountKHR < 0) {
             throw invalid_argument("Amount in KHR cannot be negative.");
@@ -241,6 +243,96 @@ class Admin {
         cout << " 9 Months: " << usdRates[2] << "%\n";
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
+    int searchUserInformation(const char* phone, ArrayList<User>& users) {
+       
+        if (!validatePhoneNumber(phone)) {
+            cout << "Invalid phone number format. Please enter a valid phone number.\n";
+            return -1;
+        }
+
+        
+        int index = indexOfUser(phone, users);
+
+    
+        if (index != -1) {
+            cout << "User found at index: " << index << endl;
+
+            
+            users.getValue(index).displayInfo(); 
+            return index;
+        } else {
+            cout << "User not found with the phone number: " << phone << endl;
+            return -1;
+        }
+    }
+    // check phone number
+     bool validatePhoneNumber(const char* phone) {
+        
+        int length = strlen(phone);
+        if (length < 8 ){
+            return false;
+        }
+
+        
+        for (int i = 0; i < length; i++) {
+            if (!isdigit(phone[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+     void blockUser(const char* phone, ArrayList<User>& users) {
+        
+        int index = indexOfUser(phone, users);
+
+        if (index == -1) {
+            cout << "Unable to block user. User not found.\n";
+            return;
+        }
+
+        
+        blockUser.push_back(users.getValue(index));
+
+        users.removeAt(index);
+
+        cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
+    }
+    void unblockUser(const char* phone, ArrayList<User>& users,  vector<User> blockUser) {
+   
+    int index = indexOfUser(phone, blockUser);
+
+    if (index == -1) {
+        cout << "Unable to unblock user. User not found in the blocked list.\n";
+        return;
+    }
+
+    User unblockedUser = blockedUsers.getValue(index);
+
+    
+    if (users.getLength() > 0) {
+        try {
+            if (unblockedUser.findFreeOrder(users, unblockedUser) == users.getLength()) {
+                users.push(unblockedUser);
+            } else {
+                users.insertAt(unblockedUser.findFreeOrder(users, unblockedUser), unblockedUser);
+            }
+        } catch (exception& e) {
+            cerr << e.what();
+        }
+    } else {
+        users.push(unblockedUser);
+    }
+
+   
+    blockUser.removeAt(index);
+
+    // Confirm successful unblocking
+    cout << "User with phone number " << phone << " has been unblocked and added back to active users.\n";
+}
+
+
+
 
 };
 
