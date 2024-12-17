@@ -66,7 +66,7 @@ int main(){
                         /* code */
                            
                      int index = indexOfUser(admin.getLoan().getValue(i).getPhoneNumber(),user);
-                     cout<<index<<"hello"<<endl;
+                     cout<<index<<"hello"<<endl<<endl;
                      if(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR()>0){
                         user.getValue(index).addMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
                         user.getValue(index).addLoanMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
@@ -94,7 +94,7 @@ int main(){
                            cout<<"Okey"<<endl;
                            goto start;
                         }
-
+                        
                      
                      default:
                         break;

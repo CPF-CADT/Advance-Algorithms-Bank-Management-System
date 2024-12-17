@@ -421,7 +421,7 @@ public:
          }
          deposit.push_back(depo);
       }catch(exception &e){
-         cerr<<e.what();
+         throw runtime_error(e.what());
       }
    }
    void payInterest(Date current){
@@ -633,8 +633,7 @@ public:
 
    void updateUserInfo(){
    int choice;
-   do
-   {
+   do{
       cout << "1. Update First Name" << endl;
       cout << "2. Update Last Name" << endl;
       cout << "3. Update Phone Number" << endl;
@@ -648,8 +647,7 @@ public:
 
       switch (choice)
       {
-      case 1:
-      {
+      case 1:{
          string newFirstName;
          cout << "Enter new first name: ";
          cin >> newFirstName;
@@ -657,8 +655,7 @@ public:
          cout << "First name updated successfully." << endl;
          break;
       }
-      case 2:
-      {
+      case 2:{
          string newLastName;
          cout << "Enter new last name: ";
          cin >> newLastName;
@@ -666,8 +663,7 @@ public:
          cout << "Last name updated successfully." << endl;
          break;
       }
-      case 3:
-      {
+      case 3:{
          char newPhoneNumber[16];
          cout << "Enter new phone number: ";
          cin >> newPhoneNumber;

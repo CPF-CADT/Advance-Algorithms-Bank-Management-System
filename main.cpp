@@ -105,9 +105,9 @@ int main(){
                                  clearScreen();
                                  header("USER BALANCE");
                                  users.getValue(currentIndexUser).showBalance();
+                                 cout<<"Press anykey Exit ... "<<endl;               
                                  puseScreen();
                                  break;
-                                 
                                  }
                               case 2:
                                  clearScreen();
@@ -116,6 +116,7 @@ int main(){
                                  for(string i:users.getValue(currentIndexUser).getHistoryTransaction()){
                                     cout<<i;
                                  }
+                                 cout<<"Press anykey Exit ... "<<endl;               
                                  puseScreen();
                                  break;
                               case 3:
@@ -146,6 +147,8 @@ int main(){
                                        break;
                                        }
                                  }
+                                 cout<<"Press anykey Exit ... "<<endl;               
+                                 puseScreen();
                                  break;
                               case 4:
                                  //Code payment
@@ -166,14 +169,22 @@ int main(){
                                        break;
                                     }
                                  }
+                                 cout<<"Press anykey Exit ... "<<endl;               
                                  puseScreen();
                                  break;
                               case 5:
                                  //Code Deposit with Interest
                                  clearScreen();
                                  header("DEPOSIT WITH INTEREST");
-                                 users.getValue(currentIndexUser).addDepositWithInterest(bank);
-                                 writeToBinary(DATA_USER,users);
+                                 try{
+                                    users.getValue(currentIndexUser).addDepositWithInterest(bank);
+                                    admin.addlistUserDeposit((string)users.getValue(currentIndexUser).getPhoneNumber());
+                                    writeToBinary(DATA_USER,users);
+                                    admin.writeToBinary(DATA_ADMIN);
+                                 }catch(exception &e){
+                                    cerr<<e.what();
+                                 }
+                                 cout<<"Press anykey Exit ... "<<endl;               
                                  puseScreen();
                                  break;
                               case 6:
@@ -190,6 +201,7 @@ int main(){
                                  }else{
                                     cout<<"You Have Loan. Need pay back money to Loan again"<<endl;
                                  }
+                                 cout<<"Press anykey Exit ... "<<endl;               
                                  puseScreen();
                                  break;
                               case 7:
@@ -204,6 +216,8 @@ int main(){
                                  clearScreen();
                                  users.getValue(currentIndexUser).displayInfo();
                                  cin.ignore();
+                                 cout<<"Press anykey Exit ... "<<endl;               
+                                 puseScreen();
                                  break;
                               case 9:{
                                  //Code Request to Admin
@@ -217,14 +231,16 @@ int main(){
                                  admin.addRequest(users.getValue(currentIndexUser),request);
                                  admin.showRequest();
                                  //ned to sacve to admin
+                                 cout<<"Press anykey Exit ... "<<endl;                 
+                                 puseScreen();
                                  break;
                                  }
                               case 0:{
                                  goto USER;
                                  break;
                               }
-                           }
-                           puseScreen();
+                           }           
+                        puseScreen();
                         goto userInterface;
                      }
                   }else{
@@ -255,7 +271,8 @@ int main(){
                      users.push(newUser);
                   }
                   writeToBinary(DATA_USER,users);
-                  cout<<"Success ... press any key"<<endl;
+                  cout<<"Success"<<endl;
+                  cout<<"Press anykey Exit ... "<<endl;
                   puseScreen();
                   break;
                }
@@ -291,12 +308,12 @@ void clearScreen() {
 #endif
 }
 void puseScreen() {
-#ifdef _WIN32
-   system("pause");
-#else
-   fflush(stdout); // Ensure the message is printed before waiting for input
-   getchar();
-#endif
+   #ifdef _WIN32
+      system("pause");
+   #else
+      fflush(stdout); // Ensure the message is printed before waiting for input
+      getchar();
+   #endif
 }
 
 void header(const string header){
