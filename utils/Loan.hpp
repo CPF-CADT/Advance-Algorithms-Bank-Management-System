@@ -81,6 +81,10 @@ class Loan{
         Date getTakeDate(){
             return takeMoney;
         }
+        //  double getLoanData() const {
+        //     return loanAmount;
+        // }
+        
       
 };
 #endif
