@@ -44,17 +44,18 @@ class Admin {
         loanRequest.push(loanReq);
     }
     void showLoanRequest(){
-        for(int i=0;i<loanRequest.getLength()/2;i++){
+        for(int i=0;i<loanRequest.getLength();i++){
             loanRequest.getValue(i).showLoanDetail();
         }
     }
     void showUserLoan(){
-        for(int i=0;i<ListLoanUser.getLength()/2;i++){
+        for(int i=0;i<ListLoanUser.getLength();i++){
             ListLoanUser.getValue(i).showLoanDetail();
         }
     }
     void writeLoan(ofstream &writeFile){
         int allLoanReq = loanRequest.getLength();
+        cout<<"LOAN _ "<<allLoanReq<<endl;
         writeFile.write((char *)(&allLoanReq),sizeof(allLoanReq));
         for(int i =0;i<allLoanReq ;i ++){
             loanRequest.getValue(i).writeToBin(writeFile);
@@ -66,8 +67,11 @@ class Admin {
         }
     }
     void readLoan(ifstream &readFile){
+        ListLoanUser.clear();
+        loanRequest.clear();
         int allLoanReq = 0;
         readFile.read((char *)(&allLoanReq), sizeof(allLoanReq));
+        cout<<"LOAN _ "<<allLoanReq<<endl;
         for (int i = 0; i < allLoanReq; i++) {
             Loan loan;
             loan.readBin(readFile);
@@ -86,15 +90,19 @@ class Admin {
         userRequest.push_back(request);
     }
     void writeToBinary(const string &fileName){
-        ofstream writeFile(fileName, ios::trunc | ios::binary); 
-        writeVectorStr(writeFile,userRequest);
+        ofstream writeFile(fileName,ios::binary); 
+        writeVectorStr(writeFile,userRequest);  
         writeLoan(writeFile);
         writeVectorStr(writeFile,listUserDeposit);
         writeFile.close();
     }
 
     void readBin(const string &fileName){
-        ifstream readFile(fileName, ios::binary);
+        ifstream readFile(fileName,ios::binary);
+        userRequest.clear();
+        listUserDeposit.clear();
+        loanRequest.clear();
+        ListLoanUser.clear();
         if(readFile.is_open()){
             readVectorStr(readFile,userRequest);
             readLoan(readFile);
@@ -122,16 +130,19 @@ class Admin {
     LinkList<Loan> &getLoan(){
         return loanRequest;
     }
-    LinkList<Loan> & getListLoanUser(){
+    Loan getLoanAt(int index){
+        return loanRequest.getValue(index);
+    }
+    LinkList<Loan> &getListLoanUser(){
         return ListLoanUser;
     }
-    void AddLoanUser(Loan AddUserLoan){
+    void AddLoanUser(const Loan AddUserLoan){
         ListLoanUser.push(AddUserLoan);
     }
     vector<string> &getlistUserDeposit(){
         return listUserDeposit;
     }
-    void addlistUserDeposit(string phone){
+    void addlistUserDeposit(const string phone){
         listUserDeposit.push_back(phone);
     }
     // void payInterest(ArrayList<User> &users){
