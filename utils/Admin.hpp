@@ -243,7 +243,7 @@ class Admin {
         cout << " 9 Months: " << usdRates[2] << "%\n";
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
-    int searchUserInformation(const char* phone, ArrayList<User>& users) {
+    int searchUserInformation( char* phone, ArrayList<User>& users) {
        
         if (!validatePhoneNumber(phone)) {
             cout << "Invalid phone number format. Please enter a valid phone number.\n";
@@ -266,7 +266,7 @@ class Admin {
         }
     }
     // check phone number
-     bool validatePhoneNumber(const char* phone) {
+     bool validatePhoneNumber(char* phone) {
         
         int length = strlen(phone);
         if (length < 8 ){
@@ -282,32 +282,34 @@ class Admin {
 
         return true;
     }
-     void blockUser(const char* phone, ArrayList<User>& users) {
-        
+     void blockUserAccount( char* phone, ArrayList<User>& users) {
         int index = indexOfUser(phone, users);
-
         if (index == -1) {
             cout << "Unable to block user. User not found.\n";
             return;
         }
-
-        
         blockUser.push_back(users.getValue(index));
-
         users.removeAt(index);
-
         cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
     }
-    void unblockUser(const char* phone, ArrayList<User>& users,  vector<User> blockUser) {
-   
-    int index = indexOfUser(phone, blockUser);
+
+    void unblockUser(char* phone, ArrayList<User>& users,  vector<User> &blockUser) {
+    int index=0;
+    int count=0;
+    for(auto i:blockUser){
+        if(strcmp(i.getPhoneNumber(),phone)==0){
+            index = count;
+            break;
+        }
+        count++;
+    }
 
     if (index == -1) {
         cout << "Unable to unblock user. User not found in the blocked list.\n";
         return;
     }
 
-    User unblockedUser = blockedUsers.getValue(index);
+    User unblockedUser = blockUser.at(index);
 
     
     if (users.getLength() > 0) {
@@ -325,7 +327,7 @@ class Admin {
     }
 
    
-    blockUser.removeAt(index);
+    // blockUser.remove(index);
 
     // Confirm successful unblocking
     cout << "User with phone number " << phone << " has been unblocked and added back to active users.\n";
