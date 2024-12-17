@@ -64,7 +64,7 @@ int main(){
                      try
                      {
                         /* code */
-                           
+                     
                      int index = indexOfUser(admin.getLoan().getValue(i).getPhoneNumber(),user);
                      cout<<index<<"hello"<<endl<<endl;
                      if(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR()>0){

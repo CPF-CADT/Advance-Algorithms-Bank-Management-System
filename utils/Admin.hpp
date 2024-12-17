@@ -244,25 +244,17 @@ class Admin {
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
     int searchUserInformation( char* phone, ArrayList<User>& users) {
-       
         if (!validatePhoneNumber(phone)) {
-            cout << "Invalid phone number format. Please enter a valid phone number.\n";
-            return -1;
+            throw runtime_error("User not found with the phone number");
         }
-
-        
         int index = indexOfUser(phone, users);
-
-    
         if (index != -1) {
-            cout << "User found at index: " << index << endl;
-
-            
+            cout << "User found at index: " << index << endl;    
             users.getValue(index).displayInfo(); 
             return index;
         } else {
-            cout << "User not found with the phone number: " << phone << endl;
-            return -1;
+            // cout << ": " << phone << endl;
+            throw runtime_error("User not found with the phone number");
         }
     }
     // check phone number
@@ -333,6 +325,30 @@ class Admin {
     cout << "User with phone number " << phone << " has been unblocked and added back to active users.\n";
 }
 
+void deposit(User &user, double amount, const string &currency) {
+    try {
+        // Validate deposit amount
+        if (amount <= 0) {
+            throw runtime_error("Invalid deposit amount!");
+        }
+        if (currency == "USD") {
+            user.setTotalMoneyUSD(user.getTotalMoneyUSD() + amount);
+            cout << "Deposit successful!" << endl;
+            cout << "Updated balance (USD): $" << user.getTotalMoneyUSD() << endl;
+        }
+        else if (currency == "KHR") {
+            user.setTotalMoneyKHR(user.getTotalMoneyKHR() + amount);
+            cout << "Deposit successful!" << endl;
+            cout << "Updated balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
+        }
+        // Invalid currency
+        else {
+            throw runtime_error("Error: Invalid currency type!");
+        }
+    } catch (const exception &e) {
+        cerr << e.what() << endl;
+    }
+}
 
 
 
