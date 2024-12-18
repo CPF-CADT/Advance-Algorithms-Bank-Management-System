@@ -334,11 +334,32 @@ int main(){
                            }
                      }
                      break;
-               case 2:
+               case 2:{
                      clearScreen();
+                     char phone[12];
+                     QRCode deposit;
                      header("Deposit");
+                     cout<<"Phone Number : ";cin>>phone;
+                     int indexUser;
+                     try{
+                        indexUser = indexOfUser(phone,users);
+                     }catch(exception &e){
+                        cerr<<e.what();
+                     }
+                     if(indexUser!=-1){
+                        deposit.cratePaymentCode();
+                        if(deposit.getAmountKHR()>0){
+                           admin.deposit(users.getValue(indexUser),deposit.getAmountKHR(),"KHR");
+                           users.getValue(indexUser).logTransactionReceiveFromBank(deposit.getAmountKHR(),false);
+                        }else{
+                           admin.deposit(users.getValue(indexUser),deposit.getAmountUSD(),"USD");
+                           users.getValue(indexUser).logTransactionReceiveFromBank(deposit.getAmountUSD(),true);
+                        }
+                     }
+                     writeToBinary(DATA_USER,users);
                      puseScreen();
                      break;
+                     }
                case 3:
                      clearScreen();
                      header("Withdraw");
@@ -346,7 +367,14 @@ int main(){
                      break;
                case 4:
                      clearScreen();
+                     char phone[12];
                      header("Search User Information");
+                     cout<<"Phone number :";cin>>phone;
+                     try{
+                        admin.searchUserInformation(phone,users);
+                     }catch(exception &e){
+                        cerr<<e.what();
+                     }
                      puseScreen();
                      break;
                case 5:

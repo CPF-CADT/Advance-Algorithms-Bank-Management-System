@@ -574,8 +574,6 @@ public:
       }
    }
 
-   
-   void updateUserInfo();
    int findFreeOrder(ArrayList<User> &users, User newUser) {
       int length = users.getLength();
       char phone[12];

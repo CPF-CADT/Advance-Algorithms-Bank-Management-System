@@ -243,30 +243,22 @@ class Admin {
         cout << " 9 Months: " << usdRates[2] << "%\n";
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
-    int searchUserInformation(const char* phone, ArrayList<User>& users) {
-       
+    int searchUserInformation( char* phone, ArrayList<User>& users) {
         if (!validatePhoneNumber(phone)) {
-            cout << "Invalid phone number format. Please enter a valid phone number.\n";
-            return -1;
+            throw runtime_error("User not found with the phone number");
         }
-
-        
         int index = indexOfUser(phone, users);
-
-    
         if (index != -1) {
-            cout << "User found at index: " << index << endl;
-
-            
+            cout << "User found at index: " << index << endl;    
             users.getValue(index).displayInfo(); 
             return index;
         } else {
-            cout << "User not found with the phone number: " << phone << endl;
-            return -1;
+            // cout << ": " << phone << endl;
+            throw runtime_error("User not found with the phone number");
         }
     }
     // check phone number
-     bool validatePhoneNumber(const char* phone) {
+     bool validatePhoneNumber(char* phone) {
         
         int length = strlen(phone);
         if (length < 8 ){
@@ -282,28 +274,46 @@ class Admin {
 
         return true;
     }
+<<<<<<< HEAD
     void blockUser(const char* phone, ArrayList<User>& users) {
+=======
+     void blockUserAccount( char* phone, ArrayList<User>& users) {
+>>>>>>> 017a1bdc310fd6f1388e36998f3064215b57d028
         int index = indexOfUser(phone, users);
         if (index == -1) {
             cout << "Unable to block user. User not found.\n";
             return;
         }
+<<<<<<< HEAD
 
         blockedUsers.push_back(users.getValue(index));
         users.removeAt(index);
 
         cout << "User with phone number " << phone << " has been blocked.\n";
+=======
+        blockUser.push_back(users.getValue(index));
+        users.removeAt(index);
+        cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
+>>>>>>> 017a1bdc310fd6f1388e36998f3064215b57d028
     }
-    void unblockUser(const char* phone, ArrayList<User>& users,  vector<User> blockUser) {
-   
-    int index = indexOfUser(phone, blockUser);
+
+    void unblockUser(char* phone, ArrayList<User>& users,  vector<User> &blockUser) {
+    int index=0;
+    int count=0;
+    for(auto i:blockUser){
+        if(strcmp(i.getPhoneNumber(),phone)==0){
+            index = count;
+            break;
+        }
+        count++;
+    }
 
     if (index == -1) {
         cout << "Unable to unblock user. User not found in the blocked list.\n";
         return;
     }
 
-    User unblockedUser = blockedUsers.getValue(index);
+    User unblockedUser = blockUser.at(index);
 
     
     if (users.getLength() > 0) {
@@ -321,12 +331,36 @@ class Admin {
     }
 
    
-    blockUser.removeAt(index);
+    // blockUser.remove(index);
 
     // Confirm successful unblocking
     cout << "User with phone number " << phone << " has been unblocked and added back to active users.\n";
 }
 
+void deposit(User &user, double amount, const string &currency) {
+    try {
+        // Validate deposit amount
+        if (amount <= 0) {
+            throw runtime_error("Invalid deposit amount!");
+        }
+        if (currency == "USD") {
+            user.setTotalMoneyUSD(user.getTotalMoneyUSD() + amount);
+            cout << "Deposit successful!" << endl;
+            cout << "Updated balance (USD): $" << user.getTotalMoneyUSD() << endl;
+        }
+        else if (currency == "KHR") {
+            user.setTotalMoneyKHR(user.getTotalMoneyKHR() + amount);
+            cout << "Deposit successful!" << endl;
+            cout << "Updated balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
+        }
+        // Invalid currency
+        else {
+            throw runtime_error("Error: Invalid currency type!");
+        }
+    } catch (const exception &e) {
+        cerr << e.what() << endl;
+    }
+}
 
 };
 
