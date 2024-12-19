@@ -18,7 +18,7 @@ class Admin {
     LinkList<Loan> loanRequest;
     LinkList<Loan> ListLoanUser;
     vector<string> listUserDeposit;
-    vector<User> blockUser;
+     vector<User> blockedUsers;
     Bank* bank;
     public:
     // Admin()
@@ -280,7 +280,7 @@ class Admin {
             cout << "Unable to block user. User not found.\n";
             return;
         }
-        blockUser.push_back(users.getValue(index));
+        blockedUsers.push_back(users.getValue(index));
         users.removeAt(index);
         cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
     }
