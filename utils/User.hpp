@@ -573,6 +573,15 @@ public:
          return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) +"R"+ " was received from Bank " + ".\n";
       }
    }
+   string logTransactionWithdraw(double amount,bool usd) {
+      Date current;
+      current.setCurrentDate();
+      if(usd){
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) + "$"+ " was Deducted" + ".\n";   
+      }else{
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) +"R"+ " was Deducted" +".\n";   
+      }
+   }
 
    int findFreeOrder(ArrayList<User> &users, User newUser) {
       int length = users.getLength();

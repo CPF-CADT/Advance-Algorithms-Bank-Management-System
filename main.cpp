@@ -343,6 +343,7 @@ int main(){
                      int indexUser;
                      try{
                         indexUser = indexOfUser(phone,users);
+                        //use input password 
                      }catch(exception &e){
                         cerr<<e.what();
                      }
@@ -360,12 +361,34 @@ int main(){
                      puseScreen();
                      break;
                      }
-               case 3:
+               case 3:{
                      clearScreen();
                      header("Withdraw");
+                     char phone[12];
+                     QRCode withdraw;
+                     header("Deposit");
+                     cout<<"Phone Number : ";cin>>phone;
+                     int indexUser;
+                     try{
+                        indexUser = indexOfUser(phone,users);
+                     }catch(exception &e){
+                        cerr<<e.what();
+                     }
+                     if(indexUser!=-1){
+                        withdraw.cratePaymentCode();
+                        if(withdraw.getAmountKHR()>0){
+                           admin.withdraw(users.getValue(indexUser),withdraw.getAmountKHR(),"KHR");
+                           users.getValue(indexUser).logTransactionWithdraw(withdraw.getAmountKHR(),false);
+                        }else{
+                           admin.withdraw(users.getValue(indexUser),withdraw.getAmountUSD(),"USD");
+                           users.getValue(indexUser).logTransactionWithdraw(withdraw.getAmountUSD(),true);
+                        }
+                     }
+                     writeToBinary(DATA_USER,users);
                      puseScreen();
                      break;
-               case 4:
+                     }
+               case 4:{
                      clearScreen();
                      char phone[12];
                      header("Search User Information");
@@ -377,6 +400,7 @@ int main(){
                      }
                      puseScreen();
                      break;
+                     }
                case 5:
                      clearScreen();
                      header("Approve Loan");
