@@ -18,7 +18,7 @@ class Admin {
     LinkList<Loan> loanRequest;
     LinkList<Loan> ListLoanUser;
     vector<string> listUserDeposit;
-    vector<User> blockUser;
+     vector<User> blockedUsers;
     Bank* bank;
     public:
     // Admin()
@@ -274,15 +274,27 @@ class Admin {
 
         return true;
     }
+<<<<<<< HEAD
+    void blockUser(const char* phone, ArrayList<User>& users) {
+=======
      void blockUserAccount( char* phone, ArrayList<User>& users) {
+>>>>>>> 017a1bdc310fd6f1388e36998f3064215b57d028
         int index = indexOfUser(phone, users);
         if (index == -1) {
             cout << "Unable to block user. User not found.\n";
             return;
         }
+<<<<<<< HEAD
+
+        blockedUsers.push_back(users.getValue(index));
+        users.removeAt(index);
+
+        cout << "User with phone number " << phone << " has been blocked.\n";
+=======
         blockUser.push_back(users.getValue(index));
         users.removeAt(index);
         cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
+>>>>>>> 017a1bdc310fd6f1388e36998f3064215b57d028
     }
 
     void unblockUser(char* phone, ArrayList<User>& users,  vector<User> &blockUser) {
@@ -349,8 +361,6 @@ void deposit(User &user, double amount, const string &currency) {
         cerr << e.what() << endl;
     }
 }
-
-
 
 };
 
