@@ -1,6 +1,6 @@
 #include "./utils/User.hpp"
 #include "./utils/Bank.hpp"
-// #include "./utils/ATM.hpp"
+#include "./utils/ATM.hpp"
 #include "./utils/Admin.hpp"
 #include "./utils/fileHandling.hpp"
 #include <unistd.h>
@@ -61,19 +61,14 @@ int main()
          if (currentIndexUser != -1)
          {
             cin.ignore();
-            if (enterPassword(users.getValue(currentIndexUser)))
-            {
+            if (enterPassword(users.getValue(currentIndexUser))){
                cout << "Login success ..." << endl;
                // Display ATM Menu
                atm.displayMenu(users.getValue(currentIndexUser));
-            }
-            else
-            {
+               }else{
                cout << "Login failed. Incorrect password." << endl;
-            }
-         }
-         else
-         {
+               }
+            }else {
             cout << "User not found!" << endl;
          }
          break;
