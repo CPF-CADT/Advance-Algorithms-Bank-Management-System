@@ -56,21 +56,21 @@ void withdraw(User &user, double amount, const string &currency) {
             } else {
                 cout << "Insufficient KHR balance!" << endl;
                 char option;
-                cout << "Do you want to deduct this amount from your USD account instead? (y/n): ";
-                cin >> option;
+                // cout << "Do you want to deduct this amount from your USD account instead? (y/n): ";
+                // cin >> option;
 
-                if (option == 'y' || option == 'Y') {
-                    if (user.getTotalMoneyUSD() >= amount) {
-                        user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
-                        cout << "Withdrawal successful!" << endl;
-                        cout << "Amount deducted from USD account." << endl;
-                        cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
-                    } else {
-                        throw runtime_error("Error: Insufficient USD balance!");
-                    }
-                } else {
-                    cout << "Withdrawal canceled by user." << endl;
-                }
+                // if (option == 'y' || option == 'Y') {
+                //     if (user.getTotalMoneyUSD() >= amount) {
+                //         user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
+                //         cout << "Withdrawal successful!" << endl;
+                //         cout << "Amount deducted from USD account." << endl;
+                //         cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
+                //     } else {
+                //         throw runtime_error("Error: Insufficient USD balance!");
+                //     }
+                // } else {
+                //     cout << "Withdrawal canceled by user." << endl;
+                // }
             }
         }
         // Invalid currency
@@ -150,15 +150,19 @@ void displayMenu(User &user) {
                 withdraw(user, amount, currency);
                 break;
             }
-            case 3:
+            case 3: {
                 checkBalance(user);
                 break;
-            case 0:
+            }
+            case 0:{
                 cout << "Exiting ATM menu." << endl;
+            break;
+            }               
                 break;
             default:
                 cout << "Invalid choice! Please try again." << endl;
         }
+    
     } while (choice != 0);
 }
 

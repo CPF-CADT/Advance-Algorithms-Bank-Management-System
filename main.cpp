@@ -52,6 +52,7 @@ int main()
       {
       case 1:
       //ATM
+         atminterface:
          clearScreen();
          char phone[12], password[16];
          cout << "Enter Information to Login" << endl;
@@ -64,12 +65,63 @@ int main()
             if (enterPassword(users.getValue(currentIndexUser))){
                cout << "Login success ..." << endl;
                // Display ATM Menu
-               atm.displayMenu(users.getValue(currentIndexUser));
-               }else{
-               cout << "Login failed. Incorrect password." << endl;
-               }
-            }else {
+               User user;
+               int choice;
+               double amount;
+               string currency;
+               do{
+                  cout << "\n==================== ATM Menu ====================" << endl;
+                  cout << "1. Deposit" << endl;
+                  cout << "2. Withdraw" << endl;
+                  cout << "3. Check Balance" << endl;
+                  cout << "0. Exit" << endl;
+                  cout << "Enter your choice: ";
+                  cin >> choice;               
+                     switch (choice) {
+                        case 1: {
+                           cout << "\nChoose currency for deposit:" << endl;
+                           cout << "1. KHR\n2. USD\nChoice: ";
+                           int currencyChoice;
+                           cin >> currencyChoice;
+                           currency = (currencyChoice == 1) ? "KHR" : "USD";
+                           cout << "Amount to deposit (" << currency << "): ";
+                           cin >> amount;
+                           atm.deposit(user, amount, currency);
+                           break;
+                        }
+                        case 2: {
+                           cout << "\nChoose currency for withdrawal:" << endl;
+                           cout << "1. KHR\n2. USD\nChoice: ";
+                           int currencyChoice;
+                           cin >> currencyChoice;
+                           currency = (currencyChoice == 1) ? "KHR" : "USD";
+                           cout << "Amount to withdraw (" << currency << "): ";
+                           cin >> amount;
+                           atm.withdraw(user, amount, currency);
+                           break;
+                        }
+                        case 3: {
+                           atm.checkBalance(user);
+                           break;
+                        }
+                        case 0:{
+                           cout << "Exiting ATM menu." << endl;
+                           sleep(1);
+                           goto START;
+                        break;
+                        }               
+                        default:{
+                           cout << "Invalid choice! Please try again." << endl;
+                           goto START;
+                        }
+                     }
+                  } while (choice != 0);     
+            }                
+            }else{
             cout << "User not found!" << endl;
+            cout << "---- Try again!" << endl;
+            sleep(1);
+            goto atminterface;
          }
          break;
       case 2:
