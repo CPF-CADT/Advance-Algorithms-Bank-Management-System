@@ -238,11 +238,23 @@ int main()
             }
             case 3:
             {
+               cout << "\n==================== Stock in USD ====================" << endl;
+               string password;
+               cout << "Enter admin password: ";
+               cin >> password;
+               if (password == "admin123"){
                clearScreen();
                cout << "Exiting ATM balance." << endl;
                atm.showATMBalance();
                atm.waitForKeyPress();
-               goto mainATM;
+               goto mainATM;             
+               }
+                  else
+               {
+                  cout << "Access denied. Incorrect password!" << endl;
+                  atm.waitForKeyPress();
+               }
+               goto atmBalance;
                break;
             }
             case 0:

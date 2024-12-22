@@ -15,14 +15,14 @@ class ATM
 private:
     double totalMoneyUSD;
     double totalMoneyKHR;
-    set<double> validDenominationsUSD; // e.g., 10$, 50$, 100$
-    set<double> validDenominationsKHR; // e.g., 10000, 50000, etc.
-
+    set<double> validDenominationsUSD;
+    set<double> validDenominationsKHR;
 public:
+
     ATM(double usd = 0.0, double khr = 0.0) : totalMoneyUSD(usd), totalMoneyKHR(khr)
     {
-        validDenominationsUSD = {10, 50, 100, 200};     // Example USD denominations
-        validDenominationsKHR = {10000, 50000, 100000}; // Example KHR denominations
+        validDenominationsUSD = {10, 50, 100, 200};
+        validDenominationsKHR = {10000, 50000, 100000};
     }
     bool isValidDenominationUSD(double amount)
     {
