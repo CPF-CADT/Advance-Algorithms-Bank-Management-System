@@ -5,13 +5,12 @@
 #include"QRCode.hpp"
 class Loan{
    private:
-      QRCode amountLoan;
-      string name;
-      string reason;
-      Date takeMoney;
-      Date returnMoney;
-      char phoneNumber[12];
-
+        QRCode amountLoan;
+        string name;
+        string reason;
+        Date takeMoney;
+        Date returnMoney;
+        char phoneNumber[12];
    public:
         Loan(){
             reason = "NULL";
@@ -82,6 +81,10 @@ class Loan{
         Date getTakeDate(){
             return takeMoney;
         }
+        //  double getLoanData() const {
+        //     return loanAmount;
+        // }
+        
       
 };
 #endif

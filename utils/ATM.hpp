@@ -3,84 +3,150 @@
 
 #include <iostream>
 #include <string>
+#include<fstream>
+#include<sstream>
+#include<vector>
 #include "User.hpp"
 using namespace std;
 
 class ATM {
 private:
-    double totalMoneyUSD; // USD balance
-    double totalMoneyKHR; // KHR balance
-    DepositInterest deposit; // DepositWithInterest object for managing deposits
+    double totalMoneyUSD;
+    double totalMoneyKHR;
 
 public:
     ATM(double usd = 0.0, double khr = 0.0) : totalMoneyUSD(usd), totalMoneyKHR(khr) {}
 
-    void withdraw(User &user, double amount, const string &currency) {
-        try {
-            if (amount <= 0) {
-                throw runtime_error("Invalid withdrawal amount!");
-            }
-            if (currency == "USD") {
-                if (user.getTotalMoneyUSD() >= amount) {
-                    user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
-                    cout << "Withdrawal successful!" << endl;
-                    cout << "Remaining USD balance: $" << user.getTotalMoneyUSD() << endl;
-                } else {
-                    cout << "Insufficient USD balance!" << endl;
-                }
-            } else if (currency == "KHR") {
-                if (user.getTotalMoneyKHR() >= amount) {
-                    user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
-                    cout << "Withdrawal successful!" << endl;
-                    cout << "Remaining KHR balance: " << user.getTotalMoneyKHR() << " KHR" << endl;
-                } else {
-                    cout << "Insufficient KHR balance!" << endl;
-                }
-            } else {
-                throw runtime_error("Invalid currency type!");
-            }
-        } catch (const exception &e) {
-            cerr << e.what() << endl;
+void writeToFile(const string filename){
+    ofstream writeFile(filename,ios::binary);
+    writeFile.write((char *)(&totalMoneyUSD), sizeof(totalMoneyUSD));
+    writeFile.write((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
+    writeFile.close();
+}
+void readFile(const string filename){
+    ifstream readFile(filename,ios::binary);
+    readFile.read((char *)(&totalMoneyUSD), sizeof(totalMoneyUSD));
+    readFile.read((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
+    readFile.close();
+}
+void withdraw(User &user, double amount, const string &currency,float exchnageRate) {
+    try {
+        // Validate withdrawal amount
+        if (amount <= 0) {
+            throw runtime_error("Invalid withdrawal amount!");
         }
-    }
-    void checkBalance(User &user) {
-        cout << "\nCurrent Balances:" << endl;
-        cout << "USD: $" << user.getTotalMoneyUSD() << endl;
-        cout << "KHR: " << user.getTotalMoneyKHR() << " KHR" << endl;
-    }
-    void displayMenu(User &user) {
-        int choice;
-        double amount;
-        string currency;
-        do {
-            cout << "\n==================== ATM Menu ====================" << endl;
-            cout << "1. Deposit with Interest" << endl;
-            cout << "2. Withdraw" << endl;
-            cout << "3. Check Balance" << endl;
-            cout << "0. Exit" << endl;
-            cout << "Enter your choice : ";
-            cin >> choice;
-            switch (choice) {
-                case 1:
-                    break;
-                case 2:
-                    cout << "Enter currency (USD/KHR): ";
-                    cin >> currency;
-                    cout << "Enter withdrawal amount: ";
-                    cin >> amount;
-                    withdraw(user, amount, currency);
-                    break;
-                case 3:
-                    checkBalance(user);
-                    break;
-                case 0:
-                    cout << "Exiting ATM. Thank you!" << endl;
-                    break;
-                default:
-                    cout << "Invalid choice. Please try again." << endl;
-            }
-        } while (choice != 0);
-    }
-};
 
+        // Handle USD withdrawals
+        if (currency == "USD") {
+            if (user.getTotalMoneyUSD() >= amount) {
+                user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
+                cout << "Withdrawal successful!" << endl;
+                totalMoneyUSD-=amount;
+                cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
+            } else {
+                cout << "Insufficient USD balance!" << endl;
+                char option;
+                cout << "Do you want to deduct this amount from your KHR account instead? (y/n): ";
+                cin >> option;
+
+                if (option == 'y' || option == 'Y') {
+                    if (user.getTotalMoneyKHR() >= amount*exchnageRate) {
+                        user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount*exchnageRate);
+                        cout << "Withdrawal successful!" << endl;
+                        totalMoneyUSD-=amount;
+                        cout << "Amount deducted from KHR account." << endl;
+                        cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
+                    } else {
+                        throw runtime_error("Error: Insufficient KHR balance!");
+                    }
+                } else {
+                    cout << "Withdrawal canceled by user." << endl;
+                }
+            }
+        }
+        // Handle KHR withdrawals
+        else if (currency == "KHR") {
+            if (user.getTotalMoneyKHR() >= amount) {
+                user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
+                cout << "Withdrawal successful!" << endl;
+                totalMoneyKHR-=amount;
+                cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
+            } else {
+                cout << "Insufficient KHR balance!" << endl;
+                // sleep(1);
+                char option;
+                cout << "Do you want to deduct this amount from your USD account instead? (y/n): ";
+                cin >> option;
+                if (option == 'y' || option == 'Y') {
+                    if (user.getTotalMoneyUSD() >= amount/exchnageRate) {
+                        user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount/exchnageRate);
+                        cout << "Withdrawal successful!" << endl;
+                        totalMoneyKHR-=amount;
+                        cout << "Amount deducted from USD account." << endl;
+                        cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
+                    } else {
+                        throw runtime_error("Error: Insufficient USD balance!");
+                    }
+                } else {
+                    cout << "Withdrawal canceled by user." << endl;
+                }
+            }
+        }
+        // Invalid currency
+        else {
+            throw runtime_error("Error: Invalid currency type!");
+        }
+    } catch (const exception &e) {
+        cerr << e.what() << endl;
+    }
+}
+
+
+    void deposit(User &user, double amount, const string &currency) {
+    try {
+        // Validate deposit amount
+        if (amount <= 0) {
+            throw runtime_error("Invalid deposit amount!");
+        }
+        if (currency == "USD") {
+            user.setTotalMoneyUSD(user.getTotalMoneyUSD() + amount);
+            cout << "Deposit successful!" << endl;
+            totalMoneyUSD+=amount;
+            cout << "Updated balance (USD): $" << user.getTotalMoneyUSD() << endl;
+        }
+        else if (currency == "KHR") {
+            user.setTotalMoneyKHR(user.getTotalMoneyKHR() + amount);
+            cout << "Deposit successful!" << endl;
+            totalMoneyKHR+=amount;
+            cout << "Updated balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
+        }
+        // Invalid currency
+        else {
+            throw runtime_error("Error: Invalid currency type!");
+        }
+    } catch (const exception &e) {
+        cerr << e.what() << endl;
+    }
+}
+
+    // void checkBalance(User &user) {
+    //     cout << "\nCurrent Balances:" << endl;
+    //     cout << "USD: $" << user.getTotalMoneyUSD() << endl;
+    //     cout << "KHR: " << user.getTotalMoneyKHR() << " KHR" << endl;
+    // }
+
+    void stockATM(double usdAmount, double khrAmount) {
+        totalMoneyUSD += usdAmount;
+        totalMoneyKHR += khrAmount;
+        cout << "Stocking successful!\nUpdated ATM stock:\n";
+        cout << "USD: $" << totalMoneyUSD << endl;
+        cout << "KHR: " << totalMoneyKHR << " KHR\n";
+}
+    void showATMBalance() const {
+        cout << "\n*** ATM Balance ***\n";
+        cout << "USD: $" << totalMoneyUSD << endl;
+        cout << "KHR: " << totalMoneyKHR << " KHR\n";
+    }
+
+};
 #endif

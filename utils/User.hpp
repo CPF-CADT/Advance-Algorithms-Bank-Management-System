@@ -44,29 +44,29 @@ public:
    }
 
   User(const string& firstName, 
-     const string& lastName, 
-     const string& address, 
-     string dob,
-     const char* phoneNumber, 
-     const char* password, 
-     int nationalIdCard, 
-     double loanKHR, 
-     double loanUSD, 
-     double totalMoneyKHR, 
-     double totalMoneyUSD) {
-    
-    this->firstName = firstName;
-    this->lastName = lastName;
-    this->address = address;
-    DOB nDob(dob);
-    this->dob = nDob;
-    strcpy(this->phoneNumber, phoneNumber);
-    strcpy(this->password, password);
-    this->nationalIdCard = nationalIdCard;
-    this->loanKHR = loanKHR;
-    this->loanUSD = loanUSD;
-    this->totalMoneyKHR = totalMoneyKHR;
-    this->totalMoneyUSD = totalMoneyUSD;
+      const string& lastName, 
+      const string& address, 
+      string dob,
+      const char* phoneNumber, 
+      const char* password, 
+      int nationalIdCard, 
+      double loanKHR, 
+      double loanUSD, 
+      double totalMoneyKHR, 
+      double totalMoneyUSD) {
+      
+      this->firstName = firstName;
+      this->lastName = lastName;
+      this->address = address;
+      DOB nDob(dob);
+      this->dob = nDob;
+      strcpy(this->phoneNumber, phoneNumber);
+      strcpy(this->password, password);
+      this->nationalIdCard = nationalIdCard;
+      this->loanKHR = loanKHR;
+      this->loanUSD = loanUSD;
+      this->totalMoneyKHR = totalMoneyKHR;
+      this->totalMoneyUSD = totalMoneyUSD;
 }
 //   User( const string &firstName,double loanUSD): firstName(firstName),loanUSD(loanUSD){} plan B
 
@@ -83,10 +83,11 @@ public:
       cout << "         Financial Information           " << endl;
       cout << "-----------------------------------------" << endl;
       cout << fixed << setprecision(2);
-      cout << "Loan Amount (USD) : $" << loanUSD << endl;
-      cout << "Loan Amount (KHR) : " << loanKHR << " KHR" << endl;
-      cout << "Total Balance USD : $" << totalMoneyUSD << endl;
-      cout << "Total Balance KHR : " << totalMoneyKHR << " KHR" << endl;
+      // cout << "Loan Amount (USD) : $" << loanUSD << endl;
+      // cout << "Loan Amount (KHR) : " << loanKHR << " KHR" << endl;
+      // cout << "Total Balance USD : $" << totalMoneyUSD << endl;
+      // cout << "Total Balance KHR : " << totalMoneyKHR << " KHR" << endl;
+      showBalance();
       cout << "=========================================" << endl;
    }
    void input(const string &fileName){
@@ -200,9 +201,11 @@ public:
       cout << "Account Loan:" << endl;
       cout << " - KHR: " << loanKHR <<"R"<< endl;
       cout << " - USD: " << loanUSD <<"$"<< endl;
-      cout << "Account Deposit Intrest:" << endl;
-      for(auto i:deposit){
-         i.infor();
+      if(!deposit.empty()){
+         cout << "Account Deposit Intrest:" << endl;
+         for(auto i:deposit){
+            i.infor();
+         }
       }
    }
    bool checkSourceUSD(double usd){
@@ -370,12 +373,12 @@ public:
    }
    bool checkQRCode(const int code,int &index){
       for(int i=0;i<qrCode.size();i++){
-         if(qrCode.at(i).getCode() != code) {
+         if(qrCode.at(i).getCode() == code) {
             index = i;
-            return false;     
+            return true;     
          }
       }
-      return true;
+      return false;
    }
    void payMoney(ArrayList<User> &destUsers,int indexSource){
       //code
@@ -390,21 +393,49 @@ public:
             check = true;
             cout<<destUsers.getValue(i).getFirstName()<<endl;
             cout<<destUsers.getValue(i).getPhoneNumber()<<endl;
-            QRCode& codeToPay = destUsers.getValue(i).getQR().at(i);
-            cout<<codeToPay.getCodeData()<<endl;
-            cout<<"press Yes/No to pay";cin>>confirm;
+            // QRCode& codeToPay = destUsers.getValue(i).getQR().at(indexQRCode);
+            cout<<destUsers.getValue(i).getQR().at(indexQRCode).getCodeData()<<endl;
+            cout<<"press Yes/No to pay :";cin>>confirm;
             if(confirm == "YES" || confirm =="yes" || confirm =="Yes"){
                cout<<"Process Pay..";
-               if(codeToPay.getAmountKHR()!=0){
-                  transferKHRtoOther(codeToPay.getAmountKHR(),destUsers.getValue(i),4100);
+               if(destUsers.getValue(i).getQR().at(indexQRCode).getAmountKHR()!=0){
+                  transferKHRtoOther(destUsers.getValue(i).getQR().at(indexQRCode).getAmountKHR(),destUsers.getValue(i),4100);
                }else{
-                  transferUSDtoOther(codeToPay.getAmountUSD(),destUsers.getValue(i),4100);
+                  transferUSDtoOther(destUsers.getValue(i).getQR().at(indexQRCode).getAmountUSD(),destUsers.getValue(i),4100);
                }
             }
          }
       }
       if(!check){
          cout<<"Code not found"<<endl;
+      }
+   }
+   void addDepositWithInterest(Bank &bank){
+      DepositInterest depo;
+      try{
+         depo.depositWithInterest(bank,totalMoneyUSD,totalMoneyKHR);
+         if(depo.getAmountKHR()>0){
+            totalMoneyKHR -=depo.getAmountKHR();
+         }else{
+            totalMoneyUSD-=depo.getAmountUSD();
+         }
+         deposit.push_back(depo);
+      }catch(exception &e){
+         throw runtime_error(e.what());
+      }
+   }
+   void payInterest(Date current){
+      double amount;
+      for(DepositInterest& i: deposit){
+         if(i.getAmountKHR()>0){
+            amount = i.payBack(current);
+            totalMoneyKHR+=amount;
+            transactionHistory.push_back(logTransactionReceiveFromBank(amount,false));
+         }else{
+            amount = i.payBack(current);
+            totalMoneyUSD+=amount;
+            transactionHistory.push_back(logTransactionReceiveFromBank(amount,true));
+         }
       }
    }
    char* getPhoneNumber() { 
@@ -516,21 +547,42 @@ public:
       return qrCode;
    }
    string logTransactionTransfer(double amount, const string destName, char* phone,bool usd){
+      Date current;
+      current.setCurrentDate();
       if(usd){
-         return "A cash amount of " + to_string(amount) + "$"+ " was transferred to " + destName + " from account " + phone + ".\n";   
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) + "$"+ " was transferred to " + destName + " from account " + phone + ".\n";   
       }else{
-         return "A cash amount of " + to_string(amount) +"R"+ " was transferred to " + destName + " from account " + phone + ".\n";   
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) +"R"+ " was transferred to " + destName + " from account " + phone + ".\n";   
       }
    }
    string logTransactionReceive(double amount, const string& source, const char* phone,bool usd) {
+      Date current;
+      current.setCurrentDate();
       if(usd){
-         return "A cash amount of " + to_string(amount) +"$"+ " was received by " + source + " from phone number " + string(phone) + ".\n";
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) +"$"+ " was received by " + source + " from phone number " + string(phone) + ".\n";
       }else{
-         return "A cash amount of " + to_string(amount) +"R"+ " was received by " + source + " from phone number " + string(phone) + ".\n";
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) +"R"+ " was received by " + source + " from phone number " + string(phone) + ".\n";
+      }
+   }
+   string logTransactionReceiveFromBank(double amount,bool usd) {
+      Date current;
+      current.setCurrentDate();
+      if(usd){
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) +"$"+ " was received from Bank " + ".\n";
+      }else{
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) +"R"+ " was received from Bank " + ".\n";
+      }
+   }
+   string logTransactionWithdraw(double amount,bool usd) {
+      Date current;
+      current.setCurrentDate();
+      if(usd){
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) + "$"+ " was Deducted" + ".\n";   
+      }else{
+         return "Date : "+current.getDate()+" - A cash amount of " + to_string(amount) +"R"+ " was Deducted" +".\n";   
       }
    }
 
-   
    int findFreeOrder(ArrayList<User> &users, User newUser) {
       int length = users.getLength();
       char phone[12];
@@ -579,12 +631,17 @@ public:
     }
 
     return lowIndex; // Fallback (shouldn't reach here due to logic)
-}
+   }
+   bool isHaveLoan(){
+      if(loanKHR>0 || loanUSD>0){
+         return true;
+      }
+      return false;
+   }
 
    void updateUserInfo(){
    int choice;
-   do
-   {
+   do{
       cout << "1. Update First Name" << endl;
       cout << "2. Update Last Name" << endl;
       cout << "3. Update Phone Number" << endl;
@@ -598,8 +655,7 @@ public:
 
       switch (choice)
       {
-      case 1:
-      {
+      case 1:{
          string newFirstName;
          cout << "Enter new first name: ";
          cin >> newFirstName;
@@ -607,8 +663,7 @@ public:
          cout << "First name updated successfully." << endl;
          break;
       }
-      case 2:
-      {
+      case 2:{
          string newLastName;
          cout << "Enter new last name: ";
          cin >> newLastName;
@@ -616,8 +671,7 @@ public:
          cout << "Last name updated successfully." << endl;
          break;
       }
-      case 3:
-      {
+      case 3:{
          char newPhoneNumber[16];
          cout << "Enter new phone number: ";
          cin >> newPhoneNumber;
@@ -692,6 +746,7 @@ public:
    };
 };
 //outside class
+
 void readFromCV(const string fileName,ArrayList<User> &users,const string fileNameBin){ 
         ifstream file(fileName);
          if(!file.is_open()){cerr<<"Error"; 
@@ -787,8 +842,8 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
          } else {
                highIndex = mid - 1;
          }
-         cout<<" Time : "<<endl;
       }
       return -1;
    }
+
 #endif

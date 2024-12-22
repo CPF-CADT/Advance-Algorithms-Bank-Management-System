@@ -17,6 +17,8 @@ class Admin {
     vector<string> userRequest;
     LinkList<Loan> loanRequest;
     LinkList<Loan> ListLoanUser;
+    vector<string> listUserDeposit;
+     vector<User> blockedUsers;
     Bank* bank;
     public:
     // Admin()
@@ -43,17 +45,18 @@ class Admin {
         loanRequest.push(loanReq);
     }
     void showLoanRequest(){
-        for(int i=0;i<loanRequest.getLength()/2;i++){
+        for(int i=0;i<loanRequest.getLength();i++){
             loanRequest.getValue(i).showLoanDetail();
         }
     }
     void showUserLoan(){
-        for(int i=0;i<ListLoanUser.getLength()/2;i++){
+        for(int i=0;i<ListLoanUser.getLength();i++){
             ListLoanUser.getValue(i).showLoanDetail();
         }
     }
     void writeLoan(ofstream &writeFile){
         int allLoanReq = loanRequest.getLength();
+        cout<<"LOAN _ "<<allLoanReq<<endl;
         writeFile.write((char *)(&allLoanReq),sizeof(allLoanReq));
         for(int i =0;i<allLoanReq ;i ++){
             loanRequest.getValue(i).writeToBin(writeFile);
@@ -65,8 +68,11 @@ class Admin {
         }
     }
     void readLoan(ifstream &readFile){
+        ListLoanUser.clear();
+        loanRequest.clear();
         int allLoanReq = 0;
         readFile.read((char *)(&allLoanReq), sizeof(allLoanReq));
+        cout<<"LOAN _ "<<allLoanReq<<endl;
         for (int i = 0; i < allLoanReq; i++) {
             Loan loan;
             loan.readBin(readFile);
@@ -85,17 +91,25 @@ class Admin {
         userRequest.push_back(request);
     }
     void writeToBinary(const string &fileName){
-        ofstream writeFile(fileName, ios::trunc | ios::binary); 
-        writeVectorStr(writeFile,userRequest);
+        ofstream writeFile(fileName,ios::binary); 
+        writeVectorStr(writeFile,userRequest);  
         writeLoan(writeFile);
+        writeVectorStr(writeFile,listUserDeposit);
         writeFile.close();
     }
 
     void readBin(const string &fileName){
-        ifstream readFile(fileName, ios::binary);
-        readVectorStr(readFile,userRequest);
-        readLoan(readFile);
-        readFile.close();
+        ifstream readFile(fileName,ios::binary);
+        userRequest.clear();
+        listUserDeposit.clear();
+        loanRequest.clear();
+        ListLoanUser.clear();
+        if(readFile.is_open()){
+            readVectorStr(readFile,userRequest);
+            readLoan(readFile);
+            readVectorStr(readFile,listUserDeposit);
+            readFile.close();
+        }
     }
     void showRequest(){
         for (auto request : userRequest) {
@@ -105,25 +119,46 @@ class Admin {
     }
     // exchange rate
    double convertUSDtoKHR(double amountUSD, double exchangeRate) {
-    if (amountUSD < 0) {
-        throw invalid_argument("Amount in USD cannot be negative.");
+        if (amountUSD < 0) {
+            throw invalid_argument("Amount in USD cannot be negative.");
+        }
+        if (exchangeRate <= 0) {
+            throw invalid_argument("Exchange rate must be positive.");
+        }
+    
+        return amountUSD * exchangeRate;
     }
-    if (exchangeRate <= 0) {
-        throw invalid_argument("Exchange rate must be positive.");
-    }
-   
-    return amountUSD * exchangeRate;
-   }
     LinkList<Loan> &getLoan(){
         return loanRequest;
     }
-    LinkList<Loan> & getListLoanUser(){
+    Loan getLoanAt(int index){
+        return loanRequest.getValue(index);
+    }
+    LinkList<Loan> &getListLoanUser(){
         return ListLoanUser;
     }
-    void AddLoanUser(Loan AddUserLoan){
+    void AddLoanUser(const Loan AddUserLoan){
         ListLoanUser.push(AddUserLoan);
-
     }
+    vector<string> &getlistUserDeposit(){
+        return listUserDeposit;
+    }
+    void addlistUserDeposit(const string phone){
+        listUserDeposit.push_back(phone);
+    }
+    // void payInterest(ArrayList<User> &users){
+    //     Date cur;
+    //     cur.nextManyMonth(1);
+    //     for(string str:listUserDeposit){
+    //         int n = str.length();
+    //         char phone[n + 1];
+    //         phone[n] = '\0';
+    //         for (int i = 0; i < n; i++){
+    //             phone[i] = str[i];
+    //         }
+    //         users.getValue(indexOfUser(phone,users)).payInterest(cur);
+    //     }
+    // }
 
     double convertKHRtoUSD(double amountKHR, double exchangeRate, double deductionRate) {
         if (amountKHR < 0) {
@@ -201,7 +236,6 @@ class Admin {
         cout << "  6 Months: " << khrRates[1] << "%\n";
         cout << "  9 Months: " << khrRates[2] << "%\n";
         cout << " 12 Months: " << khrRates[3] << "%\n";
-
         cout << "\nInterest Rates for USD:" << endl;
         float* usdRates = bank->getInterestUSD();
         cout << "  3 Months: " << usdRates[0] << "%\n";
@@ -209,6 +243,202 @@ class Admin {
         cout << " 9 Months: " << usdRates[2] << "%\n";
         cout << " 12 Months: " << usdRates[3] << "%\n";
     }
+    int searchUserInformation( char* phone, ArrayList<User>& users) {
+        if (!validatePhoneNumber(phone)) {
+            throw runtime_error("User not found with the phone number");
+        }
+        int index = indexOfUser(phone, users);
+        if (index != -1) {
+            cout << "User found at index: " << index << endl;    
+            users.getValue(index).displayInfo(); 
+            return index;
+        } else {
+            // cout << ": " << phone << endl;
+            throw runtime_error("User not found with the phone number");
+        }
+    }
+    // check phone number
+     bool validatePhoneNumber(char* phone) {
+        
+        int length = strlen(phone);
+        if (length < 8 ){
+            return false;
+        }
+
+        
+        for (int i = 0; i < length; i++) {
+            if (!isdigit(phone[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+     void blockUserAccount( char* phone, ArrayList<User>& users) {
+        int index = indexOfUser(phone, users);
+        if (index == -1) {
+            cout << "Unable to block user. User not found.\n";
+            return;
+        }
+        blockedUsers.push_back(users.getValue(index));
+        users.removeAt(index);
+        cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
+    }
+
+    void unblockUser(char* phone, ArrayList<User>& users,  vector<User> &blockUser) {
+    int index=0;
+    int count=0;
+    for(auto i:blockUser){
+        if(strcmp(i.getPhoneNumber(),phone)==0){
+            index = count;
+            break;
+        }
+        count++;
+    }
+
+    if (index == -1) {
+        cout << "Unable to unblock user. User not found in the blocked list.\n";
+        return;
+    }
+
+    User unblockedUser = blockUser.at(index);
+
+    
+    if (users.getLength() > 0) {
+        try {
+            if (unblockedUser.findFreeOrder(users, unblockedUser) == users.getLength()) {
+                users.push(unblockedUser);
+            } else {
+                users.insertAt(unblockedUser.findFreeOrder(users, unblockedUser), unblockedUser);
+            }
+        } catch (exception& e) {
+            cerr << e.what();
+        }
+    } else {
+        users.push(unblockedUser);
+    }
+
+   
+    // blockUser.remove(index);
+
+    // Confirm successful unblocking
+    cout << "User with phone number " << phone << " has been unblocked and added back to active users.\n";
+}
+
+void deposit(User &user, double amount, const string &currency) {
+    try {
+        // Validate deposit amount
+        if (amount <= 0) {
+            throw runtime_error("Invalid deposit amount!");
+        }
+        if (currency == "USD") {
+            user.setTotalMoneyUSD(user.getTotalMoneyUSD() + amount);
+            cout << "Deposit successful!" << endl;
+            cout << "Updated balance (USD): $" << user.getTotalMoneyUSD() << endl;
+        }
+        else if (currency == "KHR") {
+            user.setTotalMoneyKHR(user.getTotalMoneyKHR() + amount);
+            cout << "Deposit successful!" << endl;
+            cout << "Updated balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
+        }
+        // Invalid currency
+        else {
+            throw runtime_error("Error: Invalid currency type!");
+        }
+    } catch (const exception &e) {
+        cerr << e.what() << endl;
+    }
+}
+
+void withdraw(User &user, double amount, const string &currency) {
+    try {
+      
+        // if (!isAdmin) {
+        //     int wrongAttempts = 0;
+        //     string password;
+
+        //     while (wrongAttempts < 3) {
+        //         cout << "Enter Password: ";
+        //         cin >> password;
+
+        //         if (password == user.getPassword()) {
+        //             cout << "Login Successful..." << endl;
+        //             break; // Exit the password validation loop
+        //         } else {
+        //             wrongAttempts++;
+        //             cout << "Incorrect Password!" << endl;
+        //         }
+        //     }
+        //     if (wrongAttempts >= 3) {
+        //         throw runtime_error("Too many incorrect attempts. Access denied!");
+        //     }
+        // }
+        // Validate withdrawal amount
+        if (amount <= 0) {
+            throw runtime_error("Invalid withdrawal amount!");
+        }
+
+        // Handle USD withdrawals
+        if (currency == "USD") {
+            if (user.getTotalMoneyUSD() >= amount) {
+                user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
+                cout << "Withdrawal successful!" << endl;
+                cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
+            } else {
+                cout << "Insufficient USD balance!" << endl;
+                char option;
+                cout << "Do you want to deduct this amount from your KHR account instead? (y/n): ";
+                cin >> option;
+
+                if (option == 'y' || option == 'Y') {
+                    if (user.getTotalMoneyKHR() >= amount) {
+                        user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
+                        cout << "Withdrawal successful!" << endl;
+                        cout << "Amount deducted from KHR account." << endl;
+                        cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
+                    } else {
+                        throw runtime_error("Error: Insufficient KHR balance!");
+                    }
+                } else {
+                    cout << "Withdrawal canceled by user." << endl;
+                }
+            }
+        }
+        // Handle KHR withdrawals
+        else if (currency == "KHR") {
+            if (user.getTotalMoneyKHR() >= amount) {
+                user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
+                cout << "Withdrawal successful!" << endl;
+                cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
+            } else {
+                cout << "Insufficient KHR balance!" << endl;
+                char option;
+                cout << "Do you want to deduct this amount from your USD account instead? (y/n): ";
+                cin >> option;
+
+                if (option == 'y' || option == 'Y') {
+                    if (user.getTotalMoneyUSD() >= amount) {
+                        user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
+                        cout << "Withdrawal successful!" << endl;
+                        cout << "Amount deducted from USD account." << endl;
+                        cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
+                    } else {
+                        throw runtime_error("Error: Insufficient USD balance!");
+                    }
+                } else {
+                    cout << "Withdrawal canceled by user." << endl;
+                }
+            }
+        }
+        // Invalid currency
+        else {
+            throw runtime_error("Error: Invalid currency type!");
+        }
+    } catch (const exception &e) {
+        cerr << e.what() << endl;
+    }
+}
+
 
 };
 
