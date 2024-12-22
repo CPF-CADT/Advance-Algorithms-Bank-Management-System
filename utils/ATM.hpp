@@ -33,6 +33,25 @@ public:
         return validDenominationsKHR.find(amount) != validDenominationsKHR.end();
     }
 
+    bool isDivisibleByValidDenominationsUSD(double amount) {
+        for (double denomination : validDenominationsUSD) {
+            if (static_cast<int>(amount) % static_cast<int>(denomination) == 0) {
+                return true; // Amount is divisible by at least one valid denomination
+            }
+        }
+        return false; // No valid denomination found
+    }
+
+    bool isDivisibleByValidDenominationsKHR(double amount) {
+        for (double denomination : validDenominationsKHR) {
+            if (static_cast<int>(amount) % static_cast<int>(denomination) == 0) {
+                return true; // Amount is divisible by at least one valid denomination
+            }
+        }
+        return false; // No valid denomination found
+    }
+    
+
     void withdraw(User &user, double amount, const string &currency)
     {
         try
@@ -46,9 +65,8 @@ public:
             // Handle USD withdrawals
             if (currency == "USD")
             {
-                if (!isValidDenominationUSD(amount))
-                {
-                    throw runtime_error("Invalid USD denomination! Only 10$, 50$, or 100$ are allowed.");
+                if (!isDivisibleByValidDenominationsUSD(amount)) {
+                    throw runtime_error("Error: Invalid USD denomination! Amount must be divisible by 10$, 50$, or 100$.");
                 }
                 if (user.getTotalMoneyUSD() >= amount)
                 {
@@ -86,8 +104,8 @@ public:
             // Handle KHR withdrawals
             else if (currency == "KHR")
             {   
-                if (!isValidDenominationKHR(amount)) {
-                throw runtime_error("Invalid KHR denomination! Only 10000, 50000, 100000 KHR are allowed.");
+                if (!isDivisibleByValidDenominationsKHR(amount)) {
+                    throw runtime_error("Error: Invalid KHR denomination! Amount must be divisible by 10000, 50000, or 100000 KHR.");
                 }
                 if (user.getTotalMoneyKHR() >= amount)
                 {
@@ -146,8 +164,8 @@ public:
             }
             if (currency == "USD")
             {   
-                if (!isValidDenominationUSD(amount)) {
-                    throw runtime_error("Invalid USD denomination! Only 10$, 50$, or 100$ are allowed.");
+                if (!isDivisibleByValidDenominationsUSD(amount)) {
+                    throw runtime_error("Error: Invalid USD denomination! Amount must be divisible by 10$, 50$, or 100$.");
                 }
                 user.setTotalMoneyUSD(user.getTotalMoneyUSD() + amount);
                 cout << "Deposit successful!" << endl;
@@ -155,8 +173,8 @@ public:
             }
             else if (currency == "KHR")
             {
-                if (!isValidDenominationKHR(amount)) {
-                throw runtime_error("Invalid KHR denomination! Only 10000, 50000, 100000 KHR are allowed.");
+                if (!isDivisibleByValidDenominationsKHR(amount)) {
+                    throw runtime_error("Error: Invalid KHR denomination! Amount must be divisible by 10000, 50000, or 100000 KHR.");
                 }
                 user.setTotalMoneyKHR(user.getTotalMoneyKHR() + amount);
                 cout << "Deposit successful!" << endl;
