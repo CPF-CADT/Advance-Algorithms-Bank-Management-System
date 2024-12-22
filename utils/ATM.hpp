@@ -17,7 +17,19 @@ private:
 public:
     ATM(double usd = 0.0, double khr = 0.0) : totalMoneyUSD(usd), totalMoneyKHR(khr) {}
 
-void withdraw(User &user, double amount, const string &currency) {
+void writeToFile(const string filename){
+    ofstream writeFile(filename,ios::binary);
+    writeFile.write((char *)(&totalMoneyUSD), sizeof(totalMoneyUSD));
+    writeFile.write((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
+    writeFile.close();
+}
+void readFile(const string filename){
+    ifstream readFile(filename,ios::binary);
+    readFile.read((char *)(&totalMoneyUSD), sizeof(totalMoneyUSD));
+    readFile.read((char *)(&totalMoneyKHR), sizeof(totalMoneyKHR));
+    readFile.close();
+}
+void withdraw(User &user, double amount, const string &currency,float exchnageRate) {
     try {
         // Validate withdrawal amount
         if (amount <= 0) {
@@ -29,6 +41,7 @@ void withdraw(User &user, double amount, const string &currency) {
             if (user.getTotalMoneyUSD() >= amount) {
                 user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
                 cout << "Withdrawal successful!" << endl;
+                totalMoneyUSD-=amount;
                 cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
             } else {
                 cout << "Insufficient USD balance!" << endl;
@@ -37,9 +50,10 @@ void withdraw(User &user, double amount, const string &currency) {
                 cin >> option;
 
                 if (option == 'y' || option == 'Y') {
-                    if (user.getTotalMoneyKHR() >= amount) {
-                        user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
+                    if (user.getTotalMoneyKHR() >= amount*exchnageRate) {
+                        user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount*exchnageRate);
                         cout << "Withdrawal successful!" << endl;
+                        totalMoneyUSD-=amount;
                         cout << "Amount deducted from KHR account." << endl;
                         cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
                     } else {
@@ -55,6 +69,7 @@ void withdraw(User &user, double amount, const string &currency) {
             if (user.getTotalMoneyKHR() >= amount) {
                 user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
                 cout << "Withdrawal successful!" << endl;
+                totalMoneyKHR-=amount;
                 cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
             } else {
                 cout << "Insufficient KHR balance!" << endl;
@@ -62,11 +77,11 @@ void withdraw(User &user, double amount, const string &currency) {
                 char option;
                 cout << "Do you want to deduct this amount from your USD account instead? (y/n): ";
                 cin >> option;
-
                 if (option == 'y' || option == 'Y') {
-                    if (user.getTotalMoneyUSD() >= amount) {
-                        user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
+                    if (user.getTotalMoneyUSD() >= amount/exchnageRate) {
+                        user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount/exchnageRate);
                         cout << "Withdrawal successful!" << endl;
+                        totalMoneyKHR-=amount;
                         cout << "Amount deducted from USD account." << endl;
                         cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
                     } else {
@@ -96,11 +111,13 @@ void withdraw(User &user, double amount, const string &currency) {
         if (currency == "USD") {
             user.setTotalMoneyUSD(user.getTotalMoneyUSD() + amount);
             cout << "Deposit successful!" << endl;
+            totalMoneyUSD+=amount;
             cout << "Updated balance (USD): $" << user.getTotalMoneyUSD() << endl;
         }
         else if (currency == "KHR") {
             user.setTotalMoneyKHR(user.getTotalMoneyKHR() + amount);
             cout << "Deposit successful!" << endl;
+            totalMoneyKHR+=amount;
             cout << "Updated balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
         }
         // Invalid currency
@@ -112,11 +129,11 @@ void withdraw(User &user, double amount, const string &currency) {
     }
 }
 
-    void checkBalance(User &user) {
-        cout << "\nCurrent Balances:" << endl;
-        cout << "USD: $" << user.getTotalMoneyUSD() << endl;
-        cout << "KHR: " << user.getTotalMoneyKHR() << " KHR" << endl;
-    }
+    // void checkBalance(User &user) {
+    //     cout << "\nCurrent Balances:" << endl;
+    //     cout << "USD: $" << user.getTotalMoneyUSD() << endl;
+    //     cout << "KHR: " << user.getTotalMoneyKHR() << " KHR" << endl;
+    // }
 
     void stockATM(double usdAmount, double khrAmount) {
         totalMoneyUSD += usdAmount;

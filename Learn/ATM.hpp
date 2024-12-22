@@ -75,9 +75,7 @@ public:
         user.displayBalances();
     }
 
-    static void exchange(User &user, double amount, const string &fromCurrency, const string &toCurrency) {
-        const double exchangeRate = 4100.0; // 1 USD = 4100 KHR
-
+    static void exchange(User &user, double amount, const string &fromCurrency, const string &toCurrency , const double exchangeRate) {
         if (amount <= 0) {
             cerr << "Invalid exchange amount!\n";
             return;
