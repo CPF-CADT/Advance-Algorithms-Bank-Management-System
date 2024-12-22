@@ -9,6 +9,7 @@
 #define DATA_USER "./Data/users.dat"
 #define DATA_ADMIN "./Data/admin.dat"
 #define BANK_USER "./Data/bank.dat"
+#define DATA_ATM "./Data/atm.dat"
 
 // char* comfirmPassword();
 bool enterPassword(User user);
@@ -91,7 +92,7 @@ int main()
                      cout << "\n==================== ATM ====================" << endl;
                      cout << "1. Deposit" << endl;
                      cout << "2. Withdraw" << endl;
-                     cout << "3. Check Balance" << endl;
+                     // cout << "3. Check Balance" << endl;
                      cout << "0. Exit" << endl;
                      cout << "Enter your choice:  ";
                      cin >> choice;
@@ -109,6 +110,8 @@ int main()
                         cin >> amount;
                         atm.deposit(user, amount, currency);
                         sleep(2);
+                        atm.writeToFile(DATA_ATM);
+                        writeToBinary(DATA_USER,users);
                         puseScreen();
                         clearScreen();
                         break;
@@ -123,20 +126,22 @@ int main()
                         currency = (currencyChoice == 1) ? "KHR" : "USD";
                         cout << "Amount to withdraw (" << currency << "): ";
                         cin >> amount;
-                        atm.withdraw(user, amount, currency);
+                        atm.withdraw(user, amount, currency,bank.getExchnageRate());
+                        writeToBinary(DATA_USER,users);
+                        atm.writeToFile(DATA_ATM);
                         sleep(2);
                         puseScreen();
                         clearScreen();
                         break;
                      }
-                     case 3:
-                     {
-                        cout << "\n==================== User Balance ====================" << endl;
-                        atm.checkBalance(user);
-                        // puseScreen();
-                        // goto mainATM;
-                        break;
-                     }
+                     // case 3:
+                     // {
+                     //    cout << "\n==================== User Balance ====================" << endl;
+                     //    atm.checkBalance(user);
+                     //    puseScreen();
+                     //    // goto mainATM;
+                     //    break;
+                     // }
                      case 0:
                      {
                         clearScreen();
