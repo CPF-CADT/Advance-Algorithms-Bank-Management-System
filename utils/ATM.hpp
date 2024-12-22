@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <string>
+#include<fstream>
+#include<sstream>
+#include<vector>
 #include "User.hpp"
 using namespace std;
 
@@ -55,22 +58,23 @@ void withdraw(User &user, double amount, const string &currency) {
                 cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
             } else {
                 cout << "Insufficient KHR balance!" << endl;
+                // sleep(1);
                 char option;
-                // cout << "Do you want to deduct this amount from your USD account instead? (y/n): ";
-                // cin >> option;
+                cout << "Do you want to deduct this amount from your USD account instead? (y/n): ";
+                cin >> option;
 
-                // if (option == 'y' || option == 'Y') {
-                //     if (user.getTotalMoneyUSD() >= amount) {
-                //         user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
-                //         cout << "Withdrawal successful!" << endl;
-                //         cout << "Amount deducted from USD account." << endl;
-                //         cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
-                //     } else {
-                //         throw runtime_error("Error: Insufficient USD balance!");
-                //     }
-                // } else {
-                //     cout << "Withdrawal canceled by user." << endl;
-                // }
+                if (option == 'y' || option == 'Y') {
+                    if (user.getTotalMoneyUSD() >= amount) {
+                        user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
+                        cout << "Withdrawal successful!" << endl;
+                        cout << "Amount deducted from USD account." << endl;
+                        cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
+                    } else {
+                        throw runtime_error("Error: Insufficient USD balance!");
+                    }
+                } else {
+                    cout << "Withdrawal canceled by user." << endl;
+                }
             }
         }
         // Invalid currency
@@ -114,57 +118,18 @@ void withdraw(User &user, double amount, const string &currency) {
         cout << "KHR: " << user.getTotalMoneyKHR() << " KHR" << endl;
     }
 
-void displayMenu(User &user) {
-    int choice;
-    double amount;
-    string currency;
-    do {
-        cout << "\n==================== ATM Menu ====================" << endl;
-        cout << "1. Deposit" << endl;
-        cout << "2. Withdraw" << endl;
-        cout << "3. Check Balance" << endl;
-        cout << "0. Exit" << endl;
-        cout << "Enter your choice: ";
-        cin >> choice;
-
-        switch (choice) {
-            case 1: {
-                cout << "\nChoose currency for deposit:" << endl;
-                cout << "1. KHR\n2. USD\nChoice: ";
-                int currencyChoice;
-                cin >> currencyChoice;
-                currency = (currencyChoice == 1) ? "KHR" : "USD";
-                cout << "Amount to deposit (" << currency << "): ";
-                cin >> amount;
-                deposit(user, amount, currency);
-                break;
-            }
-            case 2: {
-                cout << "\nChoose currency for withdrawal:" << endl;
-                cout << "1. KHR\n2. USD\nChoice: ";
-                int currencyChoice;
-                cin >> currencyChoice;
-                currency = (currencyChoice == 1) ? "KHR" : "USD";
-                cout << "Amount to withdraw (" << currency << "): ";
-                cin >> amount;
-                withdraw(user, amount, currency);
-                break;
-            }
-            case 3: {
-                checkBalance(user);
-                break;
-            }
-            case 0:{
-                cout << "Exiting ATM menu." << endl;
-            break;
-            }               
-                break;
-            default:
-                cout << "Invalid choice! Please try again." << endl;
-        }
-    
-    } while (choice != 0);
+    void stockATM(double usdAmount, double khrAmount) {
+        totalMoneyUSD += usdAmount;
+        totalMoneyKHR += khrAmount;
+        cout << "Stocking successful!\nUpdated ATM stock:\n";
+        cout << "USD: $" << totalMoneyUSD << endl;
+        cout << "KHR: " << totalMoneyKHR << " KHR\n";
 }
+    void showATMBalance() const {
+        cout << "\n*** ATM Balance ***\n";
+        cout << "USD: $" << totalMoneyUSD << endl;
+        cout << "KHR: " << totalMoneyKHR << " KHR\n";
+    }
 
 };
 #endif
