@@ -1,13 +1,16 @@
-#include <iostream>
-#include "DepositWithInterest.hpp"
+#include<iostream>
+#include"User.hpp"
+#include"DepositWithInterest.hpp"
+
+
 using namespace std;
 
 class ATM {
 private:
     double totalMoneyUSD;
-    double totalMoneyKHR;  // KHR balanceit;
-
+    double totalMoneyKHR;
 public:
+
     ATM() : totalMoneyUSD(0.0), totalMoneyKHR(0.0) {}  // Initialize balances to zero
     void withdraw(double amount, const string &currency) {
         try {
@@ -59,7 +62,7 @@ public:
 
             switch(choice) {
                 case 1:
-                    deposit.depositWithInterest(totalMoneyUSD, totalMoneyKHR);  // Pass balances to deposit function
+                    deposit.depositWithInterest(totalMoneyUSD, totalMoneyKHR);
                     break;
                 case 2:
                     cout << "Enter the withdrawal amount: ";
@@ -69,7 +72,7 @@ public:
                     withdraw(amount, currency);
                     break;
                 case 3:
-                    checkBalance();  // Call check balance function
+                    checkBalance();
                     break;
                 case 0:
                     cout << "Exiting ATM. Thank you!" << endl;
