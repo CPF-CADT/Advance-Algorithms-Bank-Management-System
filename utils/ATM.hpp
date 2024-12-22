@@ -130,6 +130,10 @@ void withdraw(User &user, double amount, const string &currency) {
         cout << "USD: $" << totalMoneyUSD << endl;
         cout << "KHR: " << totalMoneyKHR << " KHR\n";
     }
-
+    void waitForKeyPress() {
+    cout << "\nPress Enter to return to the menu...";
+    cin.ignore();
+    cin.get();
+}
 };
 #endif
