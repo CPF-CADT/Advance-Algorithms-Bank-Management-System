@@ -3,6 +3,7 @@
       "*.java": "java",
       "iosfwd": "cpp",
       "iostream": "cpp",
-      "ostream": "cpp"
+      "ostream": "cpp",
+      "stdexcept": "cpp"
    }
 }

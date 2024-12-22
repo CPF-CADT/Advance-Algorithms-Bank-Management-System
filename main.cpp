@@ -240,6 +240,7 @@ int main()
             {
                clearScreen();
                cout << "Exiting ATM balance." << endl;
+               atm.showATMBalance();
                atm.waitForKeyPress();
                goto mainATM;
                break;
