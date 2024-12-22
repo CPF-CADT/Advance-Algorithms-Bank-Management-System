@@ -36,7 +36,7 @@ public:
     bool isDivisibleByValidDenominationsUSD(double amount) {
         for (double denomination : validDenominationsUSD) {
             if (static_cast<int>(amount) % static_cast<int>(denomination) == 0) {
-                return true; // Amount is divisible by at least one valid denomination
+                return true;
             }
         }
         return false; // No valid denomination found
@@ -56,7 +56,6 @@ public:
     {
         try
         {
-            // Validate withdrawal amount
             if (amount <= 0)
             {
                 throw runtime_error("Invalid withdrawal amount!");
