@@ -87,7 +87,7 @@ int main()
                   double amount;
                   string currency;
                   do
-                  {
+                  {  
                      cout << "\n==================== ATM ====================" << endl;
                      cout << "1. Deposit" << endl;
                      cout << "2. Withdraw" << endl;
@@ -98,7 +98,8 @@ int main()
                      switch (choice)
                      {
                      case 1:
-                     {
+                     {  
+                        clearScreen();
                         cout << "\nChoose currency for deposit:" << endl;
                         cout << "1. KHR\n2. USD\nChoice: ";
                         int currencyChoice;
@@ -107,10 +108,14 @@ int main()
                         cout << "Amount to deposit (" << currency << "): ";
                         cin >> amount;
                         atm.deposit(user, amount, currency);
+                        sleep(2);
+                        puseScreen();
+                        clearScreen();
                         break;
                      }
                      case 2:
-                     {
+                     {  
+                        clearScreen();
                         cout << "\nChoose currency for withdrawal:" << endl;
                         cout << "1. KHR\n2. USD\nChoice: ";
                         int currencyChoice;
@@ -119,6 +124,9 @@ int main()
                         cout << "Amount to withdraw (" << currency << "): ";
                         cin >> amount;
                         atm.withdraw(user, amount, currency);
+                        sleep(2);
+                        puseScreen();
+                        clearScreen();
                         break;
                      }
                      case 3:
@@ -157,17 +165,19 @@ int main()
             break;
          }
          case 2:
-         {
+         {  atmBalance:
+         clearScreen();
             int option;
             cout << "\n==================== ATM Balance ====================" << endl;
             cout << "1. Stock in ATM" << endl;
             cout << "2. Check Stock" << endl;
             cout << "0. Exit" << endl;
+            cout << "Enter : ";
             cin >> option;
             switch (option)
             {
             case 1:
-            {
+            {  
                string password;
                cout << "Enter admin password: ";
                cin >> password;
@@ -192,8 +202,13 @@ int main()
                   atm.stockATM(usdAmount, khrAmount);
                }
                else
-               {
+               {  
+                  
                   cout << "Access denied. Incorrect password!" << endl;
+                  sleep(1);
+                  clearScreen();
+                  goto atmBalance;
+                  
                }
                break;
             }
