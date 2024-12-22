@@ -26,6 +26,7 @@ int main(){
       cout<<" 2 . Show Laon User"<<endl;
       cout<<" 3 . Approve loan for User"<<endl;
       cout<<" 4 . User balance"<<endl;
+      cout<<" 7 . Pay back"<<endl;
 
       cout<<"Choose : ";cin>>op;
       switch(op){
@@ -34,6 +35,7 @@ int main(){
             tempUser.setTotalMoneyUSD(100);
             tempUser.setTotalMoneyKHR(10000);
             tempUser.output();
+
             
             loan.applyLoan(tempUser);
             admin.getLoan().push(loan);
@@ -103,6 +105,10 @@ int main(){
             }
         }
          break;
+         case 7:
+         //payback
+         
+
          case 4:
             for( int i=0;i<user.getLength();i++){
                user.getValue(i).displayInfo();

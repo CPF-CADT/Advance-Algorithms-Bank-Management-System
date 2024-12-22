@@ -11,6 +11,10 @@ class Loan{
         Date takeMoney;
         Date returnMoney;
         char phoneNumber[12];
+        int numberOfPayBack;
+        int countPayback;
+        Date payDaily[24];
+        double interestMoney;
    public:
         Loan(){
             reason = "NULL";
@@ -84,7 +88,19 @@ class Loan{
         //  double getLoanData() const {
         //     return loanAmount;
         // }
-        
+        double payBack(){
+         if(numberOfPayBack == 1 && numberOfPayBack!=countPayback){
+            countPayback+=1;
+            return interestMoney;
+         }
+         if(numberOfPayBack>1 && numberOfPayBack!=countPayback){
+           
+               countPayback+=1;
+               return(interestMoney/numberOfPayBack);
+            
+         }
+         return 0.00;
+      }
       
 };
 #endif

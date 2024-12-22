@@ -2,6 +2,9 @@
    "files.associations": {
       "*.java": "java",
       "iosfwd": "cpp",
-      "iostream": "cpp"
+      "iostream": "cpp",
+      "memory": "cpp",
+      "istream": "cpp",
+      "functional": "cpp"
    }
 }
