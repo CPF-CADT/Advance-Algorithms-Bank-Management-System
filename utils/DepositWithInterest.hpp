@@ -161,8 +161,10 @@ class DepositInterest{
       }
       double payBack(Date current){
          if(numberOfPayBack == 1 && numberOfPayBack!=countPayback){
-            countPayback+=1;
-            return interestMoney;
+             if(current.getDate() == payDaily[countPayback].getDate()){
+               countPayback+=1;
+               return interestMoney;
+            }
          }
          if(numberOfPayBack>1 && numberOfPayBack!=countPayback){
             if(current.getDate() == payDaily[countPayback].getDate()){
