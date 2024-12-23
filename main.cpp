@@ -92,7 +92,6 @@ int main() {
                   if (enterPassword(users.getValue(currentIndexUser))) {
                      // cout << "Login success ..." << endl;
                      // Display ATM Menu
-                     User user;
                      int choice;
                      double amount;
                      string currency;
@@ -114,7 +113,7 @@ int main() {
                            currency = (currencyChoice == 1) ? "KHR" : "USD";
                            cout << "Amount to deposit (" << currency << "): ";
                            cin >> amount;
-                           atm.deposit(user, amount, currency);
+                           atm.deposit(users.getValue(currentIndexUser), amount, currency);
                            atm.waitForKeyPress();
                            clearScreen();
                            writeToBinary(DATA_USER,users);
@@ -129,7 +128,7 @@ int main() {
                            currency = (currencyChoice == 1) ? "KHR" : "USD";
                            cout << "Amount to withdraw (" << currency << "): ";
                            cin >> amount;
-                           atm.withdraw(user, amount, currency);
+                           atm.withdraw(users.getValue(currentIndexUser), amount, currency);
                            sleep(2);
                            atm.waitForKeyPress();
                            clearScreen();
