@@ -177,10 +177,14 @@ class Loan{
                 if(countPayback==numberOfPayBack){
                     user.setLoanKHR(0);
                     user.setLoanUSD(0);
+                    cout<<"Finished Loan..."<<endl;
+                    return 0.0;
                 }
                 if(amountLoan.getAmountKHR()>0){
+                    user.setLoanKHR(user.getLoanKHR()-amountLoan.getAmountKHR()/numberOfPayBack);
                     return (amountLoan.getAmountKHR()/numberOfPayBack);
                 }
+                user.setLoanUSD(user.getLoanUSD()-amountLoan.getAmountUSD()/numberOfPayBack);
                 return amountLoan.getAmountUSD()/numberOfPayBack;
             }
             return 0.00;

@@ -83,44 +83,44 @@ public:
       cout << "         Financial Information           " << endl;
       cout << "-----------------------------------------" << endl;
       cout << fixed << setprecision(2);
-      // cout << "Loan Amount (USD) : $" << loanUSD << endl;
-      // cout << "Loan Amount (KHR) : " << loanKHR << " KHR" << endl;
-      // cout << "Total Balance USD : $" << totalMoneyUSD << endl;
-      // cout << "Total Balance KHR : " << totalMoneyKHR << " KHR" << endl;
+      cout << "Loan Amount (USD) : $" << loanUSD << endl;
+      cout << "Loan Amount (KHR) : " << loanKHR << " KHR" << endl;
+      cout << "Total Balance USD : $" << totalMoneyUSD << endl;
+      cout << "Total Balance KHR : " << totalMoneyKHR << " KHR" << endl;
       showBalance();
       cout << "=========================================" << endl;
    }
    void input(const string &fileName){
-      cout<<"User information "<<endl;
-      cout<<"First Name : ";cin>>firstName;
+      // cout<<"User information "<<endl;
+      // cout<<"First Name : ";cin>>firstName;
       // cout<<"Last Name  : ";cin>>lastName;
       // cout<<"National ID Card : ";cin>>nationalIdCard;
       // cin.ignore();
       // cout<<"Address    : ";getline(cin,address);
       // dob.inputDate();
       // cin.ignore();
-      cout<<"Security Section "<<endl;
-      inputPhoneNumber(fileName);
-      inputPassword();
-
-      // cout << "=========================================" << endl;
-      // cout << "          User Information Form          " << endl;
-      // cout << "=========================================" << endl;
-      // cout << "Please enter the following details:" << endl;
-      // cout << "First Name       : "; cin >> firstName;
-      // cout << "Last Name        : "; cin >> lastName;
-      // cout << "National ID      : "; cin >> nationalIdCard;
-      // dob.inputDate();
-      // cin.ignore(); 
-      // cout << "Address          : "; getline(cin, address);
-      // cout << "\n=========================================" << endl;
-      // cout << "          Security Section               " << endl;
-      // cout << "=========================================" << endl;
+      // cout<<"Security Section "<<endl;
       // inputPhoneNumber(fileName);
       // inputPassword();
-      // cout << "\n=========================================" << endl;
-      // cout << "Thank you, " << firstName << " " << lastName << "! Your details have been recorded." << endl;
-      // cout << "=========================================" << endl;
+
+      cout << "=========================================" << endl;
+      cout << "          User Information Form          " << endl;
+      cout << "=========================================" << endl;
+      cout << "Please enter the following details:" << endl;
+      cout << "First Name       : "; cin >> firstName;
+      cout << "Last Name        : "; cin >> lastName;
+      cout << "National ID      : "; cin >> nationalIdCard;
+      dob.inputDate();
+      cin.ignore(); 
+      cout << "Address          : "; getline(cin, address);
+      cout << "\n=========================================" << endl;
+      cout << "          Security Section               " << endl;
+      cout << "=========================================" << endl;
+      inputPhoneNumber(fileName);
+      inputPassword();
+      cout << "\n=========================================" << endl;
+      cout << "Thank you, " << firstName << " " << lastName << "! Your details have been recorded." << endl;
+      cout << "=========================================" << endl;
    }
    void writeToFile(const string &fileName){
       ofstream writeFile(fileName, ios::app | ios::binary);
@@ -192,7 +192,7 @@ public:
       strcpy(password,pass);
    }
    void output(){
-      cout<<firstName<<" "<<phoneNumber<<endl;
+      cout<<firstName<<"   "<<lastName<<"   :   "<<phoneNumber<<endl;
    }
    void showBalance(){
       cout << "Account Balance:" << endl;
@@ -490,7 +490,7 @@ public:
    }
 
    void setLoanUSD(double loan) { 
-      loanUSD = loan; 
+      this->loanUSD = loan; 
    }
 
    double getLoanKHR() { 
@@ -498,7 +498,7 @@ public:
    }
 
    void setLoanKHR(double loan) { 
-      loanKHR = loan; 
+      this->loanKHR = loan; 
    }
 
    double getTotalMoneyKHR() { 
@@ -843,6 +843,7 @@ void readFromCV(const string fileName,ArrayList<User> &users,const string fileNa
                highIndex = mid - 1;
          }
       }
+      cout<<"User Not Found !!!"<<endl;
       return -1;
    }
 

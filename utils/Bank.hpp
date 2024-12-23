@@ -4,18 +4,17 @@
 #include<vector>
 class Bank{
 private:
-   long totalUser;
+   // long totalUser;
    float exchangeRateUSDtoKHR;
    float intrestKHR[4];
    float intrestUSD[4];
-   double totalMoneyKHR;
-   double totalMoneyUSD;
+   // double totalMoneyKHR;
+   // double totalMoneyUSD;
    vector<string> report;
-   vector<string> HistoryTransaction;
 public:
    Bank(){
-      totalUser = 0;
-      exchangeRateUSDtoKHR = 0.0;
+      // totalUser = 0;
+      exchangeRateUSDtoKHR = 4100;
       intrestKHR[0] = 3.20;
       intrestKHR[1] = 4.20;
       intrestKHR[2] = 4.40;
@@ -25,9 +24,15 @@ public:
       intrestUSD[1] = 2.80;
       intrestUSD[2] = 3.15;
       intrestUSD[3] = 3.80;
-      totalMoneyKHR= 0.0;
-      totalMoneyUSD= 0.0;
+      // totalMoneyKHR= 0.0;
+      // totalMoneyUSD= 0.0;
    }
+   // void readDatabase(ifstream &readFile) {
+   //    readFile.read((char *)(&totalUser), sizeof(totalUser));
+   //    readFile.read((char *)(&exchangeRateUSDtoKHR), sizeof(exchangeRateUSDtoKHR));
+   //    readFile.read((char *)(intrestKHR), sizeof(intrestKHR));
+   //    readFile.read((char *)(intrestUSD), sizeof(intrestUSD));
+   // }
    void setExchnageRate(float rate){
       this->exchangeRateUSDtoKHR = rate;
    }

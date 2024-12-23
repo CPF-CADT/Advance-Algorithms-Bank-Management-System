@@ -24,7 +24,6 @@ int main(){
             tempUser.setTotalMoneyUSD(100);
             tempUser.setTotalMoneyKHR(10000);
             tempUser.output();
-            
             try{
                loan.applyLoan(tempUser,bank);
                admin.getLoan().push(loan);
@@ -143,6 +142,7 @@ int main(){
                   user.getValue(indexOfUser(phone,user));
                   cout<<"Amount : "<<admin.getListLoanUser().getValue(i).payBack(user.getValue(indexOfUser(phone,user)))<<endl;
                   admin.getListLoanUser().getValue(i).listPayBack();
+                  
                }
             }
             break;

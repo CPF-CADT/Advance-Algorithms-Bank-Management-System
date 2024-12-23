@@ -95,7 +95,7 @@ class Admin {
         writeLoan(writeFile);
         writeVectorStr(writeFile,listUserDeposit);
         writeVector(writeFile,blockedUsers);
-        writeFile.write((char *)(&bank),sizeof(Bank));
+        // writeFile.write((char *)(&bank),sizeof(Bank));
         writeFile.close();
     }
 
@@ -111,7 +111,7 @@ class Admin {
                 readLoan(readFile);
                 readVectorStr(readFile,listUserDeposit);
                 readVector(readFile,blockedUsers);
-                readFile.read((char *)(&bank),sizeof(Bank));
+                // readFile.read((char *)(&bank),sizeof(Bank));
             }
             readFile.close();
         }catch(exception &e){
@@ -236,7 +236,7 @@ class Admin {
 
      */
 
-    void displayInterestRates() {
+    void displayInterestRates(Bank bank) {
         cout << "Exchange Rate from 1 USD to KHR : " <<bank.getExchnageRate() <<endl;
         cout << "Interest Rates for KHR:" << endl;
         float* khrRates = bank.getInterestKHR();
@@ -283,20 +283,36 @@ class Admin {
         return true;
     }
      void blockUserAccount( char* phone, ArrayList<User>& users) {
-        int index = indexOfUser(phone, users);
+        int index;
+        try{
+            index = indexOfUser(phone, users);
+        }catch(...){
+            return;
+        }
         if (index == -1) {
             cout << "Unable to block user. User not found.\n";
             return;
         }
-        blockedUsers.push_back(users.getValue(index));
-        users.removeAt(index);
-        cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
+        string confirm;
+        users.getValue(index).output();
+        cout<<"Press Yes to Block : ";cin>>confirm;
+        if(confirm=="Yes" || confirm == "yes"){
+            blockedUsers.push_back(users.getValue(index));
+            users.removeAt(index);
+            cout << "User with phone number " << phone << " has been blocked and removed from active users.\n";
+        }
     }
 
-    void unblockUser(char* phone, ArrayList<User>& users,  vector<User> &blockUser) {
+    void unblockUser(ArrayList<User>& users) {
     int index=0;
     int count=0;
-    for(auto i:blockUser){
+    char phone[16];
+    cout<<"- List Block User "<<endl;
+    for(auto i:blockedUsers){
+        i.output();
+    }
+    cout<<"Phone Number : ";cin>>phone;
+    for(auto i:blockedUsers){
         if(strcmp(i.getPhoneNumber(),phone)==0){
             index = count;
             break;
@@ -309,7 +325,7 @@ class Admin {
         return;
     }
 
-    User unblockedUser = blockUser.at(index);
+    User unblockedUser = blockedUsers.at(index);
 
     
     if (users.getLength() > 0) {

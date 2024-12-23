@@ -71,6 +71,7 @@ public:
                 {
                     user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
                     cout << "Withdrawal successful!" << endl;
+                    user.addHistoryTransaction(user.logTransactionWithdraw(amount,true));
                     cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
                 }
                 else
@@ -87,6 +88,7 @@ public:
                             user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
                             cout << "Withdrawal successful!" << endl;
                             cout << "Amount deducted from KHR account." << endl;
+                            user.addHistoryTransaction(user.logTransactionWithdraw(amount,false));
                             cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
                         }
                         else
@@ -110,6 +112,7 @@ public:
                 {
                     user.setTotalMoneyKHR(user.getTotalMoneyKHR() - amount);
                     cout << "Withdrawal successful!" << endl;
+                    user.addHistoryTransaction(user.logTransactionWithdraw(amount,false));
                     cout << "Remaining balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
                 }
                 else
@@ -126,6 +129,7 @@ public:
                         {
                             user.setTotalMoneyUSD(user.getTotalMoneyUSD() - amount);
                             cout << "Withdrawal successful!" << endl;
+                            user.addHistoryTransaction(user.logTransactionWithdraw(amount,true));
                             cout << "Amount deducted from USD account." << endl;
                             cout << "Remaining balance (USD): $" << user.getTotalMoneyUSD() << endl;
                         }
@@ -168,6 +172,7 @@ public:
                 }
                 user.setTotalMoneyUSD(user.getTotalMoneyUSD() + amount);
                 cout << "Deposit successful!" << endl;
+                user.addHistoryTransaction(user.logTransactionReceiveFromBank(amount,true));
                 cout << "Updated balance (USD): $" << user.getTotalMoneyUSD() << endl;
             }
             else if (currency == "KHR")
@@ -177,6 +182,7 @@ public:
                 }
                 user.setTotalMoneyKHR(user.getTotalMoneyKHR() + amount);
                 cout << "Deposit successful!" << endl;
+                user.addHistoryTransaction(user.logTransactionReceiveFromBank(amount,false));
                 cout << "Updated balance (KHR): " << user.getTotalMoneyKHR() << " KHR" << endl;
             }
             // Invalid currency
