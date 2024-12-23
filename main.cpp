@@ -397,7 +397,7 @@ int main()
                      if (!users.getValue(currentIndexUser).isHaveLoan())
                      {
                         Loan loan;
-                        loan.applyLoan(users.getValue(currentIndexUser));
+                        loan.applyLoan(users.getValue(currentIndexUser),bank);
                         admin.requestLoan(loan);
                         admin.writeToBinary(DATA_ADMIN);
                         // write admin

@@ -18,7 +18,7 @@ class Admin {
     LinkList<Loan> loanRequest;
     LinkList<Loan> ListLoanUser;
     vector<string> listUserDeposit;
-     vector<User> blockedUsers;
+    vector<User> blockedUsers;
     Bank* bank;
     public:
     // Admin()
@@ -72,7 +72,6 @@ class Admin {
         loanRequest.clear();
         int allLoanReq = 0;
         readFile.read((char *)(&allLoanReq), sizeof(allLoanReq));
-        cout<<"LOAN _ "<<allLoanReq<<endl;
         for (int i = 0; i < allLoanReq; i++) {
             Loan loan;
             loan.readBin(readFile);
@@ -104,11 +103,15 @@ class Admin {
         listUserDeposit.clear();
         loanRequest.clear();
         ListLoanUser.clear();
-        if(readFile.is_open()){
-            readVectorStr(readFile,userRequest);
-            readLoan(readFile);
-            readVectorStr(readFile,listUserDeposit);
+        try{
+            if(readFile.is_open()){
+                readVectorStr(readFile,userRequest);
+                readLoan(readFile);
+                readVectorStr(readFile,listUserDeposit);
+            }
             readFile.close();
+        }catch(exception &e){
+            cerr<<e.what();
         }
     }
     void showRequest(){
