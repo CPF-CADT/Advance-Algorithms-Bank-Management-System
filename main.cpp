@@ -301,7 +301,7 @@ int main() {
                   userInterface:
                      clearScreen();
                      header("USER ACCOUNT");
-                     Date cur;
+                     Date cur;c
                      users.getValue(currentIndexUser).payInterest(cur);
                      int op;
                      cout << "Welcome back " << users.getValue(currentIndexUser).getFirstName() << endl;

@@ -452,10 +452,18 @@ public:
             amount = i.payBack(current);
             totalMoneyKHR+=amount;
             transactionHistory.push_back(logTransactionReceiveFromBank(amount,false));
+            if(i.getNumberOfPayBack() == i.getCountPayback()){
+               amount = i.getAmountKHR();
+               transactionHistory.push_back(logTransactionReceiveFromBank(amount,false));
+            }
          }else{
             amount = i.payBack(current);
             totalMoneyUSD+=amount;
             transactionHistory.push_back(logTransactionReceiveFromBank(amount,true));
+            if(i.getNumberOfPayBack() == i.getCountPayback()){
+               amount = i.getAmountUSD();
+               transactionHistory.push_back(logTransactionReceiveFromBank(amount,true));
+            }
          }
       }
    }

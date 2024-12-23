@@ -177,6 +177,9 @@ class DepositInterest{
       void setAmountKHR(double amount) {
          amountKHR = amount;
       }
+      int getCountPayback(){
+         return countPayback;
+      }
       double getAmountKHR() const {
          return amountKHR;
       }
