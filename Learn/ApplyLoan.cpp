@@ -92,7 +92,7 @@ int main(){
                         user.getValue(index).addLoanMoneyUSD(admin.getLoan().getValue(i).getAmountWithInterest());
 
                      }
-                     cout<<"yes and done!!"<<endl;
+                     cout<<"Loan approve success!!"<<endl;
                      admin.showUserLoan();
                      admin.getListLoanUser().push(admin.getLoan().getValue(i));
                      admin.getLoan().removeAt(i);

@@ -180,7 +180,7 @@ int main()
             cout << "Enter : ";
             cin >> option;
             switch (option)
-            {
+{
             case 1:
             {  
                string password;
@@ -208,7 +208,6 @@ int main()
                }
                else
                {  
-                  
                   cout << "Access denied. Incorrect password!" << endl;
                   sleep(1);
                   clearScreen();
@@ -283,6 +282,8 @@ int main()
                userInterface:
                   clearScreen();
                   header("USER ACCOUNT");
+                  Date cur;
+                  users.getValue(currentIndexUser).payInterest(cur);
                   int op;
                   cout << "Welcome back " << users.getValue(currentIndexUser).getFirstName() << endl;
                   op = displayOption(userInterface, 9);
@@ -296,6 +297,7 @@ int main()
                      header("USER BALANCE");
                      users.getValue(currentIndexUser).showBalance();
                      cout << "Press anykey Exit ... " << endl;
+                     cin.ignore();
                      puseScreen();
                      break;
                   }
@@ -308,6 +310,7 @@ int main()
                         cout << i;
                      }
                      cout << "Press anykey Exit ... " << endl;
+                     cin.ignore();
                      puseScreen();
                      break;
                   case 3:
@@ -344,6 +347,7 @@ int main()
                      }
                      }
                      cout << "Press anykey Exit ... " << endl;
+                     cin.ignore();
                      puseScreen();
                      break;
                   case 4:
@@ -369,6 +373,7 @@ int main()
                      }
                      }
                      cout << "Press anykey Exit ... " << endl;
+                     cin.ignore();
                      puseScreen();
                      break;
                   case 5:
@@ -387,6 +392,7 @@ int main()
                         cerr << e.what();
                      }
                      cout << "Press anykey Exit ... " << endl;
+                     cin.ignore();
                      puseScreen();
                      break;
                   case 6:
@@ -407,6 +413,7 @@ int main()
                         cout << "You Have Loan. Need pay back money to Loan again" << endl;
                      }
                      cout << "Press anykey Exit ... " << endl;
+                     cin.ignore();
                      puseScreen();
                      break;
                   case 7:
@@ -439,6 +446,7 @@ int main()
                      admin.showRequest();
                      // ned to sacve to admin
                      cout << "Press anykey Exit ... " << endl;
+                     cin.ignore();
                      puseScreen();
                      break;
                   }
@@ -492,6 +500,7 @@ int main()
             writeToBinary(DATA_USER, users);
             cout << "Success" << endl;
             cout << "Press anykey Exit ... " << endl;
+            cin.ignore();
             puseScreen();
             break;
          }
@@ -542,6 +551,7 @@ int main()
                writeToBinary(DATA_USER, users);
                cout << "Success" << endl;
                cout << "Press anykey Exit ... " << endl;
+               cin.ignore();
                puseScreen();
                break;
             }
@@ -553,6 +563,7 @@ int main()
                cin >> fileName;
                readFromCV(fileName, users, DATA_USER);
                cout << "Press anykey Exit ... " << endl;
+               cin.ignore();
                puseScreen();
                break;
             }
@@ -576,26 +587,27 @@ int main()
             {
                indexUser = indexOfUser(phone, users);
                // use input password
+               if (indexUser != -1)
+               {
+                  deposit.cratePaymentCode();
+                  if (deposit.getAmountKHR() > 0)
+                  {
+                     admin.deposit(users.getValue(indexUser), deposit.getAmountKHR(), "KHR");
+                     users.getValue(indexUser).logTransactionReceiveFromBank(deposit.getAmountKHR(), false);
+                  }
+                  else
+                  {
+                     admin.deposit(users.getValue(indexUser), deposit.getAmountUSD(), "USD");
+                     users.getValue(indexUser).logTransactionReceiveFromBank(deposit.getAmountUSD(), true);
+                  }
+               }
             }
             catch (exception &e)
             {
                cerr << e.what();
             }
-            if (indexUser != -1)
-            {
-               deposit.cratePaymentCode();
-               if (deposit.getAmountKHR() > 0)
-               {
-                  admin.deposit(users.getValue(indexUser), deposit.getAmountKHR(), "KHR");
-                  users.getValue(indexUser).logTransactionReceiveFromBank(deposit.getAmountKHR(), false);
-               }
-               else
-               {
-                  admin.deposit(users.getValue(indexUser), deposit.getAmountUSD(), "USD");
-                  users.getValue(indexUser).logTransactionReceiveFromBank(deposit.getAmountUSD(), true);
-               }
-            }
             writeToBinary(DATA_USER, users);
+            cin.ignore();
             puseScreen();
             break;
          }
@@ -612,26 +624,27 @@ int main()
             try
             {
                indexUser = indexOfUser(phone, users);
+               if (indexUser != -1)
+               {
+                  withdraw.cratePaymentCode();
+                  if (withdraw.getAmountKHR() > 0)
+                  {
+                     admin.withdraw(users.getValue(indexUser), withdraw.getAmountKHR(), "KHR");
+                     users.getValue(indexUser).logTransactionWithdraw(withdraw.getAmountKHR(), false);
+                  }
+                  else
+                  {
+                     admin.withdraw(users.getValue(indexUser), withdraw.getAmountUSD(), "USD");
+                     users.getValue(indexUser).logTransactionWithdraw(withdraw.getAmountUSD(), true);
+                  }
+               }
             }
             catch (exception &e)
             {
                cerr << e.what();
             }
-            if (indexUser != -1)
-            {
-               withdraw.cratePaymentCode();
-               if (withdraw.getAmountKHR() > 0)
-               {
-                  admin.withdraw(users.getValue(indexUser), withdraw.getAmountKHR(), "KHR");
-                  users.getValue(indexUser).logTransactionWithdraw(withdraw.getAmountKHR(), false);
-               }
-               else
-               {
-                  admin.withdraw(users.getValue(indexUser), withdraw.getAmountUSD(), "USD");
-                  users.getValue(indexUser).logTransactionWithdraw(withdraw.getAmountUSD(), true);
-               }
-            }
             writeToBinary(DATA_USER, users);
+            cin.ignore();
             puseScreen();
             break;
          }
@@ -650,78 +663,141 @@ int main()
             {
                cerr << e.what();
             }
+            cin.ignore();
             puseScreen();
             break;
          }
-         case 5:
+         case 5:{
             clearScreen();
             header("Approve Loan");
-            puseScreen();
-            break;
+            admin.showLoanRequest();
+             int code;
+            int indexOfloan;
+            char choice;
+            again:
+            cout<<"Input the code to aprove :"; cin>>code;
+            for(int i=0;i< admin.getLoan().getLength();i++){
+                  if(code == admin.getLoan().getValue(i).getAmountLoan().getCode() ){
+                     admin.getLoan().getValue(i).showLoanDetail();
+                     cout<<"Is it a right one? (Y/N)";cin>>choice;
+                     switch (choice)
+                     {
+                     case 'Y':{
+                     // char* phone=l.getPhoneNumber();
+                     try
+                     {
+                        /* code */
+                     
+                     int index = indexOfUser(admin.getLoan().getValue(i).getPhoneNumber(),users);
+                     cout<<index<<"hello"<<endl<<endl;
+                     if(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR()>0){
+                        users.getValue(index).addMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
+                        users.getValue(index).addLoanMoneyKHR(admin.getLoan().getValue(i).getAmountWithInterest());
+                        
+                     }else {
+                        users.getValue(index).addMoneyUSD(admin.getLoan().getValue(i).getAmountLoan().getAmountUSD());
+                        users.getValue(index).addLoanMoneyUSD(admin.getLoan().getValue(i).getAmountWithInterest());
+
+                     }
+                     cout<<"Loan approve success!!"<<endl;
+                     admin.getListLoanUser().push(admin.getLoan().getValue(i));
+                     admin.getLoan().removeAt(i);
+                     admin.writeToBinary(DATA_ADMIN);
+                     writeToBinary(DATA_USER,users);           
+                     }
+                     catch(const std::exception& e)
+                     {
+                        std::cerr << e.what() << '\n';
+                     }
+                  
+                        break;
+                        }
+                        case 'N':{
+                           cout<<"Okey"<<endl;
+                           goto ADMIN_INTER;
+                        }
+                        
+                     
+                     default:
+                        break;
+                     }
+               puseScreen();
+               goto ADMIN_INTER;
+               break;
+            }
+            }
+            }
          case 6:
             clearScreen();
             header("Check Request");
             admin.readBin(DATA_ADMIN);
             admin.showRequest();
+            cin.ignore();
             puseScreen();
             break;
          case 7:
             clearScreen();
             header("Update Bank Data");
+            cin.ignore();
             puseScreen();
             break;
          case 8:
             clearScreen();
             header("Show Transaction History");
+            cin.ignore();
             puseScreen();
             break;
          case 9:
             clearScreen();
             header("Block User");
+            char phone[16];
+            cout<<"Phone Number : ";cin>>phone;
+            admin.blockUserAccount(phone,users);
+            cin.ignore();
             puseScreen();
             break;
          case 10:
             clearScreen();
-            header("Check ATM History");
+            header("Check ATM History -- NOT Aviable");
+            cin.ignore();
             puseScreen();
             break;
          case 11:
             clearScreen();
             header("Write Report");
+            admin.generateAdminReport(bank);
+            admin.writeToBinary(DATA_ADMIN);
+            cin.ignore();
             puseScreen();
             break;
          case 12:
          {
             clearScreen();
             header("Bank Information");
+            admin.readBin(DATA_ADMIN);
+            admin.displayInterestRates();
+            cin.ignore();
             puseScreen();
             break;
-         }
-         case 0:
-         {
-            goto START;
-            break;
-         }
          }
          puseScreen();
          goto ADMIN_INTER;
          break;
-      case 0:
+         }
+      case 0:{
          clearScreen();
          cout << "Thank You" << endl;
-         break;
+         break;}
       default:
          cout << "Invalid Input " << endl;
          break;
       }
       cin.ignore();
    } while (option != 0);
-
    return 0;
 }
 
-void clearScreen()
-{
+void clearScreen(){
 #ifdef _WIN32
    system("cls");
 #else
@@ -768,26 +844,6 @@ int displayOption(string *allOption, int size)
       return -1;
    }
 }
-// char comfirmPassword(char *cpassword) { // export from project term 2 year 1
-//    char tempChar[50]="",tempCpass[50]="";
-//    static char cpass[50];
-//    int ascii,i=0;
-//    while(1){
-//       tempChar[i]=getch();
-//       ascii=tempChar[i];
-//       if(ascii==13){
-//          break;
-//       }else if((ascii==8) && (i>=0)){
-//          printf("\b \b");
-//          tempCpass[i]=tempCpass[i+1];
-//          i--;
-//       }else{
-//          printf("*");
-//          strcpy(tempCpass,tempChar);
-//          i++;
-//       }
-//    }
-// } implement next time
 bool enterPassword(User user)
 {
    int wrong = 0;

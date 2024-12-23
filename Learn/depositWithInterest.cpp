@@ -7,8 +7,8 @@ int main(){
    DepositInterest depo;
    depo.depositWithInterest(bank,100000000,10000);
    Date cur;
-   cur.nextManyMonth(1);
    cout<<depo.payBack(cur);
+   cur.nextManyMonth(1);
    depo.infor();
    // cur.nextManyMonth(2);
    // cout<<depo.payBack(cur);

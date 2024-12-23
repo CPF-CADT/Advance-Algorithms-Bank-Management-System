@@ -196,11 +196,11 @@ public:
    }
    void showBalance(){
       cout << "Account Balance:" << endl;
-      cout << " - KHR: " << totalMoneyKHR <<"R"<< endl;
-      cout << " - USD: " << totalMoneyUSD <<"$"<< endl;
+      cout << " - KHR: " <<std::fixed << std::setprecision(2)<< totalMoneyKHR <<"R"<< endl;
+      cout << " - USD: "<<std::fixed << std::setprecision(2)<< totalMoneyUSD <<"$"<< endl;
       cout << "Account Loan:" << endl;
-      cout << " - KHR: " << loanKHR <<"R"<< endl;
-      cout << " - USD: " << loanUSD <<"$"<< endl;
+      cout << " - KHR: " <<std::fixed << std::setprecision(2)<< loanKHR <<"R"<< endl;
+      cout << " - USD: " <<std::fixed << std::setprecision(2)<< loanUSD <<"$"<< endl;
       if(!deposit.empty()){
          cout << "Account Deposit Intrest:" << endl;
          for(auto i:deposit){

@@ -19,7 +19,7 @@ class Admin {
     LinkList<Loan> ListLoanUser;
     vector<string> listUserDeposit;
     vector<User> blockedUsers;
-    Bank* bank;
+    Bank bank;
     public:
     // Admin()
     // }
@@ -56,7 +56,6 @@ class Admin {
     }
     void writeLoan(ofstream &writeFile){
         int allLoanReq = loanRequest.getLength();
-        cout<<"LOAN _ "<<allLoanReq<<endl;
         writeFile.write((char *)(&allLoanReq),sizeof(allLoanReq));
         for(int i =0;i<allLoanReq ;i ++){
             loanRequest.getValue(i).writeToBin(writeFile);
@@ -66,6 +65,7 @@ class Admin {
         for(int i =0;i<listLoan ;i ++){
             ListLoanUser.getValue(i).writeToBin(writeFile);
         }
+
     }
     void readLoan(ifstream &readFile){
         ListLoanUser.clear();
@@ -94,6 +94,8 @@ class Admin {
         writeVectorStr(writeFile,userRequest);  
         writeLoan(writeFile);
         writeVectorStr(writeFile,listUserDeposit);
+        writeVector(writeFile,blockedUsers);
+        writeFile.write((char *)(&bank),sizeof(Bank));
         writeFile.close();
     }
 
@@ -108,6 +110,8 @@ class Admin {
                 readVectorStr(readFile,userRequest);
                 readLoan(readFile);
                 readVectorStr(readFile,listUserDeposit);
+                readVector(readFile,blockedUsers);
+                readFile.read((char *)(&bank),sizeof(Bank));
             }
             readFile.close();
         }catch(exception &e){
@@ -233,14 +237,15 @@ class Admin {
      */
 
     void displayInterestRates() {
+        cout << "Exchange Rate from 1 USD to KHR : " <<bank.getExchnageRate() <<endl;
         cout << "Interest Rates for KHR:" << endl;
-        float* khrRates = bank->getInterestKHR();
+        float* khrRates = bank.getInterestKHR();
         cout << "  3 Months: " << khrRates[0] << "%\n";
         cout << "  6 Months: " << khrRates[1] << "%\n";
         cout << "  9 Months: " << khrRates[2] << "%\n";
         cout << " 12 Months: " << khrRates[3] << "%\n";
         cout << "\nInterest Rates for USD:" << endl;
-        float* usdRates = bank->getInterestUSD();
+        float* usdRates = bank.getInterestUSD();
         cout << "  3 Months: " << usdRates[0] << "%\n";
         cout << "  6 Months: " << usdRates[1] << "%\n";
         cout << " 9 Months: " << usdRates[2] << "%\n";

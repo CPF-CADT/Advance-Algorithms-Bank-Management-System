@@ -3,5 +3,6 @@
       "*.java": "java",
       "iosfwd": "cpp",
       "iostream": "cpp"
-   }
+   },
+   "C_Cpp.errorSquiggles": "disabled"
 }
