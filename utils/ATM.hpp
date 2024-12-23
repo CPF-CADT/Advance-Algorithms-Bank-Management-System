@@ -190,14 +190,13 @@ public:
             cerr << e.what() << endl;
         }
     }
-
     void checkBalance(User &user)
     {
         cout << "\nCurrent Balances:" << endl;
         cout << "USD: $" << user.getTotalMoneyUSD() << endl;
         cout << "KHR: " << user.getTotalMoneyKHR() << " KHR" << endl;
     }
-
+    //stuff
     void stockATM(double usdAmount, double khrAmount)
     {
         totalMoneyUSD += usdAmount;
