@@ -39,9 +39,9 @@ public:
    float getExchnageRate(){
       return exchangeRateUSDtoKHR;
    }
-   void addNewUser(){
-      totalUser+=1;
-   }
+   // void addNewUser(){
+   //    totalUser+=1;
+   // }
    void setInterestKHR(int index,float interest){
       intrestKHR[index] = interest;
    }
@@ -54,9 +54,9 @@ public:
    float *getInterestUSD(){
       return intrestUSD;
    }
-   long getTotalUsers(){
-      return totalUser;
-   }
+   // long getTotalUsers(){
+   //    return totalUser;
+   // }
    void setReport(string text){
       report.push_back(text);
    }

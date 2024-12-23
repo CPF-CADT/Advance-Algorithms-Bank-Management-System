@@ -193,10 +193,10 @@ class Admin {
     
 }
  void generateAdminReport(Bank &bank) {
-    if (bank.getTotalUsers() == 0) {
-        cout << "Error: No users to report!" << endl;
-        return;
-    }
+    // if (bank.getTotalUsers() == 0) {
+    //     cout << "Error: No users to report!" << endl;
+    //     return;
+    // }
 
     string customMessage;
     cout << "Enter a custom message for the report: ";
@@ -208,7 +208,7 @@ class Admin {
     // Add bank details to the report
     reportStream << "Bank Report\n";
     reportStream << "-------------------------\n";
-    reportStream << "Total Users: " << bank.getTotalUsers() << "\n";
+    // reportStream << "Total Users: " << bank.getTotalUsers() << "\n";
     reportStream << "Exchange Rate (USD to KHR): " << bank.getExchnageRate() << "\n";
     reportStream << "Admin Remarks: " << customMessage << "\n";
 
