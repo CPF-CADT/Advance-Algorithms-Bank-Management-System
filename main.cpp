@@ -291,6 +291,7 @@ int main() {
                try{
                   currentIndexUser = indexOfUser(phone, users);
                }catch(exception &e){
+                  cerr<<endl;
                }
                if (currentIndexUser != -1) {
                   cin.ignore();
@@ -350,6 +351,10 @@ int main() {
                            User &destUser = users.getValue(indexOfUser(phone, users));
                            users.getValue(currentIndexUser).transferToOtherAccount(destUser, bank.getExchnageRate());
                            writeToBinary(DATA_USER, users);
+                           cout << "Press anykey Exit ... " << endl;
+                           cin.ignore();
+                           puseScreen();
+                           goto userInterface;
                            break;
                         }
                         case 0: {
@@ -446,6 +451,7 @@ int main() {
                         admin.addRequest(users.getValue(currentIndexUser), request);
                         admin.showRequest();
                         // ned to sacve to admin
+                        admin.writeToBinary(DATA_ADMIN);
                         cout << "Press anykey Exit ... " << endl;
                         cin.ignore();
                         puseScreen();
@@ -460,7 +466,6 @@ int main() {
                      goto userInterface;
                   }
                } else {
-                  currentIndexUser = -1;
                   cout << "User Not Found" << endl;
                   sleep(1);
                   goto USER;
@@ -541,6 +546,7 @@ int main() {
                   cout << "Press anykey Exit ... " << endl;
                   cin.ignore();
                   puseScreen();
+                  goto ADMIN_INTER;
                   break;
                }
                case 0: {
@@ -579,6 +585,7 @@ int main() {
                writeToBinary(DATA_USER, users);
                cin.ignore();
                puseScreen();
+               goto ADMIN_INTER;
                break;
             }
             case 3: {
@@ -609,6 +616,7 @@ int main() {
                writeToBinary(DATA_USER, users);
                cin.ignore();
                puseScreen();
+               goto ADMIN_INTER;
                break;
             }
             case 4: {
@@ -624,6 +632,7 @@ int main() {
                }
                cin.ignore();
                puseScreen();
+               goto ADMIN_INTER;
                break;
             }
             case 5:{
@@ -646,7 +655,6 @@ int main() {
                         // char* phone=l.getPhoneNumber();
                         try{
                            /* code */
-                        
                         int index = indexOfUser(admin.getLoan().getValue(i).getPhoneNumber(),users);
                         if(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR()>0){
                            users.getValue(index).addMoneyKHR(admin.getLoan().getValue(i).getAmountLoan().getAmountKHR());
@@ -692,7 +700,7 @@ int main() {
                break;
             case 7:
                clearScreen();
-               header("Update Bank Data");
+               header("------------");
                cin.ignore();
                puseScreen();
                goto ADMIN_INTER;
@@ -712,7 +720,11 @@ int main() {
                header("Block User");
                char phone[16];
                cout<<"Phone Number : ";cin>>phone;
-               admin.blockUserAccount(phone,users);
+               try{
+                  admin.blockUserAccount(phone,users);
+               }catch(exception &e){
+                  cerr<<e.what()<<endl;
+               }
                admin.writeToBinary(DATA_ADMIN);
                writeToBinary(DATA_USER,users);
                cin.ignore();
@@ -757,8 +769,7 @@ int main() {
                         }
                         admin.getListLoanUser().getValue(i).listPayBack();
                         admin.writeToBinary(DATA_ADMIN);
-                        writeToBinary(DATA_USER,users);
-                        users.getValue(curIndex).showBalance();
+                        writeToBinary(DATA_USER,users);;
                      }else{
                         cout<<"User Not Foud"<<endl;
                      }
