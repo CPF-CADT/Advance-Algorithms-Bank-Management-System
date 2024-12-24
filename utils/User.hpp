@@ -109,7 +109,8 @@ public:
       cout << "Please enter the following details:" << endl;
       cout << "First Name       : "; cin >> firstName;
       cout << "Last Name        : "; cin >> lastName;
-      cout << "National ID      : "; cin >> nationalIdCard;
+      // cout << "National ID      : "; cin >> nationalIdCard;
+      inputNationalID(fileName);
       dob.inputDate();
       cin.ignore(); 
       cout << "Address          : "; getline(cin, address);
@@ -177,6 +178,26 @@ public:
          if(strcmp(phoneNumber,phone)==0) return true;
       }
       return false;
+   }
+   bool isNationID(const string fileName,long nationID){
+      //add code
+      ArrayList<User> tempUser;
+      readFromBinary(fileName,tempUser);
+      char phone[16];
+      for(int i=0;i<tempUser.getLength();i++){        
+         if(nationID==tempUser.getValue(i).getNationalIdCard()) return true;
+      }
+      return false;
+   }
+   void inputNationalID(const string &fileName){
+      enterPhonenumber:
+      cout << "National ID      : "; cin >> nationalIdCard;
+      //add validation
+      if(isNationID(fileName,nationalIdCard)){
+         cerr<<"National ID  has been used "<<endl;
+         cerr<<"Enter it again"<<endl;
+         goto enterPhonenumber;
+      }
    }
    void inputPassword(){
       char confirmPassword[16];
@@ -334,9 +355,9 @@ public:
          }else{
             checkSourceKHR(changeUSDtoKHR(usd,exchange));
             setTotalMoneyKHR(totalMoneyKHR-changeUSDtoKHR(usd,exchange));
-            destUser.setTotalMoneyUSD(destUser.getTotalMoneyUSD()+usd);
-            transactionHistory.push_back(logTransactionTransfer(usd,destUser.getName(),phoneNumber,false));
-            destUser.addHistoryTransaction(logTransactionReceive(usd,getName(),destUser.getPhoneNumber(),false));
+            destUser.setTotalMoneyKHR(destUser.getTotalMoneyUSD()+usd);
+            transactionHistory.push_back(logTransactionTransfer(changeUSDtoKHR(usd,exchange),destUser.getName(),phoneNumber,false));
+            destUser.addHistoryTransaction(logTransactionReceive(changeUSDtoKHR(usd,exchange),getName(),destUser.getPhoneNumber(),false));
             cout<<"Transfer Success"<<endl;
          }
       }catch(exception &e){
@@ -356,8 +377,8 @@ public:
             checkSourceUSD(changeKHRtoUSD(khr,exchange));
             setTotalMoneyUSD(totalMoneyUSD-changeKHRtoUSD(khr,exchange));
             destUser.setTotalMoneyKHR(destUser.getTotalMoneyKHR()+khr);
-            transactionHistory.push_back(logTransactionTransfer(khr,destUser.getName(),phoneNumber,true));
-            destUser.addHistoryTransaction(logTransactionReceive(khr,getName(),destUser.getPhoneNumber(),true));
+            transactionHistory.push_back(logTransactionTransfer(changeKHRtoUSD(khr,exchange),destUser.getName(),phoneNumber,true));
+            destUser.addHistoryTransaction(logTransactionReceive(changeKHRtoUSD(khr,exchange),getName(),destUser.getPhoneNumber(),true));
             cout<<"Transfer Success"<<endl;
          }
       }catch(exception &e){
@@ -431,10 +452,18 @@ public:
             amount = i.payBack(current);
             totalMoneyKHR+=amount;
             transactionHistory.push_back(logTransactionReceiveFromBank(amount,false));
+            if(i.getNumberOfPayBack() == i.getCountPayback()){
+               amount = i.getAmountKHR();
+               transactionHistory.push_back(logTransactionReceiveFromBank(amount,false));
+            }
          }else{
             amount = i.payBack(current);
             totalMoneyUSD+=amount;
             transactionHistory.push_back(logTransactionReceiveFromBank(amount,true));
+            if(i.getNumberOfPayBack() == i.getCountPayback()){
+               amount = i.getAmountUSD();
+               transactionHistory.push_back(logTransactionReceiveFromBank(amount,true));
+            }
          }
       }
    }
@@ -647,8 +676,8 @@ public:
       cout << "3. Update Phone Number" << endl;
       cout << "4. Update Address" << endl;
       cout << "5. Update Password" << endl;
-      cout << "6. Update Total Money (USD)" << endl;
-      cout << "7. Update Total Money (KHR)" << endl;
+      // cout << "6. Update Total Money (USD)" << endl;
+      // cout << "7. Update Total Money (KHR)" << endl;
       cout << "8. Exit Update" << endl;
       cout << "Enter your choice: ";
       cin >> choice;
@@ -718,24 +747,24 @@ public:
          }
          break;
       }
-      case 6:
-      {
-         double newUSDAmount;
-         cout << "Enter new total USD amount: ";
-         cin >> newUSDAmount;
-         setTotalMoneyUSD(newUSDAmount);
-         cout << "Total USD amount updated successfully." << endl;
-         break;
-      }
-      case 7:
-      {
-         double newKHRAmount;
-         cout << "Enter new total KHR amount: ";
-         cin >> newKHRAmount;
-         setTotalMoneyKHR(newKHRAmount);
-         cout << "Total KHR amount updated successfully." << endl;
-         break;
-      }
+      // case 6:
+      // {
+      //    double newUSDAmount;
+      //    cout << "Enter new total USD amount: ";
+      //    cin >> newUSDAmount;
+      //    setTotalMoneyUSD(newUSDAmount);
+      //    cout << "Total USD amount updated successfully." << endl;
+      //    break;
+      // }
+      // case 7:
+      // {
+      //    double newKHRAmount;
+      //    cout << "Enter new total KHR amount: ";
+      //    cin >> newKHRAmount;
+      //    setTotalMoneyKHR(newKHRAmount);
+      //    cout << "Total KHR amount updated successfully." << endl;
+      //    break;
+      // }
       case 8:
          cout << "Exiting update menu..." << endl;
          break;
