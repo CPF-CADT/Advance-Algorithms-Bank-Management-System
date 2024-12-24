@@ -181,11 +181,11 @@ class Loan{
                     return 0.0;
                 }
                 if(amountLoan.getAmountKHR()>0){
-                    user.setLoanKHR(user.getLoanKHR()-amountWithInterestKHR/numberOfPayBack);
+                    user.setLoanKHR(user.getLoanKHR()-(amountWithInterestKHR/numberOfPayBack));
                     return (amountWithInterestKHR/numberOfPayBack);
                 }
-                user.setLoanUSD(user.getLoanUSD()-amountWithInterestUSD/numberOfPayBack);
-                return amountWithInterestUSD/numberOfPayBack +;
+                user.setLoanUSD(user.getLoanUSD()-(amountWithInterestUSD/numberOfPayBack));
+                return amountWithInterestUSD/numberOfPayBack;
             }
             return 0.00;
         }

@@ -301,7 +301,7 @@ int main() {
                   userInterface:
                      clearScreen();
                      header("USER ACCOUNT");
-                     Date cur;c
+                     Date cur;
                      users.getValue(currentIndexUser).payInterest(cur);
                      int op;
                      cout << "Welcome back " << users.getValue(currentIndexUser).getFirstName() << endl;
@@ -708,9 +708,13 @@ int main() {
             case 8:
                clearScreen();
                header("Un Block User");
-               admin.unblockUser(users);
-               admin.writeToBinary(DATA_ADMIN);
-               writeToBinary(DATA_USER,users);
+               try{
+                  admin.unblockUser(users);
+                  admin.writeToBinary(DATA_ADMIN);
+                  writeToBinary(DATA_USER,users);
+               }catch(exception &e){
+                  cerr<<e.what()<<endl;
+               }
                cin.ignore();
                puseScreen();
                goto ADMIN_INTER;
@@ -718,18 +722,18 @@ int main() {
             case 9:
                clearScreen();
                header("Block User");
-               char phone[16];
-               cout<<"Phone Number : ";cin>>phone;
                try{
+                  char phone[16];
+                  cout<<"Phone Number : ";cin>>phone;
                   admin.blockUserAccount(phone,users);
                }catch(exception &e){
                   cerr<<e.what()<<endl;
                }
-               admin.writeToBinary(DATA_ADMIN);
-               writeToBinary(DATA_USER,users);
-               cin.ignore();
-               puseScreen();
-               goto ADMIN_INTER;
+                  admin.writeToBinary(DATA_ADMIN);
+                  writeToBinary(DATA_USER,users);
+                  cin.ignore();
+                  puseScreen();
+                  goto ADMIN_INTER;
                break;
             case 10:{
                clearScreen();
