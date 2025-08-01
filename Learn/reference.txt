@@ -1,6 +1,0 @@
-for file handling with c++ i learn from 
-- https://youtu.be/Tew2tPznESY?si=0n3I9T6ff5S1Kxqb
-for random number 
-- https://www.digitalocean.com/community/tutorials/random-number-generator-c-plus-plus
-for setter and getter 
-- privaide data and give chat gpt to generate
